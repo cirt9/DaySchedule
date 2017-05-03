@@ -1,30 +1,41 @@
 #include "mainmenu.h"
 
 #include <QGridLayout>
+#include <QSpacerItem>
+#include <QDebug>
 
 MainMenu::MainMenu(QWidget * parent) : QWidget(parent)
 {
-    QGridLayout * layout = new QGridLayout(this);
+    setGeometry(0, 0, 150+3+30+3, 30+3+150+3);
+    QWidget * test = new QWidget(this);
 
-    MainMenuButton * button1 = new MainMenuButton(200, 50, -45, this);
-    MainMenuButton * button2 = new MainMenuButton(200, 50, 225, this);
-    MainMenuButton * button3 = new MainMenuButton(200, 50, 45, this);
-    MainMenuButton * button4 = new MainMenuButton(200, 50, -225, this);
-
-    layout->addWidget(button1, 0, 0);
-    layout->addWidget(button2, 1, 0);
-    layout->addWidget(button3, 0, 1);
-    layout->addWidget(button4, 1, 1);
+    button1 = new MainMenuButton(150, 30, test);
+    button2 = new MainMenuButton(30, 150, test);
+    button3 = new MainMenuButton(150, 30, test);
+    button4 = new MainMenuButton(30, 150, test);
+    button5 = new MainMenuButton(118, 118, test);
 }
 
 void MainMenu::paintEvent(QPaintEvent *)
 {
     QPainter backgroundPainter(this);
 
-    QBrush background(Qt::yellow);//QColor(23, 23, 34));
+    QBrush background(QColor(23, 23, 34));
 
     backgroundPainter.setBrush(background);
     backgroundPainter.setPen(Qt::NoPen );
 
     backgroundPainter.drawRect(0, 0, width(), height());
+}
+
+void MainMenu::resizeEvent(QResizeEvent *)
+{
+    int dx = this->width()/2 - 90;
+    int dy = this->height()/2 - 90;
+
+    button1->move(0+dx,0+dy);
+    button2->move(0+dx, 32+dy);
+    button3->move(32+dx, 152+dy);
+    button4->move(152+dx, 0+dy);
+    button5->move(32+dx, 32+dy);
 }

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <QGraphicsRectItem>
 
 class MainMenuButton : public QWidget
 {
@@ -11,12 +12,12 @@ class MainMenuButton : public QWidget
 private:
     int buttonWidth;
     int buttonHeight;
-    int tiltAngle;
 
 public:
-    explicit MainMenuButton(int width, int height, int tAngle, QWidget * parent = nullptr);
+    explicit MainMenuButton(int width, int height, QWidget * parent = nullptr);
 
     void paintEvent(QPaintEvent *);
+    void mousePressEvent(QMouseEvent *);
 };
 
 #endif // MAINMENUBUTTON_H

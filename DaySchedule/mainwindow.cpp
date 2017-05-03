@@ -5,17 +5,14 @@
 
 #include <QPushButton>
 #include <mainmenu.h>
+#include <QGridLayout>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setMinimumSize(100, 100);
-
-    //MainMenuButton * button = new MainMenuButton(200, 50, -45, this);
-
-    //QPushButton * but = new QPushButton(this);
-    //MainWindow::setCentralWidget(button);
-    //button->move(width()/2, height()/2);
+    setGeometry(0, 0, 1900, 1000);
+    setMinimumSize(600, 600);
+    move(0, 0);
 
     MainMenu * menu = new MainMenu(this);
     MainWindow::setCentralWidget(menu);
