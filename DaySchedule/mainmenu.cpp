@@ -1,41 +1,98 @@
 #include "mainmenu.h"
 
-#include <QGridLayout>
-#include <QSpacerItem>
-#include <QDebug>
-
-MainMenu::MainMenu(QWidget * parent) : QWidget(parent)
+MainMenu::MainMenu(int width, int height, QWidget * parent) : QWidget(parent)
 {
-    setGeometry(0, 0, 150+3+30+3, 30+3+150+3);
-    QWidget * test = new QWidget(this);
+    menuWidth = width;
+    menuHeight = height;
+    backgroundColor = Qt::transparent;
+    setGeometry(0, 0, menuWidth, menuHeight);
 
-    button1 = new MainMenuButton(150, 30, test);
-    button2 = new MainMenuButton(30, 150, test);
-    button3 = new MainMenuButton(150, 30, test);
-    button4 = new MainMenuButton(30, 150, test);
-    button5 = new MainMenuButton(118, 118, test);
+    initButtons();
+}
+
+void MainMenu::initButtons()
+{
+    int topBottomButtonWidth = menuWidth * 0.75;
+    int topBottomButtonHeight = menuHeight * 0.25;
+
+    int leftRightButtonWidth = menuWidth * 0.25;
+    int leftRightButtonHeight = menuHeight * 0.75;
+
+    int centralButtonWidth = menuWidth - leftRightButtonWidth * 2;
+    int centralButtonHeight = menuHeight - topBottomButtonHeight * 2;
+
+    topButton = new QPushButton(this);
+    leftButton = new QPushButton(this);
+    bottomButton = new QPushButton(this);
+    rightButton = new QPushButton(this);
+    centralButton = new QPushButton(this);
+
+    topButton->setGeometry(0, 0, topBottomButtonWidth, topBottomButtonHeight);
+    leftButton->setGeometry(0, topBottomButtonHeight, leftRightButtonWidth, leftRightButtonHeight);
+    bottomButton->setGeometry(leftRightButtonWidth, leftRightButtonHeight, topBottomButtonWidth, topBottomButtonHeight);
+    rightButton->setGeometry(topBottomButtonWidth, 0, leftRightButtonWidth, leftRightButtonHeight);
+    centralButton->setGeometry(leftRightButtonWidth, topBottomButtonHeight, centralButtonWidth, centralButtonHeight);
 }
 
 void MainMenu::paintEvent(QPaintEvent *)
 {
     QPainter backgroundPainter(this);
 
-    QBrush background(QColor(23, 23, 34));
+    QBrush background(backgroundColor);
 
     backgroundPainter.setBrush(background);
-    backgroundPainter.setPen(Qt::NoPen );
+    backgroundPainter.setPen(Qt::NoPen);
 
     backgroundPainter.drawRect(0, 0, width(), height());
 }
 
 void MainMenu::resizeEvent(QResizeEvent *)
 {
-    int dx = this->width()/2 - 90;
-    int dy = this->height()/2 - 90;
+    int halfWindowWidth = this->width()/2 - menuWidth/2;
+    int halfWindowHeight = this->height()/2 - menuHeight/2;
 
-    button1->move(0+dx,0+dy);
-    button2->move(0+dx, 32+dy);
-    button3->move(32+dx, 152+dy);
-    button4->move(152+dx, 0+dy);
-    button5->move(32+dx, 32+dy);
+    topButton->move(halfWindowWidth, halfWindowHeight);
+    leftButton->move(halfWindowWidth, topButton->height() + halfWindowHeight);
+    bottomButton->move(leftButton->width() + halfWindowWidth, leftButton->height() + halfWindowHeight);
+    rightButton->move(topButton->width() + halfWindowWidth, halfWindowHeight);
+    centralButton->move(leftButton->width() + halfWindowWidth, topButton->height() + halfWindowHeight);
+}
+
+void MainMenu::setButtonsStylesheet(const QString styleSheet)
+{
+    topButton->setStyleSheet(styleSheet);
+    leftButton->setStyleSheet(styleSheet);
+    bottomButton->setStyleSheet(styleSheet);
+    rightButton->setStyleSheet(styleSheet);
+    centralButton->setStyleSheet(styleSheet);
+}
+
+void MainMenu::setBackgroundColor(const QColor & value)
+{
+    backgroundColor = value;
+}
+
+QPushButton * MainMenu::getTopButton() const
+{
+    return topButton;
+}
+
+QPushButton * MainMenu::getLeftButton() const
+{
+    return leftButton;
+}
+
+QPushButton * MainMenu::getBottomButton() const
+{
+    return bottomButton;
+}
+
+QPushButton * MainMenu::getRightButton() const
+{
+    return rightButton;
+}
+
+QPushButton * MainMenu::getCentralButton() const
+{
+    return centralButton;
 }

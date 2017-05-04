@@ -1,24 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <mainmenubutton.h>
-
-#include <QPushButton>
-#include <mainmenu.h>
-#include <QGridLayout>
-
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setGeometry(0, 0, 1900, 1000);
+    setWindowState(Qt::WindowMaximized);
     setMinimumSize(600, 600);
-    move(0, 0);
 
-    MainMenu * menu = new MainMenu(this);
+    MainMenu * menu = new MainMenu(500, 500, this);
     MainWindow::setCentralWidget(menu);
 
-    delete ui->mainToolBar;
-    delete ui->statusBar;
+    menu->setBackgroundColor(QColor(23, 23, 34));
 }
 
 MainWindow::~MainWindow()

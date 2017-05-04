@@ -3,23 +3,39 @@
 
 #include <QWidget>
 #include <QPainter>
-#include <mainmenubutton.h>
+#include <QPushButton>
 
 class MainMenu : public QWidget
 {
     Q_OBJECT
 private:
-    MainMenuButton * button1;
-    MainMenuButton * button2;
-    MainMenuButton * button3;
-    MainMenuButton * button4;
-    MainMenuButton * button5;
+    int menuWidth;
+    int menuHeight;
+    QPushButton * topButton;
+    QPushButton * leftButton;
+    QPushButton * bottomButton;
+    QPushButton * rightButton;
+    QPushButton * centralButton;
+    QColor backgroundColor;
 
-public:
-    explicit MainMenu(QWidget * parent = 0);
+    void initButtons();
+    void centerButtons();
 
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
+
+public:
+    explicit MainMenu(int width, int height, QWidget * parent = nullptr);
+    ~MainMenu() {}
+
+    void setButtonsStylesheet(const QString styleSheet);
+    void setBackgroundColor(const QColor & value);
+
+    QPushButton * getTopButton() const;
+    QPushButton * getLeftButton() const;
+    QPushButton * getBottomButton() const;
+    QPushButton * getRightButton() const;
+    QPushButton * getCentralButton() const;
 };
 
 #endif // MAINMENU_H
