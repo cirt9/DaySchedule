@@ -16,20 +16,14 @@ private:
     QPushButton * bottomButton;
     QPushButton * rightButton;
     QPushButton * centralButton;
-    QColor backgroundColor;
 
     void initButtons();
-    void centerButtons();
-
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
 
 public:
     explicit MainMenu(int width, int height, QWidget * parent = nullptr);
     ~MainMenu() {}
 
     void setButtonsStylesheet(const QString styleSheet);
-    void setBackgroundColor(const QColor & value);
 
     QPushButton * getTopButton() const;
     QPushButton * getLeftButton() const;
