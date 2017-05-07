@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/menuIcons">
+        <file>icons/about.png</file>
+        <file>icons/load.png</file>
+        <file>icons/options.png</file>
+        <file>icons/quit.png</file>
+        <file>icons/start.png</file>
+    </qresource>
+</RCC>

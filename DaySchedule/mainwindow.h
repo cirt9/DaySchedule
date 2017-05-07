@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <mainmenu.h>
+#include <QGridLayout>
+#include <QSpacerItem>
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +17,10 @@ class MainWindow : public QMainWindow
 private:
     Ui::MainWindow *ui;
     MainMenu * menu;
+
+    void initializeCenteredMenu();
+    void customizeMenu();
+    void connectMenuToSlots();
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

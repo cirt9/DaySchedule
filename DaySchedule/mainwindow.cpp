@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QGridLayout>
-#include <QSpacerItem>
-
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -22,6 +19,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::displayMainMenu()
 {
+    initializeCenteredMenu();
+    customizeMenu();
+    connectMenuToSlots();
+}
+
+void MainWindow::initializeCenteredMenu()
+{
     int menuSize = 500;
     menu = new MainMenu(menuSize, menuSize, this);
     menu->setFixedSize(menuSize, menuSize);
@@ -37,6 +41,34 @@ void MainWindow::displayMainMenu()
 
     menuContainer->setLayout(centeringLayout);
     setCentralWidget(menuContainer);
-
-    connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
 }
+
+void MainWindow::customizeMenu()
+{
+    if(menu != nullptr)
+    {
+        menu->setButtonsStylesheet(QString("QPushButton{background-color: rgb(36,92,81); border-bottom: 3px solid;}"
+                                           "QPushButton:hover{background-color: rgb(30, 85, 75);}"
+                                           "QPushButton:pressed{background-color: rgb(36,92,81); border-bottom: 3px solid;}"));
+
+        menu->getCentralButton()->setIconSize(QSize(100,100));
+        menu->getCentralButton()->setIcon(QIcon(":/menuIcons/icons/start.png"));
+        menu->getLeftButton()->setIconSize(QSize(100,100));
+        menu->getLeftButton()->setIcon(QIcon(":/menuIcons/icons/about.png"));
+        menu->getTopButton()->setIconSize(QSize(100,100));
+        menu->getTopButton()->setIcon(QIcon(":/menuIcons/icons/load.png"));
+        menu->getRightButton()->setIconSize(QSize(100,100));
+        menu->getRightButton()->setIcon(QIcon(":/menuIcons/icons/options.png"));
+        menu->getBottomButton()->setIconSize(QSize(100,100));
+        menu->getBottomButton()->setIcon(QIcon(":/menuIcons/icons/quit.png"));
+    }
+}
+
+void MainWindow::connectMenuToSlots()
+{
+    if(menu != nullptr)
+    {
+        connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
+    }
+}
+
