@@ -7,9 +7,10 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setWindowState(Qt::WindowMaximized);
     setMinimumSize(600, 600);
     MainWindow::setWindowTitle(QString("Day Schedule"));
-    this->setStyleSheet("MainWindow {background-color: rgb(23, 23, 34);}");
+    this->setStyleSheet("MainWindow {background: rgb(23, 23, 34)}");
 
     menu = nullptr;
+    clearMainWindow(this->layout());
 }
 
 MainWindow::~MainWindow()
@@ -47,9 +48,9 @@ void MainWindow::customizeMenu()
 {
     if(menu != nullptr)
     {
-        menu->setButtonsStylesheet(QString("QPushButton{background-color: rgb(36,92,81); border-bottom: 3px solid;}"
-                                           "QPushButton:hover{background-color: rgb(30, 85, 75);}"
-                                           "QPushButton:pressed{background-color: rgb(36,92,81); border-bottom: 3px solid;}"));
+        menu->setButtonsStylesheet(QString("QPushButton{background-color: rgb(94,13,12); border-bottom: 3px solid;}"
+                                           "QPushButton:hover{background-color: rgb(86, 13, 12);}"
+                                           "QPushButton:pressed{background-color: rgb(94,13,12); border-bottom: 3px solid;}"));
 
         menu->getCentralButton()->setIconSize(QSize(100,100));
         menu->getCentralButton()->setIcon(QIcon(":/menuIcons/icons/start.png"));
@@ -69,6 +70,26 @@ void MainWindow::connectMenuToSlots()
     if(menu != nullptr)
     {
         connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
+        connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(start()));
     }
 }
 
+void MainWindow::start()
+{
+    clearMainWindow(this->layout(), true);
+}
+
+void MainWindow::clearMainWindow(QLayout * layout, bool deleteWidgets)
+{
+    while(QLayoutItem * item = layout->takeAt(0))
+    {
+        if(deleteWidgets)
+        {
+            if(QWidget * widget = item->widget())
+                widget->deleteLater();
+        }
+        if(QLayout * childLayout = item->layout())
+            clearMainWindow(childLayout, deleteWidgets);
+        delete item;
+    }
+}

@@ -22,6 +22,11 @@ private:
     void customizeMenu();
     void connectMenuToSlots();
 
+    void clearMainWindow(QLayout * layout, bool deleteWidgets = true);
+
+private slots:
+    void start();
+
 public:
     explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
