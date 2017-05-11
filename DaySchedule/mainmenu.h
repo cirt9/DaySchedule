@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPushButton>
-#include <QIcon>
 
 class MainMenu : public QWidget
 {
