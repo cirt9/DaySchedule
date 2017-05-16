@@ -6,4 +6,7 @@
         <file>icons/quit.png</file>
         <file>icons/start.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>placeholderimage.jpg</file>
+    </qresource>
 </RCC>
