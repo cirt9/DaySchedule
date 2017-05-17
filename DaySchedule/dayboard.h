@@ -5,6 +5,9 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <activity.h>
+#include <QList>
+#include <QPushButton>
 
 class DayBoard : public QGroupBox
 {
@@ -12,7 +15,8 @@ class DayBoard : public QGroupBox
 
 private:
     QVBoxLayout * dayBoardLayout;
-    size_t numberOfLayoutsInMainLayout;
+    QVBoxLayout * activitiesLayout;
+    QList <Activity *> activities;
 
     void makeDateAndProgressLayout();
     void makeBottomIconsLayout();
@@ -21,7 +25,8 @@ private slots:
     void addNewActivityLayout();
 
 public:
-    explicit DayBoard(QWidget * parent = 0);
+    explicit DayBoard(QWidget * parent = nullptr);
+    ~DayBoard() {}
 };
 
 #endif // DAYBOARD_H

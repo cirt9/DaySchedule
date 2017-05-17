@@ -6,8 +6,8 @@
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setMinimumSize(400, 400);
     setWindowState(Qt::WindowMaximized);
-    setMinimumSize(600, 600);
     MainWindow::setWindowTitle(QString("Day Schedule"));
     this->setStyleSheet("MainWindow{background: qradialgradient(radius:1.5, stop:0 rgb(197,239,247), stop:1 rgb(82,179,217))}");
 

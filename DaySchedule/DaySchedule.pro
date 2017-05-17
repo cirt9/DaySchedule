@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     mainmenu.cpp \
-    dayboard.cpp
+    dayboard.cpp \
+    activity.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
-    dayboard.h
+    dayboard.h \
+    activity.h
 
 FORMS    += \
     mainwindow.ui
