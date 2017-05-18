@@ -20,9 +20,10 @@ private:
 
     void makeDateAndProgressLayout();
     void makeBottomIconsLayout();
+    void makeScrollBar();
 
 private slots:
-    void addNewActivityLayout();
+    void addNewActivity();
 
 public:
     explicit DayBoard(QWidget * parent = nullptr);

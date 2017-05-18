@@ -1,5 +1,8 @@
 #include "dayboard.h"
 
+#include <QScrollArea>
+#include <QDialog>
+
 DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
 {
     setStyleSheet("DayBoard{background: rgb(255,240,235); border-radius: 10px;}");
@@ -11,19 +14,18 @@ DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
 
     activitiesLayout = new QVBoxLayout();
     activitiesLayout->setSpacing(5);
+    activitiesLayout->setAlignment(Qt::AlignTop);
 
     makeDateAndProgressLayout();
-    dayBoardLayout->addLayout(activitiesLayout);
+    makeScrollBar();
     makeBottomIconsLayout();
 
-    addNewActivityLayout();
-    addNewActivityLayout();
-    addNewActivityLayout();
-    addNewActivityLayout();
-    addNewActivityLayout();
-    addNewActivityLayout();
-    addNewActivityLayout();
-    addNewActivityLayout();
+    addNewActivity();
+    addNewActivity();
+    addNewActivity();
+    addNewActivity();
+    addNewActivity();
+    addNewActivity();
 }
 
 
@@ -85,7 +87,23 @@ void DayBoard::makeBottomIconsLayout()
     dayBoardLayout->setAlignment(iconsBarContainer, Qt::AlignBottom);
 }
 
-void DayBoard::addNewActivityLayout()
+void DayBoard::makeScrollBar()
+{
+    QScrollArea * scroll = new QScrollArea();
+    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setWidgetResizable(true);
+    scroll->setStyleSheet("QWidget{background: transparent; border: none;}"
+                          "QScrollBar{background: rgb(51,102,153);}");
+
+    QWidget * scrollArea = new QWidget();
+    scrollArea->setLayout(activitiesLayout);
+    scroll->setWidget(scrollArea);
+
+    dayBoardLayout->addWidget(scroll);
+}
+
+void DayBoard::addNewActivity()
 {
     Activity * activity = new Activity();
 
