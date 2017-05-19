@@ -8,6 +8,7 @@
 #include <activity.h>
 #include <QList>
 #include <QPushButton>
+#include <QScrollArea>
 
 class DayBoard : public QGroupBox
 {
@@ -19,7 +20,7 @@ private:
     QList <Activity *> activities;
 
     void makeDateAndProgressLayout();
-    void makeBottomIconsLayout();
+    void makeBottomMenuLayout();
     void makeScrollBar();
 
 private slots:
