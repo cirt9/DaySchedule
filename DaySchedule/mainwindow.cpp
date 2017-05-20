@@ -54,15 +54,15 @@ void MainWindow::customizeMenu()
                                            "QPushButton:pressed{background-color: rgb(92,151,191);}"));
 
         menu->getCentralButton()->setIconSize(QSize(100,100));
-        menu->getCentralButton()->setIcon(QIcon(":/menuIcons/icons/start.png"));
+        menu->getCentralButton()->setIcon(QIcon(":/icons/icons/start.png"));
         menu->getLeftButton()->setIconSize(QSize(100,100));
-        menu->getLeftButton()->setIcon(QIcon(":/menuIcons/icons/about.png"));
+        menu->getLeftButton()->setIcon(QIcon(":/icons/icons/about.png"));
         menu->getTopButton()->setIconSize(QSize(100,100));
-        menu->getTopButton()->setIcon(QIcon(":/menuIcons/icons/load.png"));
+        menu->getTopButton()->setIcon(QIcon(":/icons/icons/load.png"));
         menu->getRightButton()->setIconSize(QSize(100,100));
-        menu->getRightButton()->setIcon(QIcon(":/menuIcons/icons/options.png"));
+        menu->getRightButton()->setIcon(QIcon(":/icons/icons/options.png"));
         menu->getBottomButton()->setIconSize(QSize(100,100));
-        menu->getBottomButton()->setIcon(QIcon(":/menuIcons/icons/quit.png"));
+        menu->getBottomButton()->setIcon(QIcon(":/icons/icons/quit.png"));
     }
 }
 

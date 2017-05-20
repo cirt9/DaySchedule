@@ -9,17 +9,14 @@ DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
     dayBoardLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(dayBoardLayout);
 
-    activitiesLayout = new QVBoxLayout();
-    activitiesLayout->setSpacing(5);
-    activitiesLayout->setAlignment(Qt::AlignTop);
-
-    makeDateAndProgressLayout();
-    makeScrollBar();
-    makeBottomMenuLayout();
+    createDateAndProgressLayout();
+    createActivitiesLayout();
+    createScrollBar();
+    createBottomMenuLayout();
 }
 
 
-void DayBoard::makeDateAndProgressLayout()
+void DayBoard::createDateAndProgressLayout()
 {
     QHBoxLayout * dateProgressLayout = new QHBoxLayout();
     dateProgressLayout->setSpacing(0);
@@ -43,7 +40,19 @@ void DayBoard::makeDateAndProgressLayout()
     dayBoardLayout->addLayout(dateProgressLayout);
 }
 
-void DayBoard::makeBottomMenuLayout()
+void DayBoard::createActivitiesLayout()
+{
+    activitiesLayout = new QVBoxLayout();
+    activitiesLayout->setSpacing(5);
+    activitiesLayout->setAlignment(Qt::AlignTop);
+
+    QLabel * activitiesTitle = new QLabel("Activities");
+    activitiesTitle->setStyleSheet("color: rgb(51,102,153); font-size: 35px;");
+    activitiesLayout->addWidget(activitiesTitle);
+    activitiesLayout->setAlignment(activitiesTitle, Qt::AlignHCenter);
+}
+
+void DayBoard::createBottomMenuLayout()
 {
     QHBoxLayout * buttonsBarLayout = new QHBoxLayout();
     QGroupBox * buttonsBarContainer = new QGroupBox();
@@ -54,39 +63,40 @@ void DayBoard::makeBottomMenuLayout()
 
     QPushButton * addActivityButton = new QPushButton("Add New Activity");
     connect(addActivityButton, SIGNAL(clicked()), this, SLOT(addNewActivity()));
-    addActivityButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51);"
-                                    "border-radius: 3px; color: rgb(255,240,235);}"
+    addActivityButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51); border: 2px solid transparent;"
+                                    "border-radius: 3px; font-size: 15px; color: rgb(255,240,235);}"
                                     "QPushButton:hover{background: rgb(22, 25, 27); border: 1px solid rgb(255,240,235);}"
                                     "QPushButton:pressed{border: 2px solid rgb(255,240,235);}");
 
-    QPushButton * alarmsButton = new QPushButton("Turn On The Alarms");
-    alarmsButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51);"
-                              "border-radius: 3px; color: rgb(255,240,235);}"
-                              "QPushButton:hover{background: rgb(22, 25, 27); border: 1px solid rgb(255,240,235);}"
-                              "QPushButton:pressed{border: 2px solid rgb(255,240,235);}");
-
-    QPushButton * copyButton = new QPushButton("Copy Activites");
-    copyButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51);"
-                            "border-radius: 3px; color: rgb(255,240,235);}"
+    QPushButton * copyButton = new QPushButton("Copy Other Day");
+    copyButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51); border: 2px solid transparent;"
+                            "border-radius: 3px; font-size: 15px; color: rgb(255,240,235);}"
                             "QPushButton:hover{background: rgb(22, 25, 27); border: 1px solid rgb(255,240,235);}"
                             "QPushButton:pressed{border: 2px solid rgb(255,240,235);}");
 
     QPushButton * deleteAllButton = new QPushButton("Delete All Activities");
-    deleteAllButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51);"
-                                 "border-radius: 3px; color: rgb(255,240,235);}"
+    deleteAllButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51); border: 2px solid transparent;"
+                                 "border-radius: 3px; font-size: 15px; color: rgb(255,240,235);}"
                                  "QPushButton:hover{background: rgb(22, 25, 27); border: 1px solid rgb(255,240,235);}"
                                  "QPushButton:pressed{border: 2px solid rgb(255,240,235);}");
 
+    QCheckBox * alarmsButton = new QCheckBox();
+    alarmsButton->setFixedSize(40, 40);
+    alarmsButton->setStyleSheet("QCheckBox{width: 40px; height: 40px; padding: 0px;}"
+                                "QCheckBox::indicator{width: 40px; height: 40px;}"
+                                "QCheckBox::indicator::unchecked{image: url(:/icons/icons/alarmsInactive.jpg);}"
+                                "QCheckBox::indicator::checked{image: url(:/icons/icons/alarmsActive.jpg);}");
+
     buttonsBarLayout->addWidget(addActivityButton);
-    buttonsBarLayout->addWidget(alarmsButton);
     buttonsBarLayout->addWidget(copyButton);
     buttonsBarLayout->addWidget(deleteAllButton);
+    buttonsBarLayout->addWidget(alarmsButton);
 
     dayBoardLayout->addWidget(buttonsBarContainer);
     dayBoardLayout->setAlignment(buttonsBarContainer, Qt::AlignBottom);
 }
 
-void DayBoard::makeScrollBar()
+void DayBoard::createScrollBar()
 {
     QScrollArea * scroll = new QScrollArea();
     scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);

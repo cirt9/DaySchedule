@@ -7,26 +7,28 @@ Activity::Activity(QWidget * parent) : QGroupBox(parent)
     description = nullptr;
 
     setStyleSheet("background: rgb(51,102,153); margin-left: 20px; margin-right: 20px; border-radius: 3px;");
-    setFixedHeight(130);
+    setFixedHeight(170);
 
-    QHBoxLayout * timeRangeLayout = makeTimeRangeLayout();
-    QHBoxLayout * iconsLayout = makeIconsLayout();
+    QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
+    QHBoxLayout * iconsLayout = createIconsLayout();
 
     QHBoxLayout * timeAndIconsLayout = new QHBoxLayout();
     timeAndIconsLayout->addLayout(timeRangeLayout);
     timeAndIconsLayout->addLayout(iconsLayout);
     timeAndIconsLayout->setSpacing(20);
 
-    QHBoxLayout * descriptionLayout = makeDescriptionLayout();
+    QHBoxLayout * descriptionLayout = createDescriptionLayout();
+    QHBoxLayout * summaryLayout = createSummaryLayout();
 
     QVBoxLayout * activityLayout = new QVBoxLayout();
     activityLayout->addLayout(timeAndIconsLayout);
     activityLayout->addLayout(descriptionLayout);
+    activityLayout->addLayout(summaryLayout);
 
     setLayout(activityLayout);
 }
 
-QHBoxLayout * Activity::makeTimeRangeLayout()
+QHBoxLayout * Activity::createTimeRangeLayout()
 {
     QHBoxLayout * timeRangeLayout = new QHBoxLayout();
 
@@ -64,19 +66,21 @@ QHBoxLayout * Activity::makeTimeRangeLayout()
     return timeRangeLayout;
 }
 
-QHBoxLayout *Activity::makeIconsLayout()
+QHBoxLayout * Activity::createIconsLayout()
 {
     QHBoxLayout * iconsLayout = new QHBoxLayout();
 
     QPushButton * startIcon = new QPushButton();
     startIcon->setFixedSize(40, 40);
-    startIcon->setStyleSheet("background-image:url(:/placeholderimage.jpg);"
-                             "border: none; margin: 0px;");
+    startIcon->setStyleSheet("QPushButton{border: none; margin: 0px;background-image:url(:/icons/icons/ready.jpg);}"
+                             "QPushButton:hover{background-image:url(:/icons/icons/readyHover.jpg);}"
+                             "QPushButton:pressed{background-image:url(:/icons/icons/readyPressed.jpg);}");
 
     QPushButton * deleteIcon = new QPushButton();
     deleteIcon->setFixedSize(40, 40);
-    deleteIcon->setStyleSheet("background-image:url(:/placeholderimage.jpg);"
-                              "border: none; margin: 0px;");
+    deleteIcon->setStyleSheet("QPushButton{border: none; margin: 0px;background-image:url(:/icons/icons/delete.jpg);}"
+                              "QPushButton:hover{background-image:url(:/icons/icons/deleteHover.jpg);}"
+                              "QPushButton:pressed{background-image:url(:/icons/icons/deletePressed.jpg);}");
 
     iconsLayout->addWidget(startIcon);
     iconsLayout->addWidget(deleteIcon);
@@ -84,7 +88,7 @@ QHBoxLayout *Activity::makeIconsLayout()
     return iconsLayout;
 }
 
-QHBoxLayout *Activity::makeDescriptionLayout()
+QHBoxLayout * Activity::createDescriptionLayout()
 {
     QHBoxLayout * descriptionLayout = new QHBoxLayout();
     descriptionLayout->setSpacing(0);
@@ -107,5 +111,27 @@ QHBoxLayout *Activity::makeDescriptionLayout()
     descriptionLayout->addWidget(description);
 
     return descriptionLayout;
+}
+
+QHBoxLayout * Activity::createSummaryLayout()
+{
+    QHBoxLayout * summaryLayout = new QHBoxLayout();
+
+    QPushButton * doneButton = new QPushButton("I did it!");
+    doneButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51); border: 2px solid transparent;"
+                              "border-radius: 3px; font-size: 20px; color: rgb(255,240,235);}"
+                              "QPushButton:hover{background: rgb(22, 25, 27); border: 1px solid rgb(255,240,235);}"
+                              "QPushButton:pressed{border: 2px solid rgb(255,240,235);}");
+
+    QPushButton * failedButton = new QPushButton("I failed!");
+    failedButton->setStyleSheet("QPushButton{background: rgb(46, 48, 51); border: 2px solid transparent;"
+                              "border-radius: 3px; font-size: 20px; color: rgb(255,240,235);}"
+                              "QPushButton:hover{background: rgb(22, 25, 27); border: 1px solid rgb(255,240,235);}"
+                              "QPushButton:pressed{border: 2px solid rgb(255,240,235);}");
+
+    summaryLayout->addWidget(doneButton);
+    summaryLayout->addWidget(failedButton);
+
+    return summaryLayout;
 }
 

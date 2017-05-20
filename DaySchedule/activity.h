@@ -18,9 +18,10 @@ private:
     QTimeEdit * toTime;
     QLineEdit * description;
 
-    QHBoxLayout * makeTimeRangeLayout();
-    QHBoxLayout * makeIconsLayout();
-    QHBoxLayout * makeDescriptionLayout();
+    QHBoxLayout * createTimeRangeLayout();
+    QHBoxLayout * createIconsLayout();
+    QHBoxLayout * createDescriptionLayout();
+    QHBoxLayout * createSummaryLayout();
 
 public:
     explicit Activity(QWidget * parent = nullptr);
