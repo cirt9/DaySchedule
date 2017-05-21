@@ -1,0 +1,241 @@
+/* MainWidnow Style */
+
+MainWindow
+{
+background: qradialgradient(radius: 1.5, stop:0 rgb(197,239,247), stop:1 rgb(82,179,217));
+}
+
+QGroupBox
+{
+border: none;
+}
+
+/* MainMenu Style */
+
+MainMenu > QPushButton
+{
+background-color: rgb(92,151,191);
+border-width: 3px;
+}
+
+MainMenu > QPushButton:hover
+{
+background-color: rgb(81,151,191);
+}
+
+MainMenu > QPushButton:pressed
+{
+background-color: rgb(92,151,191);
+}
+
+/* DayBoard Style */
+
+DayBoard
+{
+background: rgb(255,240,235);
+border-radius: 3px;
+}
+
+#DayBoardDateLabel
+{
+background: rgb(51,102,153);
+border-right: 2px dotted rgb(255,240,235);
+padding: 10px;
+color: rgb(255,240,235);
+font-size: 35px;
+border-top-left-radius: 3px;
+}
+
+#DayBoardProgressLabel
+{
+background: rgb(51,102,153);
+border-left: 2px dotted rgb(255,240,235);
+padding: 10px;
+color: rgb(255,240,235);
+font-size: 35px;
+border-top-right-radius: 3px;
+}
+
+#DayBoardActivitiesTitleLabel
+{
+color: rgb(51,102,153);
+font-size: 35px;
+}
+
+#DayBoardButtonsBarContainer
+{
+background: rgb(51,102,153);
+padding: 10px;
+border-bottom-left-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
+#DayBoardButton
+{
+background: rgb(46, 48, 51);
+border: 2px solid transparent;
+border-radius: 3px;
+font-size: 15px;
+color: rgb(255,240,235);
+padding: 10px;
+}
+
+#DayBoardButton:hover
+{
+background: rgb(22, 25, 27);
+border: 1px solid rgb(255,240,235);
+}
+
+#DayBoardButton:pressed
+{
+border: 2px solid rgb(255,240,235);
+}
+
+#DayBoardAlarmsButton
+{
+width: 40px;
+height: 40px;
+padding: 0px;
+}
+
+#DayBoardAlarmsButton::indicator
+{
+width: 40px;
+height: 40px;
+}
+
+#DayBoardAlarmsButton::indicator::unchecked
+{
+image: url(:/icons/icons/alarmsInactive.jpg);
+}
+
+#DayBoardAlarmsButton::indicator::checked
+{
+image: url(:/icons/icons/alarmsActive.jpg);
+}
+
+#DayBoardScroll
+{
+background: transparent;
+border: none;
+}
+
+QScrollBar
+{
+background: rgb(51,102,153);
+}
+
+#DayBoardScrollArea
+{
+background: transparent;
+border: none;
+}
+
+/* Activity Style */
+
+Activity
+{
+background: rgb(51,102,153);
+border-radius: 3px;
+}
+
+#ActivityFromTimeLabel
+{
+background: rgb(255,240,235);
+font-size: 20px;
+border-top-left-radius: 3px;
+padding-left: 2px;
+border-bottom-left-radius: 3px;
+margin: 0px;
+}
+
+#ActivityFromTimeEdit
+{
+background: rgb(255,240,235);
+font-size: 20px;
+border-radius: 0px;
+}
+
+#ActivityToTimeLabel
+{
+background: rgb(255,240,235);
+font-size: 20px;
+border-radius: 0px;
+}
+
+#ActivityToTimeEdit
+{
+background: rgb(255,240,235);
+font-size: 20px;
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
+#ActivityReadyButton
+{
+border-radius: 3px;
+background-image:url(:/icons/icons/ready.jpg);
+}
+
+#ActivityReadyButton:hover
+{
+background-image:url(:/icons/icons/readyHover.jpg);
+}
+
+#ActivityReadyButton:pressed
+{
+background-image:url(:/icons/icons/readyPressed.jpg);
+}
+
+#ActivityDeleteButton
+{
+border-radius: 3px;
+background-image:url(:/icons/icons/delete.jpg);
+}
+
+#ActivityDeleteButton:hover
+{
+background-image:url(:/icons/icons/deleteHover.jpg);
+}
+
+#ActivityDeleteButton:pressed
+{
+background-image:url(:/icons/icons/deletePressed.jpg);
+}
+
+#ActivityDescriptionLabel
+{
+background: rgb(255,240,235);
+font-size:20px;
+border-top-left-radius: 3px;
+border-bottom-left-radius: 3px;
+padding-left: 5px;
+}
+
+#ActivityDescriptionLineEdit
+{
+background: rgb(255,240,235);
+font-size:20px;
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
+#ActivityButton
+{
+background: rgb(46, 48, 51);
+border: 2px solid transparent;
+border-radius: 3px;
+font-size: 20px;
+color: rgb(255,240,235);
+}
+
+#ActivityButton:hover
+{
+background: rgb(22, 25, 27);
+border: 1px solid rgb(255,240,235);
+}
+
+#ActivityButton:pressed
+{
+border: 2px solid rgb(255,240,235);
+}

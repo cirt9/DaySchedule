@@ -17,4 +17,7 @@
     <qresource prefix="/">
         <file>placeholderimage.jpg</file>
     </qresource>
+    <qresource prefix="/style">
+        <file>style.css</file>
+    </qresource>
 </RCC>
