@@ -1,4 +1,5 @@
 #include "dayboard.h"
+#include <QDebug>
 
 DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
 {
@@ -7,9 +8,10 @@ DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
     dayBoardLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(dayBoardLayout);
 
+    alarmsEnabled = false;
+
     createDateAndProgressLayout();
     createActivitiesLayout();
-    createScrollBar();
     createBottomMenuLayout();
 }
 
@@ -43,11 +45,33 @@ void DayBoard::createActivitiesLayout()
     activitiesLayout->setAlignment(Qt::AlignTop);
     activitiesLayout->setContentsMargins(30, 5, 30, 5);
 
+    createActivitiesTitle();
+    createScrollBar();
+}
+
+void DayBoard::createActivitiesTitle()
+{
     QLabel * activitiesTitle = new QLabel("Activities");
     activitiesTitle->setObjectName("DayBoardActivitiesTitleLabel");
 
     activitiesLayout->addWidget(activitiesTitle);
     activitiesLayout->setAlignment(activitiesTitle, Qt::AlignHCenter);
+}
+
+void DayBoard::createScrollBar()
+{
+    QScrollArea * scroll = new QScrollArea();
+    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setWidgetResizable(true);
+    scroll->setObjectName("DayBoardScroll");
+
+    QWidget * scrollArea = new QWidget();
+    scrollArea->setObjectName("DayBoardScrollArea");
+    scrollArea->setLayout(activitiesLayout);
+    scroll->setWidget(scrollArea);
+
+    dayBoardLayout->addWidget(scroll);
 }
 
 void DayBoard::createBottomMenuLayout()
@@ -67,10 +91,12 @@ void DayBoard::createBottomMenuLayout()
 
     QPushButton * deleteAllButton = new QPushButton("Delete All Activities");
     deleteAllButton->setObjectName("DayBoardButton");
+    connect(deleteAllButton, SIGNAL(clicked()), this, SLOT(deleteAllActivities()));
 
     QCheckBox * alarmsButton = new QCheckBox();
     alarmsButton->setObjectName("DayBoardAlarmsButton");
     alarmsButton->setFixedSize(40, 40);
+    connect(alarmsButton, SIGNAL(toggled(bool)), this, SLOT(setAlarmsState(bool)));
 
     buttonsBarLayout->addWidget(addActivityButton);
     buttonsBarLayout->addWidget(copyButton);
@@ -81,26 +107,24 @@ void DayBoard::createBottomMenuLayout()
     dayBoardLayout->setAlignment(buttonsBarContainer, Qt::AlignBottom);
 }
 
-void DayBoard::createScrollBar()
-{
-    QScrollArea * scroll = new QScrollArea();
-    scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setWidgetResizable(true);
-    scroll->setObjectName("DayBoardScroll");
-
-    QWidget * scrollArea = new QWidget();
-    scrollArea->setObjectName("DayBoardScrollArea");
-    scrollArea->setLayout(activitiesLayout);
-    scroll->setWidget(scrollArea);
-
-    dayBoardLayout->addWidget(scroll);
-}
-
 void DayBoard::addNewActivity()
 {
     Activity * activity = new Activity();
 
     activitiesLayout->addWidget(activity);
     activities.push_back(activity);
+}
+
+void DayBoard::deleteAllActivities()
+{
+    LayoutDeleter deleter(activitiesLayout);
+    deleter.clearLayout();
+    activities.clear();
+
+    createActivitiesTitle();
+}
+
+void DayBoard::setAlarmsState(bool state)
+{
+    alarmsEnabled = state;
 }

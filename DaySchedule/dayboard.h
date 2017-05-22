@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <layoutdeleter.h>
 
 class DayBoard : public QGroupBox
 {
@@ -19,14 +20,18 @@ private:
     QVBoxLayout * dayBoardLayout;
     QVBoxLayout * activitiesLayout;
     QList <Activity *> activities;
+    bool alarmsEnabled;
 
     void createDateAndProgressLayout();
     void createActivitiesLayout();
-    void createBottomMenuLayout();
+    void createActivitiesTitle();
     void createScrollBar();
+    void createBottomMenuLayout();
 
 private slots:
     void addNewActivity();
+    void deleteAllActivities();
+    void setAlarmsState(bool state);
 
 public:
     explicit DayBoard(QWidget * parent = nullptr);

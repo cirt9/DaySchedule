@@ -5,6 +5,7 @@
 #include <mainmenu.h>
 #include <QGridLayout>
 #include <QSpacerItem>
+#include <layoutdeleter.h>
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +23,7 @@ private:
     void customizeMenu();
     void connectMenuToSlots();
 
-    void clearMainWindow(QLayout * layout, bool deleteWidgets = true);
+    void clearMainWindow();
 
 private slots:
     void start();

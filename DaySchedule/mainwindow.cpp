@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
     menu = nullptr;
-    clearMainWindow(this->layout());
+    clearMainWindow();
 }
 
 MainWindow::~MainWindow()
@@ -72,7 +72,7 @@ void MainWindow::connectMenuToSlots()
 
 void MainWindow::start()
 {
-    clearMainWindow(this->layout(), true);
+    clearMainWindow();
 
     DayBoard * day = new DayBoard(this);
 
@@ -89,17 +89,8 @@ void MainWindow::start()
     setCentralWidget(dayContainter);
 }
 
-void MainWindow::clearMainWindow(QLayout * layout, bool deleteWidgets)
+void MainWindow::clearMainWindow()
 {
-    while(QLayoutItem * item = layout->takeAt(0))
-    {
-        if(deleteWidgets)
-        {
-            if(QWidget * widget = item->widget())
-                widget->deleteLater();
-        }
-        if(QLayout * childLayout = item->layout())
-            clearMainWindow(childLayout, deleteWidgets);
-        delete item;
-    }
+    LayoutDeleter deleter(this->layout());
+    deleter.clearLayout();
 }
