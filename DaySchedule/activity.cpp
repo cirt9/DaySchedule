@@ -8,7 +8,7 @@ Activity::Activity(QWidget * parent) : QGroupBox(parent)
     setFixedHeight(170);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
-    QHBoxLayout * iconsLayout = createIconsLayout();
+    QHBoxLayout * iconsLayout = createControlButtonsLayout();
 
     QHBoxLayout * timeAndIconsLayout = new QHBoxLayout();
     timeAndIconsLayout->addLayout(timeRangeLayout);
@@ -59,22 +59,23 @@ QHBoxLayout * Activity::createTimeRangeLayout()
     return timeRangeLayout;
 }
 
-QHBoxLayout * Activity::createIconsLayout()
+QHBoxLayout * Activity::createControlButtonsLayout()
 {
-    QHBoxLayout * iconsLayout = new QHBoxLayout();
+    QHBoxLayout * controlButtonsLayout = new QHBoxLayout();
 
-    QPushButton * readyIcon = new QPushButton();
-    readyIcon->setFixedSize(40, 40);
-    readyIcon->setObjectName("ActivityReadyButton");
+    QPushButton * readyButton = new QPushButton();
+    readyButton->setFixedSize(40, 40);
+    readyButton->setObjectName("ActivityReadyButton");
 
-    QPushButton * deleteIcon = new QPushButton();
-    deleteIcon->setFixedSize(40, 40);
-    deleteIcon->setObjectName("ActivityDeleteButton");
+    QPushButton * deleteButton = new QPushButton();
+    deleteButton->setFixedSize(40, 40);
+    deleteButton->setObjectName("ActivityDeleteButton");
+    connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteActivity()));
 
-    iconsLayout->addWidget(readyIcon);
-    iconsLayout->addWidget(deleteIcon);
+    controlButtonsLayout->addWidget(readyButton);
+    controlButtonsLayout->addWidget(deleteButton);
 
-    return iconsLayout;
+    return controlButtonsLayout;
 }
 
 QHBoxLayout * Activity::createDescriptionLayout()
@@ -112,4 +113,14 @@ QHBoxLayout * Activity::createSummaryLayout()
     summaryLayout->addWidget(failedButton);
 
     return summaryLayout;
+}
+
+void Activity::deleteActivity()
+{
+    emit activityDeleted(this);
+
+    LayoutDeleter deleter(this->layout(), true);
+    deleter.clearLayout();
+
+    delete this;
 }

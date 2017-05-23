@@ -32,10 +32,14 @@ private slots:
     void addNewActivity();
     void deleteAllActivities();
     void setAlarmsState(bool state);
+    void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:
     explicit DayBoard(QWidget * parent = nullptr);
     ~DayBoard() {}
+
+    bool getAlarmsEnabled() const;
+    void setAlarmsEnabled(bool value);
 };
 
 #endif // DAYBOARD_H

@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <layoutdeleter.h>
 
 class Activity : public QGroupBox
 {
@@ -19,13 +20,19 @@ private:
     QLineEdit * description;
 
     QHBoxLayout * createTimeRangeLayout();
-    QHBoxLayout * createIconsLayout();
+    QHBoxLayout * createControlButtonsLayout();
     QHBoxLayout * createDescriptionLayout();
     QHBoxLayout * createSummaryLayout();
+
+private slots:
+    void deleteActivity();
 
 public:
     explicit Activity(QWidget * parent = nullptr);
     ~Activity() {}
+
+signals:
+    activityDeleted(QWidget * = nullptr);
 };
 
 #endif // ACTIVITY_H

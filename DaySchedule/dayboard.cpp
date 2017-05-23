@@ -1,5 +1,4 @@
 #include "dayboard.h"
-#include <QDebug>
 
 DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
 {
@@ -14,7 +13,6 @@ DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
     createActivitiesLayout();
     createBottomMenuLayout();
 }
-
 
 void DayBoard::createDateAndProgressLayout()
 {
@@ -110,6 +108,7 @@ void DayBoard::createBottomMenuLayout()
 void DayBoard::addNewActivity()
 {
     Activity * activity = new Activity();
+    connect(activity, SIGNAL(activityDeleted(QWidget*)), this, SLOT(eraseActivityFromList(QWidget*)));
 
     activitiesLayout->addWidget(activity);
     activities.push_back(activity);
@@ -127,4 +126,26 @@ void DayBoard::deleteAllActivities()
 void DayBoard::setAlarmsState(bool state)
 {
     alarmsEnabled = state;
+}
+
+void DayBoard::eraseActivityFromList(QWidget * activity)
+{
+    for(auto it = activities.begin(); it != activities.end(); it++)
+    {
+        if(*it == activity)
+        {
+            it = activities.erase(it);
+            break;
+        }
+    }
+}
+
+bool DayBoard::getAlarmsEnabled() const
+{
+    return alarmsEnabled;
+}
+
+void DayBoard::setAlarmsEnabled(bool value)
+{
+    alarmsEnabled = value;
 }
