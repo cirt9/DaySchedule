@@ -5,7 +5,7 @@ Activity::Activity(QWidget * parent) : QGroupBox(parent)
     fromTime = nullptr;
     toTime = nullptr;
     description = nullptr;
-    setFixedHeight(170);
+    setFixedHeight(fixedHeightStartEnd);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
     QHBoxLayout * iconsLayout = createControlButtonsLayout();
@@ -16,12 +16,10 @@ Activity::Activity(QWidget * parent) : QGroupBox(parent)
     timeAndIconsLayout->setSpacing(20);
 
     QHBoxLayout * descriptionLayout = createDescriptionLayout();
-    QHBoxLayout * summaryLayout = createSummaryLayout();
 
-    QVBoxLayout * activityLayout = new QVBoxLayout();
+    activityLayout = new QVBoxLayout();
     activityLayout->addLayout(timeAndIconsLayout);
     activityLayout->addLayout(descriptionLayout);
-    activityLayout->addLayout(summaryLayout);
 
     setLayout(activityLayout);
 }
@@ -63,11 +61,12 @@ QHBoxLayout * Activity::createControlButtonsLayout()
 {
     QHBoxLayout * controlButtonsLayout = new QHBoxLayout();
 
-    QPushButton * readyButton = new QPushButton();
+    readyButton = new QPushButton();
     readyButton->setFixedSize(40, 40);
     readyButton->setObjectName("ActivityReadyButton");
+    connect(readyButton, SIGNAL(clicked()), this, SLOT(startActivity()));
 
-    QPushButton * deleteButton = new QPushButton();
+    deleteButton = new QPushButton();
     deleteButton->setFixedSize(40, 40);
     deleteButton->setObjectName("ActivityDeleteButton");
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteActivity()));
@@ -83,7 +82,7 @@ QHBoxLayout * Activity::createDescriptionLayout()
     QHBoxLayout * descriptionLayout = new QHBoxLayout();
     descriptionLayout->setSpacing(0);
 
-    QLabel * descriptionLabel = new QLabel();
+    descriptionLabel = new QLabel();
     descriptionLabel->setText(QString("Description: "));
     descriptionLabel->setAlignment(Qt::AlignCenter);
     descriptionLabel->setFixedHeight(50);
@@ -105,9 +104,11 @@ QHBoxLayout * Activity::createSummaryLayout()
 
     QPushButton * doneButton = new QPushButton("I did it!");
     doneButton->setObjectName("ActivityButton");
+    connect(doneButton, SIGNAL(clicked()), this, SLOT(succeeded()));
 
     QPushButton * failedButton = new QPushButton("I failed!");
     failedButton->setObjectName("ActivityButton");
+    connect(failedButton, SIGNAL(clicked()), this, SLOT(failed()));
 
     summaryLayout->addWidget(doneButton);
     summaryLayout->addWidget(failedButton);
@@ -123,4 +124,49 @@ void Activity::deleteActivity()
     deleter.clearLayout();
 
     delete this;
+}
+
+void Activity::startActivity()
+{
+    setFixedHeight(fixedHeightActivated);
+
+    fromTime->setDisabled(true);
+    toTime->setDisabled(true);
+    description->setDisabled(true);
+    readyButton->setDisabled(true);
+
+    summaryLayout = createSummaryLayout();
+    activityLayout->addLayout(summaryLayout);
+
+    emit activityStarted();
+}
+
+void Activity::failed()
+{
+    clearSummaryLayout();
+    deleteButton->setDisabled(true);
+
+    description->setStyleSheet("background: rgb(255, 154, 154);");
+    descriptionLabel->setStyleSheet("background: rgb(255, 154, 154);");
+
+    emit fail();
+}
+
+void Activity::succeeded()
+{
+    clearSummaryLayout();
+    deleteButton->setDisabled(true);
+
+    description->setStyleSheet("background: rgb(177, 238, 144);");
+    descriptionLabel->setStyleSheet("background: rgb(177, 238, 144);");
+
+    emit success();
+}
+
+void Activity::clearSummaryLayout()
+{
+    LayoutDeleter deleter(summaryLayout, true, true);
+    deleter.clearLayout();
+    summaryLayout = nullptr;
+    setFixedHeight(fixedHeightStartEnd);
 }
