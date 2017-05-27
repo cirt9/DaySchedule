@@ -5,7 +5,9 @@ Activity::Activity(QWidget * parent) : QGroupBox(parent)
     fromTime = nullptr;
     toTime = nullptr;
     description = nullptr;
-    setFixedHeight(fixedHeightStartEnd);
+    summaryLayout = nullptr;
+    state = ActivityState();
+    setFixedHeight(FIXEDHEIGHTSTARTEND);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
     QHBoxLayout * iconsLayout = createControlButtonsLayout();
@@ -128,12 +130,14 @@ void Activity::deleteActivity()
 
 void Activity::startActivity()
 {
-    setFixedHeight(fixedHeightActivated);
+    setFixedHeight(FIXEDHEIGHTACTIVATED);
 
     fromTime->setDisabled(true);
     toTime->setDisabled(true);
     description->setDisabled(true);
     readyButton->setDisabled(true);
+
+    state.setState(ActivityState::ACTIVE);
 
     summaryLayout = createSummaryLayout();
     activityLayout->addLayout(summaryLayout);
@@ -144,7 +148,8 @@ void Activity::startActivity()
 void Activity::failed()
 {
     clearSummaryLayout();
-    deleteButton->setDisabled(true);
+
+    state.setState(ActivityState::FAIL);
 
     description->setStyleSheet("background: rgb(255, 154, 154);");
     descriptionLabel->setStyleSheet("background: rgb(255, 154, 154);");
@@ -155,7 +160,8 @@ void Activity::failed()
 void Activity::succeeded()
 {
     clearSummaryLayout();
-    deleteButton->setDisabled(true);
+
+    state.setState(ActivityState::SUCCESS);
 
     description->setStyleSheet("background: rgb(177, 238, 144);");
     descriptionLabel->setStyleSheet("background: rgb(177, 238, 144);");
@@ -168,5 +174,10 @@ void Activity::clearSummaryLayout()
     LayoutDeleter deleter(summaryLayout, true, true);
     deleter.clearLayout();
     summaryLayout = nullptr;
-    setFixedHeight(fixedHeightStartEnd);
+    setFixedHeight(FIXEDHEIGHTSTARTEND);
+}
+
+QString Activity::getState() const
+{
+    return state.getState();
 }

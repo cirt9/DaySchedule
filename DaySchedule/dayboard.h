@@ -19,18 +19,17 @@ class DayBoard : public QGroupBox
 private:
     QVBoxLayout * dayBoardLayout;
     QVBoxLayout * activitiesLayout;
-    QList <Activity *> activities;
+    QList<Activity *> activities;
     bool alarmsEnabled;
 
     void createDateAndProgressLayout();
     void createActivitiesLayout();
-    void createActivitiesTitle();
     void createScrollBar();
     void createBottomMenuLayout();
 
 private slots:
     void addNewActivity();
-    void deleteAllActivities();
+    void clearActivities();
     void setAlarmsState(bool state);
     void eraseActivityFromList(QWidget * activity = nullptr);
 

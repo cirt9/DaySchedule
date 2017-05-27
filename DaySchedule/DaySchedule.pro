@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     mainmenu.cpp \
     dayboard.cpp \
     activity.cpp \
-    layoutdeleter.cpp
+    layoutdeleter.cpp \
+    activitystate.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
     dayboard.h \
     activity.h \
-    layoutdeleter.h
+    layoutdeleter.h \
+    activitystate.h
 
 FORMS    += \
     mainwindow.ui

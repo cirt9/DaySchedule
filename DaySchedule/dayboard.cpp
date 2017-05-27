@@ -43,17 +43,13 @@ void DayBoard::createActivitiesLayout()
     activitiesLayout->setAlignment(Qt::AlignTop);
     activitiesLayout->setContentsMargins(30, 5, 30, 5);
 
-    createActivitiesTitle();
-    createScrollBar();
-}
-
-void DayBoard::createActivitiesTitle()
-{
     QLabel * activitiesTitle = new QLabel("Activities");
     activitiesTitle->setObjectName("DayBoardActivitiesTitleLabel");
 
     activitiesLayout->addWidget(activitiesTitle);
     activitiesLayout->setAlignment(activitiesTitle, Qt::AlignHCenter);
+
+    createScrollBar();
 }
 
 void DayBoard::createScrollBar()
@@ -87,9 +83,9 @@ void DayBoard::createBottomMenuLayout()
     QPushButton * copyButton = new QPushButton("Copy Other Day");
     copyButton->setObjectName("DayBoardButton");
 
-    QPushButton * deleteAllButton = new QPushButton("Delete All Activities");
-    deleteAllButton->setObjectName("DayBoardButton");
-    connect(deleteAllButton, SIGNAL(clicked()), this, SLOT(deleteAllActivities()));
+    QPushButton * clearButton = new QPushButton("Clear Activities");
+    clearButton->setObjectName("DayBoardButton");
+    connect(clearButton, SIGNAL(clicked()), this, SLOT(clearActivities()));
 
     QCheckBox * alarmsButton = new QCheckBox();
     alarmsButton->setObjectName("DayBoardAlarmsButton");
@@ -98,7 +94,7 @@ void DayBoard::createBottomMenuLayout()
 
     buttonsBarLayout->addWidget(addActivityButton);
     buttonsBarLayout->addWidget(copyButton);
-    buttonsBarLayout->addWidget(deleteAllButton);
+    buttonsBarLayout->addWidget(clearButton);
     buttonsBarLayout->addWidget(alarmsButton);
 
     dayBoardLayout->addWidget(buttonsBarContainer);
@@ -114,13 +110,22 @@ void DayBoard::addNewActivity()
     activities.push_back(activity);
 }
 
-void DayBoard::deleteAllActivities()
+void DayBoard::clearActivities()
 {
-    LayoutDeleter deleter(activitiesLayout);
-    deleter.clearLayout();
-    activities.clear();
+    auto it = activities.begin();
+    while(it != activities.end())
+    {
+        if((*it)->getState() == ActivityState::INACTIVE)
+        {
+            LayoutDeleter deleter((*it)->layout(), true);
+            deleter.clearLayout();
+            (*it)->deleteLater();
 
-    createActivitiesTitle();
+            it = activities.erase(it);
+        }
+        else
+            ++it;
+    }
 }
 
 void DayBoard::setAlarmsState(bool state)
@@ -130,7 +135,7 @@ void DayBoard::setAlarmsState(bool state)
 
 void DayBoard::eraseActivityFromList(QWidget * activity)
 {
-    for(auto it = activities.begin(); it != activities.end(); it++)
+    for(auto it = activities.begin(); it != activities.end(); ++it)
     {
         if(*it == activity)
         {

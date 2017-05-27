@@ -9,14 +9,16 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <layoutdeleter.h>
+#include <activitystate.h>
 
 class Activity : public QGroupBox
 {
     Q_OBJECT
 
 private:
-    static const int fixedHeightActivated = 170;
-    static const int fixedHeightStartEnd = 130;
+    static const int FIXEDHEIGHTACTIVATED = 170;
+    static const int FIXEDHEIGHTSTARTEND = 130;
+    ActivityState state;
 
     QVBoxLayout * activityLayout;
     QHBoxLayout * summaryLayout;
@@ -44,6 +46,8 @@ private slots:
 public:
     explicit Activity(QWidget * parent = nullptr);
     ~Activity() {}
+
+    QString getState() const;
 
 signals:
     void activityDeleted(QWidget * = nullptr);
