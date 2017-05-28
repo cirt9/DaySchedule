@@ -13,7 +13,7 @@ public:
     ActivityState(const QString State);
     ~ActivityState() {}
 
-    setState(const QString State);
+    void setState(const QString State);
     QString getState() const;
 
     static const QString INACTIVE;

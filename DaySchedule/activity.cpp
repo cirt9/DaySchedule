@@ -120,29 +120,66 @@ QHBoxLayout * Activity::createSummaryLayout()
 
 void Activity::deleteActivity()
 {
-    emit activityDeleted(this);
+    if(getConfirmationOfActiveActivityDeletion())
+    {
+        emit activityDeleted(this);
 
-    LayoutDeleter deleter(this->layout(), true);
-    deleter.clearLayout();
+        LayoutDeleter deleter(this->layout(), true);
+        deleter.clearLayout();
 
-    delete this;
+        delete this;
+    }
+}
+
+bool Activity::getConfirmationOfActiveActivityDeletion()
+{
+    if(state.getState() == ActivityState::INACTIVE)
+        return true;
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::information(this, "Information",
+                                  "Please do not cheat by removing active activities."
+                                  "<br>Do you still want to delete this activity?",
+                                  QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes)
+        return true;
+    else
+        return false;
 }
 
 void Activity::startActivity()
 {
-    setFixedHeight(FIXEDHEIGHTACTIVATED);
+    try
+    {
+        checkCorrectnessOfInput();
 
-    fromTime->setDisabled(true);
-    toTime->setDisabled(true);
-    description->setDisabled(true);
-    readyButton->setDisabled(true);
+        setFixedHeight(FIXEDHEIGHTACTIVATED);
 
-    state.setState(ActivityState::ACTIVE);
+        fromTime->setDisabled(true);
+        toTime->setDisabled(true);
+        description->setDisabled(true);
+        readyButton->setDisabled(true);
 
-    summaryLayout = createSummaryLayout();
-    activityLayout->addLayout(summaryLayout);
+        state.setState(ActivityState::ACTIVE);
 
-    emit activityStarted();
+        summaryLayout = createSummaryLayout();
+        activityLayout->addLayout(summaryLayout);
+
+        emit activityStarted();
+    }
+    catch(QString e)
+    {
+        QMessageBox::warning(this, QString("Failure"), e);
+    }
+}
+
+void Activity::checkCorrectnessOfInput()
+{
+    if(fromTime->time() >= toTime->time())
+        throw QString("Time does not run backwards.<br>You gave the wrong time!");
+
+    if(description->text().isEmpty())
+        throw QString("Description cannot be empty!");
 }
 
 void Activity::failed()

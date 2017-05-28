@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <layoutdeleter.h>
 #include <activitystate.h>
+#include <QMessageBox>
 
 class Activity : public QGroupBox
 {
@@ -34,6 +35,9 @@ private:
     QHBoxLayout * createControlButtonsLayout();
     QHBoxLayout * createDescriptionLayout();
     QHBoxLayout * createSummaryLayout();
+
+    bool getConfirmationOfActiveActivityDeletion();
+    void checkCorrectnessOfInput();
 
     void clearSummaryLayout();
 

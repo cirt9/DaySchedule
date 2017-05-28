@@ -15,7 +15,7 @@ ActivityState::ActivityState(const QString State)
     state = State;
 }
 
-ActivityState::setState(const QString State)
+void ActivityState::setState(const QString State)
 {
     state = State;
 }
