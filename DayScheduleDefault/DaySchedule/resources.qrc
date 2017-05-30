@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/about.png</file>
+        <file>icons/load.png</file>
+        <file>icons/options.png</file>
+        <file>icons/quit.png</file>
+        <file>icons/start.png</file>
+        <file>icons/alarmsActive.jpg</file>
+        <file>icons/alarmsInactive.jpg</file>
+        <file>icons/delete.jpg</file>
+        <file>icons/deleteHover.jpg</file>
+        <file>icons/deletePressed.jpg</file>
+        <file>icons/ready.jpg</file>
+        <file>icons/readyHover.jpg</file>
+        <file>icons/readyPressed.jpg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>placeholderimage.jpg</file>
+    </qresource>
+    <qresource prefix="/style">
+        <file>style.css</file>
+    </qresource>
+</RCC>
