@@ -11,6 +11,7 @@
 #include <layoutdeleter.h>
 #include <activitystate.h>
 #include <QMessageBox>
+#include <timerangesystem.h>
 
 class Activity : public QGroupBox
 {
@@ -20,6 +21,7 @@ private:
     static const int FIXEDHEIGHTACTIVATED = 170;
     static const int FIXEDHEIGHTSTARTEND = 130;
     ActivityState state;
+    TimeRangeSystem * timeSystem;
 
     QVBoxLayout * activityLayout;
     QHBoxLayout * summaryLayout;
@@ -48,7 +50,7 @@ private slots:
     void succeeded();
 
 public:
-    explicit Activity(QWidget * parent = nullptr);
+    explicit Activity(TimeRangeSystem * tSystem, QWidget * parent = nullptr);
     ~Activity() {}
 
     QString getState() const;

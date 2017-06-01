@@ -1,12 +1,13 @@
 #include "activity.h"
 
-Activity::Activity(QWidget * parent) : QGroupBox(parent)
+Activity::Activity(TimeRangeSystem * tSystem, QWidget * parent) : QGroupBox(parent)
 {
     fromTime = nullptr;
     toTime = nullptr;
     description = nullptr;
     summaryLayout = nullptr;
     state = ActivityState();
+    timeSystem = tSystem;
     setFixedHeight(FIXEDHEIGHTSTARTEND);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
@@ -152,6 +153,7 @@ void Activity::startActivity()
     try
     {
         checkCorrectnessOfInput();
+        timeSystem->addInterval(fromTime->time(), toTime->time());
 
         setFixedHeight(FIXEDHEIGHTACTIVATED);
 

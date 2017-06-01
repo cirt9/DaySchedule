@@ -7,6 +7,7 @@ DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
     dayBoardLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(dayBoardLayout);
 
+    timeSystem = new TimeRangeSystem();
     alarmsEnabled = false;
 
     createDateAndProgressLayout();
@@ -103,7 +104,7 @@ void DayBoard::createBottomMenuLayout()
 
 void DayBoard::addNewActivity()
 {
-    Activity * activity = new Activity();
+    Activity * activity = new Activity(timeSystem);
     connect(activity, SIGNAL(activityDeleted(QWidget*)), this, SLOT(eraseActivityFromList(QWidget*)));
 
     activitiesLayout->addWidget(activity);

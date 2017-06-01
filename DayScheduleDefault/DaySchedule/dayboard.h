@@ -11,6 +11,7 @@
 #include <QScrollArea>
 #include <QCheckBox>
 #include <layoutdeleter.h>
+#include <timerangesystem.h>
 
 class DayBoard : public QGroupBox
 {
@@ -20,6 +21,7 @@ private:
     QVBoxLayout * dayBoardLayout;
     QVBoxLayout * activitiesLayout;
     QList<Activity *> activities;
+    TimeRangeSystem * timeSystem;
     bool alarmsEnabled;
 
     void createDateAndProgressLayout();

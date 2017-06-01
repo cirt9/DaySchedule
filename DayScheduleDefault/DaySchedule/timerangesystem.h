@@ -21,6 +21,9 @@ public:
     ~TimeRangeSystem() {}
 
     void addInterval(const QTime from, const QTime to);
+
+    int getNumberOfIntervals() const;
+    void clear();
 };
 
 #endif // TIMERANGESYSTEM_H

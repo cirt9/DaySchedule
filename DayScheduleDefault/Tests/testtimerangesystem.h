@@ -8,6 +8,8 @@
 class TestTimeRangeSystem : public QObject
 {
     Q_OBJECT
+private:
+    TimeRangeSystem timeSystem;
 
 public:
     TestTimeRangeSystem();
@@ -15,7 +17,10 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
-    void testCase1();
+
+    void testNumberOfIntervalsReturnsZero();
+    void testIntervalAddingWorksProperly();
+    void testIntervalAddingThrowsException();
 };
 
 #endif // TESTTIMERANGESYSTEM_H
