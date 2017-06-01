@@ -37,7 +37,7 @@ private slots:
 
 public:
     explicit DayBoard(QWidget * parent = nullptr);
-    ~DayBoard() {}
+    ~DayBoard() {delete timeSystem;}
 
     bool getAlarmsEnabled() const;
     void setAlarmsEnabled(bool value);
