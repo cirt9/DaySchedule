@@ -58,3 +58,41 @@ void TimeRangeSystem::clear()
     while(itBegin != itEnd)
         itBegin = intervals.erase(itBegin);
 }
+
+bool TimeRangeSystem::removeInterval(const QTime from, const QTime to)
+{
+    Interval toRemove;
+    toRemove.fromTime = from;
+    toRemove.toTime = to;
+
+    int position = findInterval(toRemove);
+
+    if(position != -1)
+    {
+        intervals.removeAt(position);
+        return true;
+    }
+    else
+        return false;
+}
+
+int TimeRangeSystem::findInterval(const Interval interval)
+{
+    int lowest = 1;
+    int highest = intervals.size()-2;
+
+    while(lowest <= highest)
+    {
+        int middle = lowest + (highest - lowest) / 2;
+
+        if(interval.toTime < intervals[middle].fromTime)
+            highest = middle-1;
+
+        else if(interval.fromTime > intervals[middle].toTime)
+            lowest = middle+1;
+
+        else
+            return middle;
+    }
+    return -1;
+}

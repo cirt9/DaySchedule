@@ -17,10 +17,13 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void cleanup();
 
     void testNumberOfIntervalsReturnsZero();
     void testIntervalAddingWorksProperly();
     void testIntervalAddingThrowsException();
+    void testIntervalRemovingReturnsTrue();
+    void testIntervalRemovingReturnsFalse();
 };
 
 #endif // TESTTIMERANGESYSTEM_H

@@ -17,6 +17,11 @@ void TestTimeRangeSystem::cleanupTestCase()
     QCOMPARE(timeSystem.getNumberOfIntervals(), 0);
 }
 
+void TestTimeRangeSystem::cleanup()
+{
+    timeSystem.clear();
+}
+
 void TestTimeRangeSystem::testNumberOfIntervalsReturnsZero()
 {
     int zeroIntervals = timeSystem.getNumberOfIntervals();
@@ -39,7 +44,7 @@ void TestTimeRangeSystem::testIntervalAddingWorksProperly()
 
 void TestTimeRangeSystem::testIntervalAddingThrowsException()
 {
-    QString exception = "Exception not thrown";
+    QString exception = QString("Exception not thrown");
 
     try
     {
@@ -53,8 +58,29 @@ void TestTimeRangeSystem::testIntervalAddingThrowsException()
     }
     catch(QString e)
     {
-        exception = e;
+        exception = QString("Exception thrown");
     }
 
-    QCOMPARE(exception, QString("This time interval collides with other time intervals!"));
+    QCOMPARE(exception, QString("Exception thrown"));
+}
+
+void TestTimeRangeSystem::testIntervalRemovingReturnsTrue()
+{
+    QTime fromTime(0, 0, 0, 0);
+    QTime toTime(1, 0, 0, 0);
+    timeSystem.addInterval(fromTime, toTime);
+
+    bool removed = timeSystem.removeInterval(fromTime, toTime);
+
+    QCOMPARE(removed, true);
+}
+
+void TestTimeRangeSystem::testIntervalRemovingReturnsFalse()
+{
+    QTime fromTime(0, 0, 0, 0);
+    QTime toTime(1, 0, 0, 0);
+
+    bool removed = timeSystem.removeInterval(fromTime, toTime);
+
+    QCOMPARE(removed, false);
 }
