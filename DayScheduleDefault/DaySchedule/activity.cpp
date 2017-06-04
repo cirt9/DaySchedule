@@ -125,7 +125,8 @@ void Activity::deleteActivity()
     {
         emit activityDeleted(this);
 
-        timeSystem->removeInterval(fromTime->time(), toTime->time());
+        if(state.getState() != ActivityState::INACTIVE)
+            timeSystem->removeInterval(fromTime->time(), toTime->time());
 
         LayoutDeleter deleter(this->layout(), true);
         deleter.clearLayout();

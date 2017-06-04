@@ -2,6 +2,12 @@
 
 TimeRangeSystem::TimeRangeSystem()
 {
+    setMinimalTimeInterval();
+    setMaximalTimeInterval();
+}
+
+void TimeRangeSystem::setMinimalTimeInterval()
+{
     QTime minimumIntervalFrom(0, 0, 0, 0);
     QTime minimumIntervalTo(0, 0, 0, 0);
     Interval minimumIntervalRange;
@@ -9,7 +15,10 @@ TimeRangeSystem::TimeRangeSystem()
     minimumIntervalRange.toTime = minimumIntervalTo;
 
     intervals.push_back(minimumIntervalRange);
+}
 
+void TimeRangeSystem::setMaximalTimeInterval()
+{
     QTime maximumIntervalFrom(23, 59, 59, 999);
     QTime maximumIntervalTo(23, 59, 59, 999);
     Interval maximumIntervalRange;
@@ -65,7 +74,7 @@ bool TimeRangeSystem::removeInterval(const QTime from, const QTime to)
     toRemove.fromTime = from;
     toRemove.toTime = to;
 
-    int position = findInterval(toRemove);
+    int position = findIntervalIndex(toRemove);
 
     if(position != -1)
     {
@@ -76,23 +85,13 @@ bool TimeRangeSystem::removeInterval(const QTime from, const QTime to)
         return false;
 }
 
-int TimeRangeSystem::findInterval(const Interval interval)
+int TimeRangeSystem::findIntervalIndex(const Interval interval)
 {
-    int lowest = 1;
-    int highest = intervals.size()-2;
-
-    while(lowest <= highest)
+    for(int i=1; i<intervals.size()-1; i++)
     {
-        int middle = lowest + (highest - lowest) / 2;
-
-        if(interval.toTime < intervals[middle].fromTime)
-            highest = middle-1;
-
-        else if(interval.fromTime > intervals[middle].toTime)
-            lowest = middle+1;
-
-        else
-            return middle;
+        if(intervals[i].fromTime == interval.fromTime && intervals[i].toTime == interval.toTime)
+            return i;
     }
+
     return -1;
 }

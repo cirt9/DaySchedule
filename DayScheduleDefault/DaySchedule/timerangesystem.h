@@ -16,7 +16,10 @@ private:
 
     QList<Interval> intervals;
 
-    int findInterval(const Interval interval);
+    void setMinimalTimeInterval();
+    void setMaximalTimeInterval();
+
+    int findIntervalIndex(const Interval interval);
 
 public:
     TimeRangeSystem();
