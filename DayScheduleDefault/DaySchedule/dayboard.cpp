@@ -1,14 +1,15 @@
 #include "dayboard.h"
 
-DayBoard::DayBoard(QWidget * parent) : QGroupBox(parent)
+DayBoard::DayBoard(QString date, QWidget * parent) : QGroupBox(parent), timeSystem(new TimeRangeSystem)
 {
     dayBoardLayout = new QVBoxLayout();
     dayBoardLayout->setSpacing(20);
     dayBoardLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(dayBoardLayout);
 
-    timeSystem = new TimeRangeSystem();
+    progress = nullptr;
     alarmsEnabled = false;
+    dayBoardDate = date;
 
     createDateAndProgressLayout();
     createActivitiesLayout();
@@ -20,12 +21,12 @@ void DayBoard::createDateAndProgressLayout()
     QHBoxLayout * dateProgressLayout = new QHBoxLayout();
     dateProgressLayout->setSpacing(0);
 
-    QLabel * date = new QLabel("13.05.2017, Saturday");
+    QLabel * date = new QLabel(dayBoardDate);
     date->setMaximumHeight(80);
     date->setAlignment(Qt::AlignCenter);
     date->setObjectName("DayBoardDateLabel");
 
-    QLabel * progress = new QLabel("100%");
+    progress = new QLabel("0%");
     progress->setMaximumHeight(80);
     progress->setAlignment(Qt::AlignCenter);
     progress->setMaximumWidth(120);
@@ -107,8 +108,14 @@ void DayBoard::addNewActivity()
     Activity * activity = new Activity(timeSystem);
     connect(activity, SIGNAL(activityDeleted(QWidget*)), this, SLOT(eraseActivityFromList(QWidget*)));
 
+    connect(activity, SIGNAL(fail()), this, SLOT(updateProgress()));
+    connect(activity, SIGNAL(success()), this, SLOT(updateProgress()));
+    connect(activity, SIGNAL(destroyed()), this, SLOT(updateProgress()));
+
     activitiesLayout->addWidget(activity);
     activities.push_back(activity);
+
+    updateProgress();
 }
 
 void DayBoard::clearActivities()
@@ -144,6 +151,29 @@ void DayBoard::eraseActivityFromList(QWidget * activity)
             break;
         }
     }
+}
+
+void DayBoard::updateProgress()
+{
+    QString updatedProgress = QString::number(calculateProgress()) + QString("%");
+
+    progress->setText(updatedProgress);
+}
+
+int DayBoard::calculateProgress()
+{
+    int numberOfSucceededActivities = 0;
+
+    for(auto activity : activities)
+    {
+        if(activity->getState() == ActivityState::SUCCESS)
+            numberOfSucceededActivities++;
+    }
+    if(activities.size() == 0)
+        return 0;
+
+    else
+        return numberOfSucceededActivities * 100 / activities.size();
 }
 
 bool DayBoard::getAlarmsEnabled() const

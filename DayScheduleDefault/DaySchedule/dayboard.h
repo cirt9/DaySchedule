@@ -12,6 +12,7 @@
 #include <QCheckBox>
 #include <layoutdeleter.h>
 #include <timerangesystem.h>
+#include <QSharedPointer>
 
 class DayBoard : public QGroupBox
 {
@@ -21,13 +22,18 @@ private:
     QVBoxLayout * dayBoardLayout;
     QVBoxLayout * activitiesLayout;
     QList<Activity *> activities;
-    TimeRangeSystem * timeSystem;
+    QSharedPointer<TimeRangeSystem> timeSystem;
     bool alarmsEnabled;
+    QString dayBoardDate;
+
+    QLabel * progress;
 
     void createDateAndProgressLayout();
     void createActivitiesLayout();
     void createScrollBar();
     void createBottomMenuLayout();
+
+    int calculateProgress();
 
 private slots:
     void addNewActivity();
@@ -36,11 +42,14 @@ private slots:
     void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:
-    explicit DayBoard(QWidget * parent = nullptr);
-    ~DayBoard() {delete timeSystem;}
+    explicit DayBoard(QString date, QWidget * parent = nullptr);
+    ~DayBoard() {;}
 
     bool getAlarmsEnabled() const;
     void setAlarmsEnabled(bool value);
+
+public slots:
+    void updateProgress();
 };
 
 #endif // DAYBOARD_H

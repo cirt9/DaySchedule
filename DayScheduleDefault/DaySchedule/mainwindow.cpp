@@ -74,7 +74,7 @@ void MainWindow::start()
 {
     clearMainWindow();
 
-    DayBoard * day = new DayBoard(this);
+    DayBoard * day = new DayBoard(QString("05.06.2017, Saturday"),this);
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);

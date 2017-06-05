@@ -1,6 +1,6 @@
 #include "activity.h"
 
-Activity::Activity(TimeRangeSystem * tSystem, QWidget * parent) : QGroupBox(parent)
+Activity::Activity(QSharedPointer<TimeRangeSystem> tSystem, QWidget * parent) : QGroupBox(parent)
 {
     fromTime = nullptr;
     toTime = nullptr;
