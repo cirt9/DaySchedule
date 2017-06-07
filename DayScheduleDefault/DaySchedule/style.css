@@ -10,6 +10,14 @@ QGroupBox
 border: none;
 }
 
+/* MonthBoard Style */
+
+MonthBoard
+{
+background: rgb(255,240,235);
+border-radius: 3px;
+}
+
 /* DayBoard Style */
 
 DayBoard

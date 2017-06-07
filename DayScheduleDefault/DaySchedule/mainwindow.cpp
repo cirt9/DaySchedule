@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <dayboard.h>
+#include <monthboard.h>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -74,7 +75,7 @@ void MainWindow::start()
 {
     clearMainWindow();
 
-    DayBoard * day = new DayBoard(QString("05.06.2017, Saturday"),this);
+    /*DayBoard * day = new DayBoard(QString("05.06.2017, Saturday"),this);
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -86,7 +87,21 @@ void MainWindow::start()
     centeringLayout->addItem(rightSpacer, 0, 2);
 
     dayContainter->setLayout(centeringLayout);
-    setCentralWidget(dayContainter);
+    setCentralWidget(dayContainter);*/
+
+    MonthBoard * month = new MonthBoard(this);
+
+    QGridLayout * centeringLayout = new QGridLayout();
+    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QWidget * monthContainter = new QWidget(this);
+
+    centeringLayout->addItem(leftSpacer, 0, 0);
+    centeringLayout->addWidget(month, 0, 1);
+    centeringLayout->addItem(rightSpacer, 0, 2);
+
+    monthContainter->setLayout(centeringLayout);
+    setCentralWidget(monthContainter);
 }
 
 void MainWindow::clearMainWindow()

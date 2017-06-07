@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     activity.cpp \
     layoutdeleter.cpp \
     activitystate.cpp \
-    timerangesystem.cpp
+    timerangesystem.cpp \
+    monthboard.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     activity.h \
     layoutdeleter.h \
     activitystate.h \
-    timerangesystem.h
+    timerangesystem.h \
+    monthboard.h
 
 FORMS    += \
     mainwindow.ui
