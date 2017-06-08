@@ -3,10 +3,21 @@
 
 
 #include <QGroupBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QLabel>
 
 class MonthBoard : public QGroupBox
 {
     Q_OBJECT
+
+private:
+    QVBoxLayout * monthBoardLayout;
+
+    void createHeaderLayout();
+    void createDayCardsLayout();
+    void createFooterLayout();
 
 public:
     explicit MonthBoard(QWidget * parent = nullptr);

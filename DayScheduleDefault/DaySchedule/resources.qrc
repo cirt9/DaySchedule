@@ -14,9 +14,6 @@
         <file>icons/readyHover.jpg</file>
         <file>icons/readyPressed.jpg</file>
     </qresource>
-    <qresource prefix="/">
-        <file>placeholderimage.jpg</file>
-    </qresource>
     <qresource prefix="/style">
         <file>style.css</file>
     </qresource>

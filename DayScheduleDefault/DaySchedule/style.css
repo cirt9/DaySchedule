@@ -18,6 +18,26 @@ background: rgb(255,240,235);
 border-radius: 3px;
 }
 
+#MonthBoardMonthNameLabel
+{
+background: rgb(51,102,153);
+padding: 10px;
+color: rgb(255,240,235);
+font-size: 40px;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+}
+
+#MonthBoardFooterTextLabel
+{
+background: rgb(51,102,153);
+padding: 10px;
+color: rgb(255,240,235);
+font-size: 35px;
+border-bottom-left-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
 /* DayBoard Style */
 
 DayBoard
