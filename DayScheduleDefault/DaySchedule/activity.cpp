@@ -8,7 +8,7 @@ Activity::Activity(QSharedPointer<TimeRangeSystem> tSystem, QWidget * parent) : 
     summaryLayout = nullptr;
     state = ActivityState();
     timeSystem = tSystem;
-    setFixedHeight(FIXEDHEIGHTSTARTEND);
+    setFixedHeight(FIXED_HEIGHT_START_END);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
     QHBoxLayout * iconsLayout = createControlButtonsLayout();
@@ -158,7 +158,7 @@ void Activity::startActivity()
         checkCorrectnessOfInput();
         timeSystem->addInterval(fromTime->time(), toTime->time());
 
-        setFixedHeight(FIXEDHEIGHTACTIVATED);
+        setFixedHeight(FIXED_HEIGHT_ACTIVATED);
 
         fromTime->setDisabled(true);
         toTime->setDisabled(true);
@@ -216,7 +216,7 @@ void Activity::clearSummaryLayout()
     LayoutDeleter deleter(summaryLayout, true, true);
     deleter.clearLayout();
     summaryLayout = nullptr;
-    setFixedHeight(FIXEDHEIGHTSTARTEND);
+    setFixedHeight(FIXED_HEIGHT_START_END);
 }
 
 QString Activity::getState() const

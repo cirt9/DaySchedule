@@ -19,8 +19,8 @@ class Activity : public QGroupBox
     Q_OBJECT
 
 private:
-    static const int FIXEDHEIGHTACTIVATED = 170;
-    static const int FIXEDHEIGHTSTARTEND = 130;
+    static const int FIXED_HEIGHT_ACTIVATED = 170;
+    static const int FIXED_HEIGHT_START_END = 130;
     ActivityState state;
     QSharedPointer<TimeRangeSystem> timeSystem;
 

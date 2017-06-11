@@ -38,6 +38,56 @@ border-bottom-left-radius: 3px;
 border-bottom-right-radius: 3px;
 }
 
+#MonthBoardDayNameLabel
+{
+color: rgb(51,102,153);
+font: bold 11px;
+}
+
+#MonthBoardDayCard
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 35px;
+}
+
+#MonthBoardDayCardTopLeftCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 35px;
+border-top-left-radius: 3px;
+}
+
+#MonthBoardDayCardTopRightCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 35px;
+border-top-right-radius: 3px;
+}
+
+#MonthBoardDayCardBottomLeftCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 35px;
+border-bottom-left-radius: 3px;
+}
+
+#MonthBoardDayCardBottomRightCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 35px;
+border-bottom-right-radius: 3px;
+}
+
 /* DayBoard Style */
 
 DayBoard
