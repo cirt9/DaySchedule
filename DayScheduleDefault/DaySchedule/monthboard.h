@@ -17,8 +17,8 @@ class MonthBoard : public QGroupBox
     Q_OBJECT
 
 private:
-    static const int MAX_NUMBER_OF_CARDS = 42;
     static const int MAX_ROW_SIZE = 7;
+    int maxNumberOfCards;
 
     QVBoxLayout * monthBoardLayout;
     QDate date;

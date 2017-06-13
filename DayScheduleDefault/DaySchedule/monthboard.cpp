@@ -7,6 +7,7 @@ MonthBoard::MonthBoard(QWidget * parent) : QGroupBox(parent)
     monthBoardLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(monthBoardLayout);
 
+    maxNumberOfCards = 42;
     date = QDate(2017, 6, 1);
 
     createHeaderLayout();
@@ -67,11 +68,12 @@ void MonthBoard::createBlankCardsOnTheFront(int & row, int & column, QGridLayout
 
     for(int blankCards=0; blankCards<firstDayNumber; blankCards++)
     {
-        QPushButton * dayCard = new QPushButton();
-        dayCard->setMinimumSize(100, 100);
-        dayCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        dayCard->setObjectName("MonthBoardDayCard");
-        cardsLayout->addWidget(dayCard, row, column);
+        QPushButton * blankCard = new QPushButton();
+        blankCard->setMinimumSize(100, 100);
+        blankCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        blankCard->setObjectName("MonthBoardDayCard");
+        blankCard->setDisabled(true);
+        cardsLayout->addWidget(blankCard, row, column);
         column++;
     }
 }
@@ -100,7 +102,10 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
 {
     int numberOfCreatedCards = (row-1) * MAX_ROW_SIZE + column;
 
-    for(int blankCards=numberOfCreatedCards; blankCards<MAX_NUMBER_OF_CARDS; blankCards++)
+    if(numberOfCreatedCards <= 35)
+        maxNumberOfCards = 35;
+
+    for(int blankCards=numberOfCreatedCards; blankCards<maxNumberOfCards; blankCards++)
     {
         if(column == 7)
         {
@@ -108,11 +113,12 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
             row++;
         }
 
-        QPushButton * dayCard = new QPushButton();
-        dayCard->setMinimumSize(100, 100);
-        dayCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        dayCard->setObjectName("MonthBoardDayCard");
-        cardsLayout->addWidget(dayCard, row, column);
+        QPushButton * blankCard = new QPushButton();
+        blankCard->setMinimumSize(100, 100);
+        blankCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        blankCard->setObjectName("MonthBoardDayCard");
+        blankCard->setDisabled(true);
+        cardsLayout->addWidget(blankCard, row, column);
         column++;
     }
 }
@@ -131,9 +137,9 @@ void MonthBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
     }
 
     dayCards[0]->setObjectName("MonthBoardDayCardTopLeftCorner");
-    dayCards[6]->setObjectName("MonthBoardDayCardTopRightCorner");
-    dayCards[35]->setObjectName("MonthBoardDayCardBottomLeftCorner");
-    dayCards[41]->setObjectName("MonthBoardDayCardBottomRightCorner");
+    dayCards[MAX_ROW_SIZE-1]->setObjectName("MonthBoardDayCardTopRightCorner");
+    dayCards[maxNumberOfCards-MAX_ROW_SIZE]->setObjectName("MonthBoardDayCardBottomLeftCorner");
+    dayCards[maxNumberOfCards-1]->setObjectName("MonthBoardDayCardBottomRightCorner");
 
 }
 

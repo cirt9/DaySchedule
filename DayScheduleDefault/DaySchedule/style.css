@@ -88,6 +88,26 @@ font: bold 35px;
 border-bottom-right-radius: 3px;
 }
 
+#MonthBoardDayCard:hover,
+#MonthBoardDayCardTopLeftCorner:hover,
+#MonthBoardDayCardTopRightCorner:hover,
+#MonthBoardDayCardBottomLeftCorner:hover,
+#MonthBoardDayCardBottomRightCorner:hover
+{
+background: rgb(255,240,235);
+color: rgb(51,102,153);
+font: bold 40px;
+}
+
+#MonthBoardDayCard:pressed,
+#MonthBoardDayCardTopLeftCorner:pressed,
+#MonthBoardDayCardTopRightCorner:pressed,
+#MonthBoardDayCardBottomLeftCorner:pressed,
+#MonthBoardDayCardBottomRightCorner:pressed
+{
+font: bold 50px;
+}
+
 /* DayBoard Style */
 
 DayBoard
