@@ -149,7 +149,7 @@ void MonthBoard::createFooterLayout()
 
     QLabel * footerText = new QLabel(QString("Footer"));
     footerText->setObjectName("MonthBoardFooterTextLabel");
-    footerText->setMaximumHeight(60);
+    footerText->setMaximumHeight(80);
     footerText->setAlignment(Qt::AlignCenter);
 
     footerLayout->addWidget(footerText);

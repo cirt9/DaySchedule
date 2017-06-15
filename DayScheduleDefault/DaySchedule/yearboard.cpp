@@ -7,56 +7,77 @@ YearBoard::YearBoard(QWidget * parent) : QGroupBox(parent)
     yearBoardLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(yearBoardLayout);
 
-    setStyleSheet("background: black;");
+    createHeaderLayout();
+    createMonthCardsLayout();
+    createFooterLayout();
+}
 
-
+void YearBoard::createHeaderLayout()
+{
     QHBoxLayout * headerLayout = new QHBoxLayout();
 
     QLabel * yearNumber = new QLabel(QString("2017"));
-    yearNumber->setStyleSheet("background: white;");
+    yearNumber->setObjectName("YearBoardYearNumberLabel");
     yearNumber->setMaximumHeight(80);
     yearNumber->setAlignment(Qt::AlignCenter);
 
     headerLayout->addWidget(yearNumber);
 
     yearBoardLayout->addLayout(headerLayout);
+}
 
-
-
+void YearBoard::createMonthCardsLayout()
+{
     QGridLayout * monthsCardsLayout = new QGridLayout();
+    monthsCardsLayout->setSpacing(1);
+    monthsCardsLayout->setContentsMargins(20, 5, 20, 5);
 
-    QPushButton * monthCard1 = new QPushButton();
-    monthCard1->setStyleSheet("background:white;");
-    monthCard1->setMinimumHeight(100);
-    monthCard1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QPushButton * monthCard2 = new QPushButton();
-    monthCard2->setStyleSheet("background:white;");
-    monthCard2->setMinimumHeight(100);
-    monthCard2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QPushButton * monthCard3 = new QPushButton();
-    monthCard3->setStyleSheet("background:white;");
-    monthCard3->setMinimumHeight(100);
-    monthCard3->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QPushButton * monthCard4 = new QPushButton();
-    monthCard4->setStyleSheet("background:white;");
-    monthCard4->setMinimumHeight(100);
-    monthCard4->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    for(int row=0, monthNumber=1; row<ROWS; row++)
+    {
+        for(int column=0; column<COLUMNS; column++, monthNumber++)
+        {
+            QLocale locale(QLocale::English);
+            QString monthName = locale.monthName(monthNumber);
 
-    monthsCardsLayout->addWidget(monthCard1, 0, 0);
-    monthsCardsLayout->addWidget(monthCard2, 0, 1);
-    monthsCardsLayout->addWidget(monthCard3, 1, 0);
-    monthsCardsLayout->addWidget(monthCard4, 1, 1);
+            QPushButton * monthCard = new QPushButton(monthName);
+            monthCard->setObjectName("YearBoardMonthCard");
+            monthCard->setMinimumWidth(210);
+            monthCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+            monthsCardsLayout->addWidget(monthCard, row, column);
+        }
+    }
+    roundEdgesOfTheCornerCards(monthsCardsLayout);
 
     yearBoardLayout->addLayout(monthsCardsLayout);
-    yearBoardLayout->setAlignment(monthsCardsLayout, Qt::AlignTop);
+}
 
+void YearBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
+{
+    QList<QPushButton *> monthsCards;
 
+    for (int i=0; i<cardsLayout->count(); i++)
+    {
+        if(cardsLayout->itemAt(i)->widget()->objectName() == "YearBoardMonthCard")
+        {
+            QPushButton * monthCard = dynamic_cast<QPushButton *>(cardsLayout->itemAt(i)->widget());
+            monthsCards.push_back(monthCard);
+        }
+    }
 
+    monthsCards[0]->setObjectName("YearBoardMonthCardTopLeftCorner");
+    monthsCards[COLUMNS-1]->setObjectName("YearBoardMonthCardTopRightCorner");
+    monthsCards[ROWS * COLUMNS - COLUMNS]->setObjectName("YearBoardMonthCardBottomLeftCorner");
+    monthsCards[ROWS * COLUMNS - 1]->setObjectName("YearBoardMonthCardBottomRightCorner");
+}
+
+void YearBoard::createFooterLayout()
+{
     QHBoxLayout * footerLayout = new QHBoxLayout();
 
     QLabel * footerText = new QLabel(QString("Footer"));
-    footerText->setStyleSheet("background: white;");
-    footerText->setMaximumHeight(60);
+    footerText->setObjectName("YearBoardFooterTextLabel");
+    footerText->setMaximumHeight(80);
     footerText->setAlignment(Qt::AlignCenter);
 
     footerLayout->addWidget(footerText);
