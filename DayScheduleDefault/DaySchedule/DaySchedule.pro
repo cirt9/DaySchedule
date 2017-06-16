@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     activitystate.cpp \
     timerangesystem.cpp \
     monthboard.cpp \
-    yearboard.cpp
+    yearboard.cpp \
+    listofyearsboard.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -32,7 +33,8 @@ HEADERS  += mainwindow.h \
     activitystate.h \
     timerangesystem.h \
     monthboard.h \
-    yearboard.h
+    yearboard.h \
+    listofyearsboard.h
 
 FORMS    += \
     mainwindow.ui

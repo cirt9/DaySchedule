@@ -10,6 +10,102 @@ QGroupBox
 border: none;
 }
 
+/* ListOfYearsBoard Style */
+
+ListOfYearsBoard
+{
+background: rgb(255,240,235);
+border-radius: 3px;
+}
+
+#ListOfYearsBoardHeaderTextLabel
+{
+background: rgb(51,102,153);
+padding: 10px;
+color: rgb(255,240,235);
+font-size: 40px;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+}
+
+#ListOfYearsBoardFooterTextLabel
+{
+background: rgb(51,102,153);
+padding: 10px;
+color: rgb(255,240,235);
+font-size: 35px;
+border-bottom-left-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
+#ListOfYearsBoardYearCard
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 15px;
+padding: 15 10;
+}
+
+#ListOfYearsBoardYearCardTopLeftCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 15px;
+padding: 15 10;
+border-top-left-radius: 3px;
+}
+
+#ListOfYearsBoardYearCardTopRightCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 15px;
+padding: 15 10;
+border-top-right-radius: 3px;
+}
+
+#ListOfYearsBoardYearCardBottomLeftCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 15px;
+padding: 15 10;
+border-bottom-left-radius: 3px;
+}
+
+#ListOfYearsBoardYearCardBottomRightCorner
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 15px;
+padding: 15 10;
+border-bottom-right-radius: 3px;
+}
+
+#ListOfYearsBoardYearCard:hover,
+#ListOfYearsBoardYearCardTopLeftCorner:hover,
+#ListOfYearsBoardYearCardTopRightCorner:hover,
+#ListOfYearsBoardYearCardBottomLeftCorner:hover,
+#ListOfYearsBoardYearCardBottomRightCorner:hover
+{
+background: rgb(255,240,235);
+color: rgb(51,102,153);
+}
+
+#ListOfYearsBoardYearCard:pressed,
+#ListOfYearsBoardYearCardTopLeftCorner:pressed,
+#ListOfYearsBoardYearCardTopRightCorner:pressed,
+#ListOfYearsBoardYearCardBottomLeftCorner:pressed,
+#ListOfYearsBoardYearCardBottomRightCorner:pressed
+{
+font: bold 20px;
+}
+
 /* YearBoard Style*/
 YearBoard
 {
