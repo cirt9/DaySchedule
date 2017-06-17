@@ -10,15 +10,15 @@ QGroupBox
 border: none;
 }
 
-/* ListOfYearsBoard Style */
+/* BoardTemplate Style */
 
-ListOfYearsBoard
+BoardTemplate
 {
 background: rgb(255,240,235);
 border-radius: 3px;
 }
 
-#ListOfYearsBoardHeaderTextLabel
+#BoardTemplateHeaderLabel
 {
 background: rgb(51,102,153);
 padding: 10px;
@@ -28,15 +28,17 @@ border-top-left-radius: 3px;
 border-top-right-radius: 3px;
 }
 
-#ListOfYearsBoardFooterTextLabel
+#BoardTemplateFooterLabel
 {
 background: rgb(51,102,153);
 padding: 10px;
 color: rgb(255,240,235);
-font-size: 35px;
+font-size: 40px;
 border-bottom-left-radius: 3px;
 border-bottom-right-radius: 3px;
 }
+
+/* ListOfYearsBoard Style */
 
 #ListOfYearsBoardYearCard
 {

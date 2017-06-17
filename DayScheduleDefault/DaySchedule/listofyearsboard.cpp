@@ -1,29 +1,10 @@
 #include "listofyearsboard.h"
 
-ListOfYearsBoard::ListOfYearsBoard(QWidget * parent) : QGroupBox(parent)
+ListOfYearsBoard::ListOfYearsBoard(QWidget * parent) : BoardTemplate(parent)
 {
-    yearsBoardLayout = new QVBoxLayout();
-    yearsBoardLayout->setSpacing(20);
-    yearsBoardLayout->setContentsMargins(0, 0, 0, 0);
-    setLayout(yearsBoardLayout);
-
-    createHeaderLayout();
+    createHeaderLayout(QString("Header"));
     createYearsCardsLayout();
-    createFooterLayout();
-}
-
-void ListOfYearsBoard::createHeaderLayout()
-{
-    QHBoxLayout * headerLayout = new QHBoxLayout();
-
-    QLabel * headerText = new QLabel(QString("Header"));
-    headerText->setObjectName("ListOfYearsBoardHeaderTextLabel");
-    headerText->setMaximumHeight(80);
-    headerText->setAlignment(Qt::AlignCenter);
-
-    headerLayout->addWidget(headerText);
-
-    yearsBoardLayout->addLayout(headerLayout);
+    createFooterLayout(QString("Footer"));
 }
 
 void ListOfYearsBoard::createYearsCardsLayout()
@@ -45,7 +26,7 @@ void ListOfYearsBoard::createYearsCardsLayout()
     }
     roundEdgesOfTheCornerCards(yearsCardsLayout);
 
-    yearsBoardLayout->addLayout(yearsCardsLayout);
+    boardLayout->insertLayout(1, yearsCardsLayout);
 }
 
 void ListOfYearsBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
@@ -65,18 +46,4 @@ void ListOfYearsBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
     yearCards[COLUMNS-1]->setObjectName("ListOfYearsBoardYearCardTopRightCorner");
     yearCards[ROWS * COLUMNS - COLUMNS]->setObjectName("ListOfYearsBoardYearCardBottomLeftCorner");
     yearCards[ROWS * COLUMNS - 1]->setObjectName("ListOfYearsBoardYearCardBottomRightCorner");
-}
-
-void ListOfYearsBoard::createFooterLayout()
-{
-    QHBoxLayout * footerLayout = new QHBoxLayout();
-
-    QLabel * footerText = new QLabel(QString("Footer"));
-    footerText->setObjectName("ListOfYearsBoardFooterTextLabel");
-    footerText->setMaximumHeight(80);
-    footerText->setAlignment(Qt::AlignCenter);
-
-    footerLayout->addWidget(footerText);
-
-    yearsBoardLayout->addLayout(footerLayout);
 }
