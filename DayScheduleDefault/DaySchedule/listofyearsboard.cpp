@@ -24,26 +24,7 @@ void ListOfYearsBoard::createYearsCardsLayout()
             yearsCardsLayout->addWidget(yearCard, row, column);
         }
     }
-    roundEdgesOfTheCornerCards(yearsCardsLayout);
+    BoardTemplate::roundCornersOfTheGrid(yearsCardsLayout, "ListOfYearsBoardYearCard");
 
     boardLayout->insertLayout(1, yearsCardsLayout);
-}
-
-void ListOfYearsBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
-{
-    QList<QPushButton *> yearCards;
-
-    for (int i=0; i<cardsLayout->count(); i++)
-    {
-        if(cardsLayout->itemAt(i)->widget()->objectName() == "ListOfYearsBoardYearCard")
-        {
-            QPushButton * yearCard = dynamic_cast<QPushButton *>(cardsLayout->itemAt(i)->widget());
-            yearCards.push_back(yearCard);
-        }
-    }
-
-    yearCards[0]->setObjectName("ListOfYearsBoardYearCardTopLeftCorner");
-    yearCards[COLUMNS-1]->setObjectName("ListOfYearsBoardYearCardTopRightCorner");
-    yearCards[ROWS * COLUMNS - COLUMNS]->setObjectName("ListOfYearsBoardYearCardBottomLeftCorner");
-    yearCards[ROWS * COLUMNS - 1]->setObjectName("ListOfYearsBoardYearCardBottomRightCorner");
 }

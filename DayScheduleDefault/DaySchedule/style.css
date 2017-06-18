@@ -109,31 +109,6 @@ font: bold 20px;
 }
 
 /* YearBoard Style*/
-YearBoard
-{
-background: rgb(255,240,235);
-border-radius: 3px;
-}
-
-#YearBoardYearNumberLabel
-{
-background: rgb(51,102,153);
-padding: 10px;
-color: rgb(255,240,235);
-font-size: 40px;
-border-top-left-radius: 3px;
-border-top-right-radius: 3px;
-}
-
-#YearBoardFooterTextLabel
-{
-background: rgb(51,102,153);
-padding: 10px;
-color: rgb(255,240,235);
-font-size: 35px;
-border-bottom-left-radius: 3px;
-border-bottom-right-radius: 3px;
-}
 
 #YearBoardMonthCard
 {
@@ -141,7 +116,7 @@ border: none;
 background: rgb(51,102,153);
 color: rgb(255,240,235);
 font: bold 30px;
-padding: 15px, 10px, 15px, 10px;
+padding: 15 10;
 }
 
 #YearBoardMonthCardTopLeftCorner
@@ -150,7 +125,7 @@ border: none;
 background: rgb(51,102,153);
 color: rgb(255,240,235);
 font: bold 30px;
-padding: 15px, 10px, 15px, 10px;
+padding: 15 10;
 border-top-left-radius: 3px;
 }
 
@@ -160,7 +135,7 @@ border: none;
 background: rgb(51,102,153);
 color: rgb(255,240,235);
 font: bold 30px;
-padding: 15px, 10px, 15px, 10px;
+padding: 15 10;
 border-top-right-radius: 3px;
 }
 
@@ -170,7 +145,7 @@ border: none;
 background: rgb(51,102,153);
 color: rgb(255,240,235);
 font: bold 30px;
-padding: 15px, 10px, 15px, 10px;
+padding: 15 10;
 border-bottom-left-radius: 3px;
 }
 
@@ -180,7 +155,7 @@ border: none;
 background: rgb(51,102,153);
 color: rgb(255,240,235);
 font: bold 30px;
-padding: 15px, 10px, 15px, 10px;
+padding: 15 10;
 border-bottom-right-radius: 3px;
 }
 
@@ -204,32 +179,6 @@ font: bold 35px;
 }
 
 /* MonthBoard Style */
-
-MonthBoard
-{
-background: rgb(255,240,235);
-border-radius: 3px;
-}
-
-#MonthBoardMonthNameLabel
-{
-background: rgb(51,102,153);
-padding: 10px;
-color: rgb(255,240,235);
-font-size: 40px;
-border-top-left-radius: 3px;
-border-top-right-radius: 3px;
-}
-
-#MonthBoardFooterTextLabel
-{
-background: rgb(51,102,153);
-padding: 10px;
-color: rgb(255,240,235);
-font-size: 35px;
-border-bottom-left-radius: 3px;
-border-bottom-right-radius: 3px;
-}
 
 #MonthBoardDayNameLabel
 {

@@ -40,3 +40,28 @@ void BoardTemplate::createFooterLayout(QString footerText)
 
     boardLayout->insertLayout(boardLayout->count(), footerLayout);
 }
+
+void BoardTemplate::roundCornersOfTheGrid(QGridLayout * layout, QString objectName, int rows, int columns)
+{
+    QList<QWidget *> objects;
+
+    for (int i=0; i<layout->count(); i++)
+    {
+        if(layout->itemAt(i)->widget()->objectName() == objectName)
+        {
+            QWidget * object = dynamic_cast<QWidget *>(layout->itemAt(i)->widget());
+            objects.push_back(object);
+        }
+    }
+
+    if(rows == -1 || columns == -1)
+    {
+        rows = layout->rowCount();
+        columns = layout->columnCount();
+    }
+
+    objects[0]->setObjectName(objectName + "TopLeftCorner");
+    objects[columns-1]->setObjectName(objectName + "TopRightCorner");
+    objects[rows * columns - columns]->setObjectName(objectName + "BottomLeftCorner");
+    objects[rows * columns - 1]->setObjectName(objectName + "BottomRightCorner");
+}

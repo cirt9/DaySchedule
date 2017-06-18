@@ -14,7 +14,6 @@ private:
     static const int COLUMNS = 7;
 
     void createYearsCardsLayout();
-    void roundEdgesOfTheCornerCards(QGridLayout * cardsLayout);
 
 public:
     explicit ListOfYearsBoard(QWidget * parent = nullptr);

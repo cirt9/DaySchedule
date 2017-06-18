@@ -1,29 +1,10 @@
 #include "yearboard.h"
 
-YearBoard::YearBoard(QWidget * parent) : QGroupBox(parent)
+YearBoard::YearBoard(QWidget * parent) : BoardTemplate(parent)
 {
-    yearBoardLayout = new QVBoxLayout();
-    yearBoardLayout->setSpacing(20);
-    yearBoardLayout->setContentsMargins(0, 0, 0, 0);
-    setLayout(yearBoardLayout);
-
-    createHeaderLayout();
+    createHeaderLayout(QString("2017"));
     createMonthCardsLayout();
-    createFooterLayout();
-}
-
-void YearBoard::createHeaderLayout()
-{
-    QHBoxLayout * headerLayout = new QHBoxLayout();
-
-    QLabel * yearNumber = new QLabel(QString("2017"));
-    yearNumber->setObjectName("YearBoardYearNumberLabel");
-    yearNumber->setMaximumHeight(80);
-    yearNumber->setAlignment(Qt::AlignCenter);
-
-    headerLayout->addWidget(yearNumber);
-
-    yearBoardLayout->addLayout(headerLayout);
+    createFooterLayout(QString("Footer"));
 }
 
 void YearBoard::createMonthCardsLayout()
@@ -47,40 +28,7 @@ void YearBoard::createMonthCardsLayout()
             monthsCardsLayout->addWidget(monthCard, row, column);
         }
     }
-    roundEdgesOfTheCornerCards(monthsCardsLayout);
+    BoardTemplate::roundCornersOfTheGrid(monthsCardsLayout, "YearBoardMonthCard");
 
-    yearBoardLayout->addLayout(monthsCardsLayout);
-}
-
-void YearBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
-{
-    QList<QPushButton *> monthsCards;
-
-    for (int i=0; i<cardsLayout->count(); i++)
-    {
-        if(cardsLayout->itemAt(i)->widget()->objectName() == "YearBoardMonthCard")
-        {
-            QPushButton * monthCard = dynamic_cast<QPushButton *>(cardsLayout->itemAt(i)->widget());
-            monthsCards.push_back(monthCard);
-        }
-    }
-
-    monthsCards[0]->setObjectName("YearBoardMonthCardTopLeftCorner");
-    monthsCards[COLUMNS-1]->setObjectName("YearBoardMonthCardTopRightCorner");
-    monthsCards[ROWS * COLUMNS - COLUMNS]->setObjectName("YearBoardMonthCardBottomLeftCorner");
-    monthsCards[ROWS * COLUMNS - 1]->setObjectName("YearBoardMonthCardBottomRightCorner");
-}
-
-void YearBoard::createFooterLayout()
-{
-    QHBoxLayout * footerLayout = new QHBoxLayout();
-
-    QLabel * footerText = new QLabel(QString("Footer"));
-    footerText->setObjectName("YearBoardFooterTextLabel");
-    footerText->setMaximumHeight(80);
-    footerText->setAlignment(Qt::AlignCenter);
-
-    footerLayout->addWidget(footerText);
-
-    yearBoardLayout->addLayout(footerLayout);
+    boardLayout->addLayout(monthsCardsLayout);
 }

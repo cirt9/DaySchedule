@@ -91,7 +91,7 @@ void MainWindow::start()
     dayContainter->setLayout(centeringLayout);
     setCentralWidget(dayContainter);*/
 
-    /*MonthBoard * month = new MonthBoard(this);
+    MonthBoard * month = new MonthBoard(this);
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -103,7 +103,7 @@ void MainWindow::start()
     centeringLayout->addItem(rightSpacer, 0, 2);
 
     monthContainter->setLayout(centeringLayout);
-    setCentralWidget(monthContainter);*/
+    setCentralWidget(monthContainter);
 
     /*YearBoard * year = new YearBoard(this);
 
@@ -119,7 +119,7 @@ void MainWindow::start()
     yearContainter->setLayout(centeringLayout);
     setCentralWidget(yearContainter);*/
 
-
+    /*
     ListOfYearsBoard * years = new ListOfYearsBoard(this);
 
     QGridLayout * centeringLayout = new QGridLayout();
@@ -133,6 +133,7 @@ void MainWindow::start()
 
     yearsContainter->setLayout(centeringLayout);
     setCentralWidget(yearsContainter);
+    */
 }
 
 void MainWindow::clearMainWindow()

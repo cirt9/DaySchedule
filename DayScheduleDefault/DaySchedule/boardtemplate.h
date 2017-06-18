@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QList>
 
 class BoardTemplate : public QGroupBox
 {
@@ -22,6 +23,8 @@ public:
     explicit BoardTemplate(QWidget * parent = nullptr);
     virtual ~BoardTemplate() = 0;
 
+    static void roundCornersOfTheGrid(QGridLayout * layout, QString objectName,
+                                      int rows = -1, int columns = -1);
 };
 
 #endif // BOARDTEMPLATE_H

@@ -1,32 +1,13 @@
 #include "monthboard.h"
 
-MonthBoard::MonthBoard(QWidget * parent) : QGroupBox(parent)
+MonthBoard::MonthBoard(QWidget * parent) : BoardTemplate(parent)
 {
-    monthBoardLayout = new QVBoxLayout();
-    monthBoardLayout->setSpacing(20);
-    monthBoardLayout->setContentsMargins(0, 0, 0, 0);
-    setLayout(monthBoardLayout);
-
     maxNumberOfCards = 42;
     date = QDate(2017, 6, 1);
 
-    createHeaderLayout();
+    createHeaderLayout(QString("June 2017"));
     createDayCardsLayout();
-    createFooterLayout();
-}
-
-void MonthBoard::createHeaderLayout()
-{
-    QHBoxLayout * headerLayout = new QHBoxLayout();
-
-    QLabel * monthName = new QLabel(QString("June 2017"));
-    monthName->setObjectName("MonthBoardMonthNameLabel");
-    monthName->setMaximumHeight(80);
-    monthName->setAlignment(Qt::AlignCenter);
-
-    headerLayout->addWidget(monthName);
-
-    monthBoardLayout->addLayout(headerLayout);
+    createFooterLayout(QString("Footer"));
 }
 
 void MonthBoard::createDayCardsLayout()
@@ -43,9 +24,11 @@ void MonthBoard::createDayCardsLayout()
     createBlankCardsOnTheFront(row, column, cardsLayout);
     createDayCards(row, column, cardsLayout);
     createBlankCardsOnTheEnd(row, column, cardsLayout);
-    roundEdgesOfTheCornerCards(cardsLayout);
 
-    monthBoardLayout->addLayout(cardsLayout);
+    BoardTemplate::roundCornersOfTheGrid(cardsLayout, "MonthBoardDayCard",
+                   cardsLayout->rowCount()-1, cardsLayout->columnCount());
+
+    boardLayout->addLayout(cardsLayout);
 }
 
 void MonthBoard::createDaysNames(QGridLayout * cardsLayout)
@@ -121,38 +104,4 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
         cardsLayout->addWidget(blankCard, row, column);
         column++;
     }
-}
-
-void MonthBoard::roundEdgesOfTheCornerCards(QGridLayout * cardsLayout)
-{
-    QList<QPushButton *> dayCards;
-
-    for (int i=0; i<cardsLayout->count(); i++)
-    {
-        if(cardsLayout->itemAt(i)->widget()->objectName() == "MonthBoardDayCard")
-        {
-            QPushButton * dayCard = dynamic_cast<QPushButton *>(cardsLayout->itemAt(i)->widget());
-            dayCards.push_back(dayCard);
-        }
-    }
-
-    dayCards[0]->setObjectName("MonthBoardDayCardTopLeftCorner");
-    dayCards[MAX_ROW_SIZE-1]->setObjectName("MonthBoardDayCardTopRightCorner");
-    dayCards[maxNumberOfCards-MAX_ROW_SIZE]->setObjectName("MonthBoardDayCardBottomLeftCorner");
-    dayCards[maxNumberOfCards-1]->setObjectName("MonthBoardDayCardBottomRightCorner");
-
-}
-
-void MonthBoard::createFooterLayout()
-{
-    QHBoxLayout * footerLayout = new QHBoxLayout();
-
-    QLabel * footerText = new QLabel(QString("Footer"));
-    footerText->setObjectName("MonthBoardFooterTextLabel");
-    footerText->setMaximumHeight(80);
-    footerText->setAlignment(Qt::AlignCenter);
-
-    footerLayout->addWidget(footerText);
-
-    monthBoardLayout->addLayout(footerLayout);
 }
