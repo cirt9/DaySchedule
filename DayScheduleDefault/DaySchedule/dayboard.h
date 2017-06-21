@@ -1,10 +1,7 @@
 #ifndef DAYBOARD_H
 #define DAYBOARD_H
 
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QLabel>
+#include <boardtemplate.h>
 #include <activity.h>
 #include <QList>
 #include <QPushButton>
@@ -14,12 +11,11 @@
 #include <timerangesystem.h>
 #include <QSharedPointer>
 
-class DayBoard : public QGroupBox
+class DayBoard : public BoardTemplate
 {
     Q_OBJECT
 
 private:
-    QVBoxLayout * dayBoardLayout;
     QVBoxLayout * activitiesLayout;
     QList<Activity *> activities;
     QSharedPointer<TimeRangeSystem> timeSystem;

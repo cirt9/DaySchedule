@@ -1,12 +1,7 @@
 #include "dayboard.h"
 
-DayBoard::DayBoard(QString date, QWidget * parent) : QGroupBox(parent), timeSystem(new TimeRangeSystem)
+DayBoard::DayBoard(QString date, QWidget * parent) : BoardTemplate(parent), timeSystem(new TimeRangeSystem)
 {
-    dayBoardLayout = new QVBoxLayout();
-    dayBoardLayout->setSpacing(20);
-    dayBoardLayout->setContentsMargins(0, 0, 0, 0);
-    setLayout(dayBoardLayout);
-
     progress = nullptr;
     alarmsEnabled = false;
     dayBoardDate = date;
@@ -35,7 +30,7 @@ void DayBoard::createDateAndProgressLayout()
     dateProgressLayout->addWidget(date);
     dateProgressLayout->addWidget(progress);
 
-    dayBoardLayout->addLayout(dateProgressLayout);
+    boardLayout->addLayout(dateProgressLayout);
 }
 
 void DayBoard::createActivitiesLayout()
@@ -67,7 +62,7 @@ void DayBoard::createScrollBar()
     scrollArea->setLayout(activitiesLayout);
     scroll->setWidget(scrollArea);
 
-    dayBoardLayout->addWidget(scroll);
+    boardLayout->addWidget(scroll);
 }
 
 void DayBoard::createBottomMenuLayout()
@@ -99,8 +94,8 @@ void DayBoard::createBottomMenuLayout()
     buttonsBarLayout->addWidget(clearButton);
     buttonsBarLayout->addWidget(alarmsButton);
 
-    dayBoardLayout->addWidget(buttonsBarContainer);
-    dayBoardLayout->setAlignment(buttonsBarContainer, Qt::AlignBottom);
+    boardLayout->addWidget(buttonsBarContainer);
+    boardLayout->setAlignment(buttonsBarContainer, Qt::AlignBottom);
 }
 
 void DayBoard::addNewActivity()

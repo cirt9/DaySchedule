@@ -60,8 +60,11 @@ void BoardTemplate::roundCornersOfTheGrid(QGridLayout * layout, QString objectNa
         columns = layout->columnCount();
     }
 
-    objects[0]->setObjectName(objectName + "TopLeftCorner");
-    objects[columns-1]->setObjectName(objectName + "TopRightCorner");
-    objects[rows * columns - columns]->setObjectName(objectName + "BottomLeftCorner");
-    objects[rows * columns - 1]->setObjectName(objectName + "BottomRightCorner");
+    if(objects.size() != 0)
+    {
+        objects[0]->setObjectName(objectName + "TopLeftCorner");
+        objects[columns-1]->setObjectName(objectName + "TopRightCorner");
+        objects[rows * columns - columns]->setObjectName(objectName + "BottomLeftCorner");
+        objects[rows * columns - 1]->setObjectName(objectName + "BottomRightCorner");
+    }
 }

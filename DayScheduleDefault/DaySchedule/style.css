@@ -252,12 +252,6 @@ font: bold 50px;
 
 /* DayBoard Style */
 
-DayBoard
-{
-background: rgb(255,240,235);
-border-radius: 3px;
-}
-
 #DayBoardDateLabel
 {
 background: rgb(51,102,153);
