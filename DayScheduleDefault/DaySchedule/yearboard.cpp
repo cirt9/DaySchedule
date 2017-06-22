@@ -1,8 +1,8 @@
 #include "yearboard.h"
 
-YearBoard::YearBoard(QWidget * parent) : BoardTemplate(parent)
+YearBoard::YearBoard(QString headerText, QWidget * parent) : BoardTemplate(parent)
 {
-    createHeaderLayout(QString("2017"));
+    createHeaderLayout(headerText);
     createMonthCardsLayout();
     createFooterLayout(QString("Footer"));
 }
@@ -20,10 +20,12 @@ void YearBoard::createMonthCardsLayout()
             QLocale locale(QLocale::English);
             QString monthName = locale.monthName(monthNumber);
 
-            QPushButton * monthCard = new QPushButton(monthName);
+            CalendarCard * monthCard = new CalendarCard(monthName);
             monthCard->setObjectName("YearBoardMonthCard");
             monthCard->setMinimumWidth(210);
             monthCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+            connect(monthCard, SIGNAL(cardClicked(QString&)), this, SIGNAL(cardChosen(QString&)));
 
             monthsCardsLayout->addWidget(monthCard, row, column);
         }

@@ -17,9 +17,12 @@ void ListOfYearsBoard::createYearsCardsLayout()
     {
         for(int column=0; column<COLUMNS; column++, year++)
         {
-            QPushButton * yearCard = new QPushButton(QString::number(year));
+            CalendarCard * yearCard = new CalendarCard(QString::number(year));
             yearCard->setObjectName("ListOfYearsBoardYearCard");
             yearCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            yearCard->setMinimumWidth(70);
+
+            connect(yearCard, SIGNAL(cardClicked(QString&)), this, SIGNAL(cardChosen(QString&)));
 
             yearsCardsLayout->addWidget(yearCard, row, column);
         }

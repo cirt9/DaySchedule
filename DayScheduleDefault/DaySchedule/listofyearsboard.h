@@ -4,6 +4,7 @@
 #include <boardtemplate.h>
 #include <QGridLayout>
 #include <QPushButton>
+#include <calendarcard.h>
 
 class ListOfYearsBoard : public BoardTemplate
 {

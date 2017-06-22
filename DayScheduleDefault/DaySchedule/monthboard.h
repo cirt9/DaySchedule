@@ -26,7 +26,7 @@ private:
     void createBlankCardsOnTheEnd(int & row, int & column, QGridLayout * cardsLayout);
 
 public:
-    explicit MonthBoard(QWidget * parent = nullptr);
+    explicit MonthBoard(QString headerText, QWidget * parent = nullptr);
     ~MonthBoard() {;}
 };
 

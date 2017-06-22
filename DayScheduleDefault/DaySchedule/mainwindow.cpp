@@ -91,36 +91,8 @@ void MainWindow::start()
     dayContainter->setLayout(centeringLayout);
     setCentralWidget(dayContainter);*/
 
-    /*MonthBoard * month = new MonthBoard(this);
-
-    QGridLayout * centeringLayout = new QGridLayout();
-    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QWidget * monthContainter = new QWidget(this);
-
-    centeringLayout->addItem(leftSpacer, 0, 0);
-    centeringLayout->addWidget(month, 0, 1);
-    centeringLayout->addItem(rightSpacer, 0, 2);
-
-    monthContainter->setLayout(centeringLayout);
-    setCentralWidget(monthContainter);*/
-
-    /*YearBoard * year = new YearBoard(this);
-
-    QGridLayout * centeringLayout = new QGridLayout();
-    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QWidget * yearContainter = new QWidget(this);
-
-    centeringLayout->addItem(leftSpacer, 0, 0);
-    centeringLayout->addWidget(year, 0, 1);
-    centeringLayout->addItem(rightSpacer, 0, 2);
-
-    yearContainter->setLayout(centeringLayout);
-    setCentralWidget(yearContainter);*/
-
-
     ListOfYearsBoard * years = new ListOfYearsBoard(this);
+    connect(years, SIGNAL(cardChosen(QString&)), this, SLOT(showYear(QString&)));
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -134,6 +106,45 @@ void MainWindow::start()
     yearsContainter->setLayout(centeringLayout);
     setCentralWidget(yearsContainter);
 
+}
+
+void MainWindow::showYear(QString & text)
+{
+    clearMainWindow();
+
+    YearBoard * year = new YearBoard(text, this);
+    connect(year, SIGNAL(cardChosen(QString&)), this, SLOT(showMonth(QString&)));
+
+    QGridLayout * centeringLayout = new QGridLayout();
+    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QWidget * yearContainter = new QWidget(this);
+
+    centeringLayout->addItem(leftSpacer, 0, 0);
+    centeringLayout->addWidget(year, 0, 1);
+    centeringLayout->addItem(rightSpacer, 0, 2);
+
+    yearContainter->setLayout(centeringLayout);
+    setCentralWidget(yearContainter);
+}
+
+void MainWindow::showMonth(QString & text)
+{
+    clearMainWindow();
+
+    MonthBoard * month = new MonthBoard(text, this);
+
+    QGridLayout * centeringLayout = new QGridLayout();
+    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QWidget * monthContainter = new QWidget(this);
+
+    centeringLayout->addItem(leftSpacer, 0, 0);
+    centeringLayout->addWidget(month, 0, 1);
+    centeringLayout->addItem(rightSpacer, 0, 2);
+
+    monthContainter->setLayout(centeringLayout);
+    setCentralWidget(monthContainter);
 }
 
 void MainWindow::clearMainWindow()

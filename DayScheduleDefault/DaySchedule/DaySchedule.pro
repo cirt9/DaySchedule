@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     monthboard.cpp \
     yearboard.cpp \
     listofyearsboard.cpp \
-    boardtemplate.cpp
+    boardtemplate.cpp \
+    calendarcard.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     monthboard.h \
     yearboard.h \
     listofyearsboard.h \
-    boardtemplate.h
+    boardtemplate.h \
+    calendarcard.h
 
 FORMS    += \
     mainwindow.ui

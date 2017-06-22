@@ -3,9 +3,9 @@
 
 #include <boardtemplate.h>
 #include <QGridLayout>
-#include <QPushButton>
 #include <QDate>
 #include <QLocale>
+#include <calendarcard.h>
 
 class YearBoard : public BoardTemplate
 {
@@ -18,7 +18,7 @@ private:
     void createMonthCardsLayout();
 
 public:
-    explicit YearBoard(QWidget * parent = nullptr);
+    explicit YearBoard(QString headerText, QWidget * parent = nullptr);
     ~YearBoard() {;}
 };
 

@@ -25,6 +25,9 @@ public:
 
     static void roundCornersOfTheGrid(QGridLayout * layout, QString objectName,
                                       int rows = -1, int columns = -1);
+
+signals:
+    void cardChosen(QString & cardText);
 };
 
 #endif // BOARDTEMPLATE_H

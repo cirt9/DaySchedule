@@ -1,11 +1,11 @@
 #include "monthboard.h"
 
-MonthBoard::MonthBoard(QWidget * parent) : BoardTemplate(parent)
+MonthBoard::MonthBoard(QString headerText, QWidget * parent) : BoardTemplate(parent)
 {
     maxNumberOfCards = 42;
     date = QDate(2017, 6, 1);
 
-    createHeaderLayout(QString("June 2017"));
+    createHeaderLayout(QString(headerText));
     createDayCardsLayout();
     createFooterLayout(QString("Footer"));
 }

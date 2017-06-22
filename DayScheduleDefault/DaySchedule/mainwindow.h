@@ -28,6 +28,9 @@ private:
 private slots:
     void start();
 
+    void showYear(QString & text);
+    void showMonth(QString & text);
+
 public:
     explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
