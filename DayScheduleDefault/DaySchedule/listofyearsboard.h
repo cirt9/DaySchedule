@@ -16,8 +16,11 @@ private:
 
     void createYearsCardsLayout();
 
+private slots:
+    void updateCurrentlyUsedDateYear(QString & yearValue);
+
 public:
-    explicit ListOfYearsBoard(QWidget * parent = nullptr);
+    explicit ListOfYearsBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~ListOfYearsBoard() {;}
 };
 

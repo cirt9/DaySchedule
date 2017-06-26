@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
     menu = nullptr;
+    currentlyUsedDate = QSharedPointer<QDate>(new QDate);
+    currentlyUsedDate->setDate(2017, 6, 26);
+
     clearMainWindow();
 }
 
@@ -77,22 +80,13 @@ void MainWindow::start()
 {
     clearMainWindow();
 
-    /*DayBoard * day = new DayBoard(QString("05.06.2017, Saturday"),this);
+    showYearsList();
+}
 
-    QGridLayout * centeringLayout = new QGridLayout();
-    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QWidget * dayContainter = new QWidget(this);
-
-    centeringLayout->addItem(leftSpacer, 0, 0);
-    centeringLayout->addWidget(day, 0, 1);
-    centeringLayout->addItem(rightSpacer, 0, 2);
-
-    dayContainter->setLayout(centeringLayout);
-    setCentralWidget(dayContainter);*/
-
-    ListOfYearsBoard * years = new ListOfYearsBoard(this);
-    connect(years, SIGNAL(cardChosen(QString&)), this, SLOT(showYear(QString&)));
+void MainWindow::showYearsList()
+{
+    ListOfYearsBoard * years = new ListOfYearsBoard(currentlyUsedDate, this);
+    connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showYear()));
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -105,15 +99,14 @@ void MainWindow::start()
 
     yearsContainter->setLayout(centeringLayout);
     setCentralWidget(yearsContainter);
-
 }
 
-void MainWindow::showYear(QString & text)
+void MainWindow::showYear()
 {
     clearMainWindow();
 
-    YearBoard * year = new YearBoard(text, this);
-    connect(year, SIGNAL(cardChosen(QString&)), this, SLOT(showMonth(QString&)));
+    YearBoard * year = new YearBoard(currentlyUsedDate, this);
+    connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showMonth()));
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -128,11 +121,12 @@ void MainWindow::showYear(QString & text)
     setCentralWidget(yearContainter);
 }
 
-void MainWindow::showMonth(QString & text)
+void MainWindow::showMonth()
 {
     clearMainWindow();
 
-    MonthBoard * month = new MonthBoard(text, this);
+    MonthBoard * month = new MonthBoard(currentlyUsedDate, this);
+    connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showDay()));
 
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -145,6 +139,23 @@ void MainWindow::showMonth(QString & text)
 
     monthContainter->setLayout(centeringLayout);
     setCentralWidget(monthContainter);
+}
+
+void MainWindow::showDay()
+{
+    DayBoard * day = new DayBoard(currentlyUsedDate, this);
+
+    QGridLayout * centeringLayout = new QGridLayout();
+    QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QWidget * dayContainter = new QWidget(this);
+
+    centeringLayout->addItem(leftSpacer, 0, 0);
+    centeringLayout->addWidget(day, 0, 1);
+    centeringLayout->addItem(rightSpacer, 0, 2);
+
+    dayContainter->setLayout(centeringLayout);
+    setCentralWidget(dayContainter);
 }
 
 void MainWindow::clearMainWindow()

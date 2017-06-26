@@ -1,11 +1,10 @@
 #include "monthboard.h"
 
-MonthBoard::MonthBoard(QString headerText, QWidget * parent) : BoardTemplate(parent)
+MonthBoard::MonthBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent)
 {
     maxNumberOfCards = 42;
-    date = QDate(2017, 6, 1);
 
-    createHeaderLayout(QString(headerText));
+    createHeaderLayout(QString("Header"));
     createDayCardsLayout();
     createFooterLayout(QString("Footer"));
 }
@@ -47,11 +46,16 @@ void MonthBoard::createDaysNames(QGridLayout * cardsLayout)
 
 void MonthBoard::createBlankCardsOnTheFront(int & row, int & column, QGridLayout * cardsLayout)
 {
-    int firstDayNumber = date.dayOfWeek()-1;
+    int currentYear = currentlyUsedDate->year();
+    int currentMonth = currentlyUsedDate->month();
+    int firstDay = 1;
+    QDate firstDayOfTheMonth(currentYear, currentMonth, firstDay);
+
+    int firstDayNumber = firstDayOfTheMonth.dayOfWeek()-1;
 
     for(int blankCards=0; blankCards<firstDayNumber; blankCards++)
     {
-        QPushButton * blankCard = new QPushButton();
+        CalendarCard * blankCard = new CalendarCard(QString(""));
         blankCard->setMinimumSize(100, 100);
         blankCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         blankCard->setObjectName("MonthBoardDayCard");
@@ -63,7 +67,7 @@ void MonthBoard::createBlankCardsOnTheFront(int & row, int & column, QGridLayout
 
 void MonthBoard::createDayCards(int & row, int & column, QGridLayout * cardsLayout)
 {
-    for(int numberOfCards=0; numberOfCards<date.daysInMonth(); numberOfCards++)
+    for(int numberOfCards=0; numberOfCards<currentlyUsedDate->daysInMonth(); numberOfCards++)
     {
         if(column == 7)
         {
@@ -71,14 +75,26 @@ void MonthBoard::createDayCards(int & row, int & column, QGridLayout * cardsLayo
             row++;
         }
 
-        QPushButton * dayCard = new QPushButton(QString::number(numberOfCards+1));
+        CalendarCard * dayCard = new CalendarCard(QString::number(numberOfCards+1));
         dayCard->setMinimumSize(100, 100);
         dayCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         dayCard->setObjectName("MonthBoardDayCard");
 
+        connect(dayCard, SIGNAL(cardClicked(QString&)), this, SLOT(updateCurrentlyUsedDateDay(QString&)));
+
         cardsLayout->addWidget(dayCard, row, column);
         column++;
     }
+}
+
+void MonthBoard::updateCurrentlyUsedDateDay(QString & dayValue)
+{
+    int year = currentlyUsedDate->year();
+    int month = currentlyUsedDate->month();
+    int newDay = dayValue.toInt();
+
+    currentlyUsedDate->setDate(year, month, newDay);
+    emit currentlyUsedDateHasChanged();
 }
 
 void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout * cardsLayout)
@@ -96,7 +112,7 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
             row++;
         }
 
-        QPushButton * blankCard = new QPushButton();
+        CalendarCard * blankCard = new CalendarCard(QString(""));
         blankCard->setMinimumSize(100, 100);
         blankCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         blankCard->setObjectName("MonthBoardDayCard");
@@ -105,3 +121,4 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
         column++;
     }
 }
+

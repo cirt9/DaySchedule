@@ -1,8 +1,8 @@
 #include "yearboard.h"
 
-YearBoard::YearBoard(QString headerText, QWidget * parent) : BoardTemplate(parent)
+YearBoard::YearBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent)
 {
-    createHeaderLayout(headerText);
+    createHeaderLayout(QString::number(currentlyUsedDate->year()));
     createMonthCardsLayout();
     createFooterLayout(QString("Footer"));
 }
@@ -25,7 +25,7 @@ void YearBoard::createMonthCardsLayout()
             monthCard->setMinimumWidth(210);
             monthCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-            connect(monthCard, SIGNAL(cardClicked(QString&)), this, SIGNAL(cardChosen(QString&)));
+            connect(monthCard, SIGNAL(cardClicked(QString&)), this, SLOT(updateCurrentlyUsedDateMonth(QString&)));
 
             monthsCardsLayout->addWidget(monthCard, row, column);
         }
@@ -34,3 +34,24 @@ void YearBoard::createMonthCardsLayout()
 
     boardLayout->addLayout(monthsCardsLayout);
 }
+
+void YearBoard::updateCurrentlyUsedDateMonth(QString & monthValue)
+{
+    int year = currentlyUsedDate->year();
+
+    QLocale locale(QLocale::English);
+
+    int i;
+    for(i=1; i<=12; i++)
+    {
+        if(monthValue == locale.monthName(i))
+            break;
+    }
+
+    int newMonth = i;
+    int day = currentlyUsedDate->day();
+
+    currentlyUsedDate->setDate(year, newMonth, day);
+    emit currentlyUsedDateHasChanged();
+}
+

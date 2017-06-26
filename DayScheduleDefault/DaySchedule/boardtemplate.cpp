@@ -1,7 +1,9 @@
 #include "boardtemplate.h"
 
-BoardTemplate::BoardTemplate(QWidget * parent) : QGroupBox(parent)
+BoardTemplate::BoardTemplate(QSharedPointer<QDate> currUsedDate, QWidget * parent) : QGroupBox(parent)
 {
+    currentlyUsedDate = currUsedDate;
+
     boardLayout = new QVBoxLayout();
     boardLayout->setSpacing(20);
     boardLayout->setContentsMargins(0, 0, 0, 0);

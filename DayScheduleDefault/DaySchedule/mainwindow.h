@@ -6,6 +6,8 @@
 #include <QGridLayout>
 #include <QSpacerItem>
 #include <layoutdeleter.h>
+#include <QSharedPointer>
+#include <QDate>
 
 namespace Ui {
 class MainWindow;
@@ -18,6 +20,7 @@ class MainWindow : public QMainWindow
 private:
     Ui::MainWindow *ui;
     MainMenu * menu;
+    QSharedPointer<QDate> currentlyUsedDate;
 
     void initializeCenteredMenu();
     void customizeMenu();
@@ -28,8 +31,10 @@ private:
 private slots:
     void start();
 
-    void showYear(QString & text);
-    void showMonth(QString & text);
+    void showYearsList();
+    void showYear();
+    void showMonth();
+    void showDay();
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

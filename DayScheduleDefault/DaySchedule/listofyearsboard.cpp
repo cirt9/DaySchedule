@@ -1,6 +1,6 @@
 #include "listofyearsboard.h"
 
-ListOfYearsBoard::ListOfYearsBoard(QWidget * parent) : BoardTemplate(parent)
+ListOfYearsBoard::ListOfYearsBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent)
 {
     createHeaderLayout(QString("Header"));
     createYearsCardsLayout();
@@ -22,7 +22,7 @@ void ListOfYearsBoard::createYearsCardsLayout()
             yearCard->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             yearCard->setMinimumWidth(70);
 
-            connect(yearCard, SIGNAL(cardClicked(QString&)), this, SIGNAL(cardChosen(QString&)));
+            connect(yearCard, SIGNAL(cardClicked(QString&)), SLOT(updateCurrentlyUsedDateYear(QString&)));
 
             yearsCardsLayout->addWidget(yearCard, row, column);
         }
@@ -30,4 +30,14 @@ void ListOfYearsBoard::createYearsCardsLayout()
     BoardTemplate::roundCornersOfTheGrid(yearsCardsLayout, "ListOfYearsBoardYearCard");
 
     boardLayout->insertLayout(1, yearsCardsLayout);
+}
+
+void ListOfYearsBoard::updateCurrentlyUsedDateYear(QString & yearValue)
+{
+    int newYear = yearValue.toInt();
+    int month = currentlyUsedDate->month();
+    int day = currentlyUsedDate->day();
+
+    currentlyUsedDate->setDate(newYear, month, day);
+    emit currentlyUsedDateHasChanged();
 }

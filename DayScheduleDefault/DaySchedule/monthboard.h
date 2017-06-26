@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QDate>
 #include <QLocale>
-#include <QPushButton>
+#include <calendarcard.h>
 
 class MonthBoard : public BoardTemplate
 {
@@ -16,8 +16,6 @@ private:
     static const int MAX_ROW_SIZE = 7;
     int maxNumberOfCards;
 
-    QDate date;
-
     void createDayCardsLayout();
     void createDaysNames(QGridLayout * cardsLayout);
 
@@ -25,8 +23,11 @@ private:
     void createDayCards(int & row, int & column, QGridLayout * cardsLayout);
     void createBlankCardsOnTheEnd(int & row, int & column, QGridLayout * cardsLayout);
 
+private slots:
+    void updateCurrentlyUsedDateDay(QString & dayValue);
+
 public:
-    explicit MonthBoard(QString headerText, QWidget * parent = nullptr);
+    explicit MonthBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~MonthBoard() {;}
 };
 

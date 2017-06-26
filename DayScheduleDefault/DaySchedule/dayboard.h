@@ -20,7 +20,6 @@ private:
     QList<Activity *> activities;
     QSharedPointer<TimeRangeSystem> timeSystem;
     bool alarmsEnabled;
-    QString dayBoardDate;
 
     QLabel * progress;
 
@@ -38,7 +37,7 @@ private slots:
     void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:
-    explicit DayBoard(QString date, QWidget * parent = nullptr);
+    explicit DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~DayBoard() {;}
 
     bool getAlarmsEnabled() const;

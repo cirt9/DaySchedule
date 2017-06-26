@@ -1,10 +1,9 @@
 #include "dayboard.h"
 
-DayBoard::DayBoard(QString date, QWidget * parent) : BoardTemplate(parent), timeSystem(new TimeRangeSystem)
+DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
 {
     progress = nullptr;
     alarmsEnabled = false;
-    dayBoardDate = date;
 
     createDateAndProgressLayout();
     createActivitiesLayout();
@@ -16,7 +15,7 @@ void DayBoard::createDateAndProgressLayout()
     QHBoxLayout * dateProgressLayout = new QHBoxLayout();
     dateProgressLayout->setSpacing(0);
 
-    QLabel * date = new QLabel(dayBoardDate);
+    QLabel * date = new QLabel(QString("26.06.2017, Monday"));
     date->setMaximumHeight(80);
     date->setAlignment(Qt::AlignCenter);
     date->setObjectName("DayBoardDateLabel");
@@ -180,3 +179,4 @@ void DayBoard::setAlarmsEnabled(bool value)
 {
     alarmsEnabled = value;
 }
+
