@@ -10,6 +10,7 @@
 #include <layoutdeleter.h>
 #include <timerangesystem.h>
 #include <QSharedPointer>
+#include <QLocale>
 
 class DayBoard : public BoardTemplate
 {
@@ -24,6 +25,7 @@ private:
     QLabel * progress;
 
     void createDateAndProgressLayout();
+    QString createHeaderDate();
     void createActivitiesLayout();
     void createScrollBar();
     void createBottomMenuLayout();

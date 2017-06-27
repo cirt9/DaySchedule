@@ -4,9 +4,19 @@ MonthBoard::MonthBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : B
 {
     maxNumberOfCards = 42;
 
-    createHeaderLayout(QString("Header"));
+    QString headerDate = createHeaderDate();
+    createHeaderLayout(headerDate);
     createDayCardsLayout();
     createFooterLayout(QString("Footer"));
+}
+
+QString MonthBoard::createHeaderDate()
+{
+    QLocale locale(QLocale::English);
+    QString monthName = locale.monthName(currentlyUsedDate->month());
+    QString year = QString::number(currentlyUsedDate->year());
+
+    return monthName + QString(" ") + year;
 }
 
 void MonthBoard::createDayCardsLayout()
@@ -46,12 +56,7 @@ void MonthBoard::createDaysNames(QGridLayout * cardsLayout)
 
 void MonthBoard::createBlankCardsOnTheFront(int & row, int & column, QGridLayout * cardsLayout)
 {
-    int currentYear = currentlyUsedDate->year();
-    int currentMonth = currentlyUsedDate->month();
-    int firstDay = 1;
-    QDate firstDayOfTheMonth(currentYear, currentMonth, firstDay);
-
-    int firstDayNumber = firstDayOfTheMonth.dayOfWeek()-1;
+    int firstDayNumber = calculateFirstDayOfTheMonthValue()-1;
 
     for(int blankCards=0; blankCards<firstDayNumber; blankCards++)
     {
@@ -63,6 +68,16 @@ void MonthBoard::createBlankCardsOnTheFront(int & row, int & column, QGridLayout
         cardsLayout->addWidget(blankCard, row, column);
         column++;
     }
+}
+
+int MonthBoard::calculateFirstDayOfTheMonthValue()
+{
+    int currentYear = currentlyUsedDate->year();
+    int currentMonth = currentlyUsedDate->month();
+    int firstDay = 1;
+    QDate firstDayOfTheMonth(currentYear, currentMonth, firstDay);
+
+    return firstDayOfTheMonth.dayOfWeek();
 }
 
 void MonthBoard::createDayCards(int & row, int & column, QGridLayout * cardsLayout)
@@ -121,4 +136,3 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
         column++;
     }
 }
-

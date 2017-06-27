@@ -1,6 +1,7 @@
 #include "dayboard.h"
 
-DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
+DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) :
+BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
 {
     progress = nullptr;
     alarmsEnabled = false;
@@ -15,7 +16,8 @@ void DayBoard::createDateAndProgressLayout()
     QHBoxLayout * dateProgressLayout = new QHBoxLayout();
     dateProgressLayout->setSpacing(0);
 
-    QLabel * date = new QLabel(QString("26.06.2017, Monday"));
+    QString headerDateText = createHeaderDate();
+    QLabel * date = new QLabel(headerDateText);
     date->setMaximumHeight(80);
     date->setAlignment(Qt::AlignCenter);
     date->setObjectName("DayBoardDateLabel");
@@ -30,6 +32,16 @@ void DayBoard::createDateAndProgressLayout()
     dateProgressLayout->addWidget(progress);
 
     boardLayout->addLayout(dateProgressLayout);
+}
+
+QString DayBoard::createHeaderDate()
+{
+    QString date = currentlyUsedDate->toString("dd.MM.yyyy");
+
+    QLocale locale(QLocale::English);
+    QString dayName = locale.dayName(currentlyUsedDate->dayOfWeek());
+
+    return date + QString(", ") + dayName;
 }
 
 void DayBoard::createActivitiesLayout()

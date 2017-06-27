@@ -22,15 +22,17 @@ private:
     MainMenu * menu;
     QSharedPointer<QDate> currentlyUsedDate;
 
-    void initializeCenteredMenu();
-    void customizeMenu();
+    void setIconsInTheMenu();
     void connectMenuToSlots();
 
     void clearMainWindow();
 
+    void showWidgetOnCenter(QWidget * widget);
+
 private slots:
     void start();
 
+    void showMenu();
     void showYearsList();
     void showYear();
     void showMonth();

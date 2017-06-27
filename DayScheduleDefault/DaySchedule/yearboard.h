@@ -17,8 +17,10 @@ private:
 
     void createMonthCardsLayout();
 
+    int convertMonthNameToMonthValue(QString & name);
+
 private slots:
-    void updateCurrentlyUsedDateMonth(QString & monthValue);
+    void updateCurrentlyUsedDateMonth(QString & monthName);
 
 public:
     explicit YearBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);

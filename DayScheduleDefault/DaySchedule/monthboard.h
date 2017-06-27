@@ -16,12 +16,16 @@ private:
     static const int MAX_ROW_SIZE = 7;
     int maxNumberOfCards;
 
+    QString createHeaderDate();
+
     void createDayCardsLayout();
     void createDaysNames(QGridLayout * cardsLayout);
 
     void createBlankCardsOnTheFront(int & row, int & column, QGridLayout * cardsLayout);
     void createDayCards(int & row, int & column, QGridLayout * cardsLayout);
     void createBlankCardsOnTheEnd(int & row, int & column, QGridLayout * cardsLayout);
+
+    int calculateFirstDayOfTheMonthValue();
 
 private slots:
     void updateCurrentlyUsedDateDay(QString & dayValue);

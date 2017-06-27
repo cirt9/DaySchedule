@@ -35,23 +35,24 @@ void YearBoard::createMonthCardsLayout()
     boardLayout->addLayout(monthsCardsLayout);
 }
 
-void YearBoard::updateCurrentlyUsedDateMonth(QString & monthValue)
+void YearBoard::updateCurrentlyUsedDateMonth(QString & monthName)
 {
     int year = currentlyUsedDate->year();
-
-    QLocale locale(QLocale::English);
-
-    int i;
-    for(i=1; i<=12; i++)
-    {
-        if(monthValue == locale.monthName(i))
-            break;
-    }
-
-    int newMonth = i;
+    int newMonth = convertMonthNameToMonthValue(monthName);
     int day = currentlyUsedDate->day();
 
     currentlyUsedDate->setDate(year, newMonth, day);
     emit currentlyUsedDateHasChanged();
 }
 
+int YearBoard::convertMonthNameToMonthValue(QString & name)
+{
+    QLocale locale(QLocale::English);
+
+    for(int monthValue=1; monthValue<=12; monthValue++)
+    {
+        if(name == locale.monthName(monthValue))
+            return monthValue;
+    }
+    return 0;
+}
