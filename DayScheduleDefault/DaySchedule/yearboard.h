@@ -25,6 +25,9 @@ private slots:
 public:
     explicit YearBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~YearBoard() {;}
+
+signals:
+    void errorDetected(QString errorText);
 };
 
 #endif // YEARBOARD_H

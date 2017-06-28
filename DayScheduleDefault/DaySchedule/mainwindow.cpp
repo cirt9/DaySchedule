@@ -88,6 +88,7 @@ void MainWindow::showYear()
 
     YearBoard * year = new YearBoard(currentlyUsedDate, this);
     connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showMonth()));
+    connect(year, SIGNAL(errorDetected(QString)), this, SLOT(errorReaction(QString)));
 
     showWidgetOnCenter(year);
 }
@@ -130,4 +131,10 @@ void MainWindow::clearMainWindow()
 {
     LayoutDeleter deleter(this->layout());
     deleter.clearLayout();
+}
+
+void MainWindow::errorReaction(QString errorText)
+{
+    QMessageBox::critical(this, QString("Error"), errorText);
+    close();
 }

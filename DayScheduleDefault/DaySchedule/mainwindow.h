@@ -8,6 +8,7 @@
 #include <layoutdeleter.h>
 #include <QSharedPointer>
 #include <QDate>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,8 @@ private:
     void showWidgetOnCenter(QWidget * widget);
 
 private slots:
+    void errorReaction(QString errorText);
+
     void start();
 
     void showMenu();

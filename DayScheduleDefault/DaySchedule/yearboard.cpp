@@ -39,6 +39,10 @@ void YearBoard::updateCurrentlyUsedDateMonth(QString & monthName)
 {
     int year = currentlyUsedDate->year();
     int newMonth = convertMonthNameToMonthValue(monthName);
+
+    if(newMonth == 0)
+        emit errorDetected(QString("The application has encountered an unexpected error."));
+
     int day = currentlyUsedDate->day();
 
     currentlyUsedDate->setDate(year, newMonth, day);
