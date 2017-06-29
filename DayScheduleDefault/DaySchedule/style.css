@@ -10,6 +10,46 @@ QGroupBox
 border: none;
 }
 
+/* Bar Style */
+
+#BarLeftWidget
+{
+background: rgb(51,102,153);
+border-bottom-left-radius: 40px;
+color: rgb(255,240,235);
+font-size: 20px;
+}
+
+#BarMiddleWidget
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font-size: 20px;
+}
+
+#BarRightWidget
+{
+background: rgb(51,102,153);
+border-bottom-right-radius: 40px;
+color: rgb(255,240,235);
+font-size: 20px;
+}
+#BarLeftWidget:hover,
+#BarMiddleWidget:hover,
+#BarRightWidget:hover
+{
+background: rgb(77, 148, 255);
+}
+
+#BarLeftWidget:pressed,
+#BarMiddleWidget:pressed,
+#BarRightWidget:pressed
+{
+font-size: 25px;
+}
+
+
 /* BoardTemplate Style */
 
 BoardTemplate

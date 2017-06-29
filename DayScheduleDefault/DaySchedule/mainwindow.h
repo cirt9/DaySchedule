@@ -9,6 +9,11 @@
 #include <QSharedPointer>
 #include <QDate>
 #include <QMessageBox>
+#include <dayboard.h>
+#include <monthboard.h>
+#include <yearboard.h>
+#include <listofyearsboard.h>
+#include <bar.h>
 
 namespace Ui {
 class MainWindow;
@@ -19,12 +24,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    Ui::MainWindow *ui;
-    MainMenu * menu;
+    Ui::MainWindow * ui;
     QSharedPointer<QDate> currentlyUsedDate;
 
-    void setIconsInTheMenu();
-    void connectMenuToSlots();
+    void setIconsInTheMenu(MainMenu * menu);
+    void connectMenuToSlots(MainMenu * menu);
 
     void clearMainWindow();
 
@@ -33,9 +37,6 @@ private:
 private slots:
     void errorReaction(QString errorText);
 
-    void start();
-
-    void showMenu();
     void showYearsList();
     void showYear();
     void showMonth();

@@ -1,18 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <dayboard.h>
-#include <monthboard.h>
-#include <yearboard.h>
-#include <listofyearsboard.h>
-
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     setWindowState(Qt::WindowMaximized);
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
-    menu = nullptr;
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
     currentlyUsedDate->setDate(2017, 6, 26);
 
@@ -26,50 +20,33 @@ MainWindow::~MainWindow()
 
 void MainWindow::displayMainMenu()
 {
-    showMenu();
-    setIconsInTheMenu();
-    connectMenuToSlots();
-}
-
-void MainWindow::showMenu()
-{
     int menuSize = 500;
-    menu = new MainMenu(menuSize, menuSize, this);
+    MainMenu * menu = new MainMenu(menuSize, menuSize, this);
     menu->setFixedSize(menuSize, menuSize);
+    setIconsInTheMenu(menu);
+    connectMenuToSlots(menu);
 
     showWidgetOnCenter(menu);
 }
 
-void MainWindow::setIconsInTheMenu()
+void MainWindow::setIconsInTheMenu(MainMenu * menu)
 {
-    if(menu != nullptr)
-    {
-        menu->getCentralButton()->setIconSize(QSize(100,100));
-        menu->getCentralButton()->setIcon(QIcon(":/icons/icons/start.png"));
-        menu->getLeftButton()->setIconSize(QSize(100,100));
-        menu->getLeftButton()->setIcon(QIcon(":/icons/icons/about.png"));
-        menu->getTopButton()->setIconSize(QSize(100,100));
-        menu->getTopButton()->setIcon(QIcon(":/icons/icons/load.png"));
-        menu->getRightButton()->setIconSize(QSize(100,100));
-        menu->getRightButton()->setIcon(QIcon(":/icons/icons/options.png"));
-        menu->getBottomButton()->setIconSize(QSize(100,100));
-        menu->getBottomButton()->setIcon(QIcon(":/icons/icons/quit.png"));
-    }
+    menu->getCentralButton()->setIconSize(QSize(100,100));
+    menu->getCentralButton()->setIcon(QIcon(":/icons/icons/start.png"));
+    menu->getLeftButton()->setIconSize(QSize(100,100));
+    menu->getLeftButton()->setIcon(QIcon(":/icons/icons/about.png"));
+    menu->getTopButton()->setIconSize(QSize(100,100));
+    menu->getTopButton()->setIcon(QIcon(":/icons/icons/load.png"));
+    menu->getRightButton()->setIconSize(QSize(100,100));
+    menu->getRightButton()->setIcon(QIcon(":/icons/icons/options.png"));
+    menu->getBottomButton()->setIconSize(QSize(100,100));
+    menu->getBottomButton()->setIcon(QIcon(":/icons/icons/quit.png"));
 }
 
-void MainWindow::connectMenuToSlots()
+void MainWindow::connectMenuToSlots(MainMenu * menu)
 {
-    if(menu != nullptr)
-    {
-        connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
-        connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(start()));
-    }
-}
-
-void MainWindow::start()
-{
-    clearMainWindow();
-    showYearsList();
+    connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
+    connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(showYearsList()));
 }
 
 void MainWindow::showYearsList()
@@ -119,9 +96,50 @@ void MainWindow::showWidgetOnCenter(QWidget * widget)
     QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
     QWidget * containter = new QWidget(this);
 
-    centeringLayout->addItem(leftSpacer, 0, 0);
-    centeringLayout->addWidget(widget, 0, 1);
-    centeringLayout->addItem(rightSpacer, 0, 2);
+    centeringLayout->addItem(leftSpacer, 1, 0);
+    centeringLayout->addWidget(widget, 1, 1);
+    centeringLayout->addItem(rightSpacer, 1, 2);
+
+    //
+    centeringLayout->setContentsMargins(11, 0, 11, 11);
+    QSpacerItem * leftSpacer0 = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSpacerItem * rightSpacer0 = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    Bar * menuBar = new Bar();
+
+    QPushButton * menuButton = new QPushButton(QString("Menu"));
+    menuButton->setObjectName("BarLeftWidget");
+    menuBar->addWidget(menuButton);
+
+    QPushButton * yearsButton = new QPushButton(QString("Years"));
+    yearsButton->setObjectName("BarMiddleWidget");
+    menuBar->addWidget(yearsButton);
+
+    QPushButton * yearButton = new QPushButton(QString("Year"));
+    yearButton->setObjectName("BarMiddleWidget");
+    menuBar->addWidget(yearButton);
+
+    QPushButton * time = new QPushButton(QString("Time"));
+    time->setObjectName("BarMiddleWidget");
+    menuBar->addWidget(time);
+
+    QPushButton * monthButton = new QPushButton(QString("Month"));
+    monthButton->setObjectName("BarMiddleWidget");
+    menuBar->addWidget(monthButton);
+
+    QPushButton * dayButton = new QPushButton(QString("Day"));
+    dayButton->setObjectName("BarMiddleWidget");
+    menuBar->addWidget(dayButton);
+
+    QPushButton * saveButton = new QPushButton(QString("Save"));
+    saveButton->setObjectName("BarRightWidget");
+    menuBar->addWidget(saveButton);
+
+    centeringLayout->addItem(leftSpacer0, 0, 0);
+    centeringLayout->addWidget(menuBar, 0, 1);
+    centeringLayout->addItem(rightSpacer0, 0, 2);
+
+    //
 
     containter->setLayout(centeringLayout);
     setCentralWidget(containter);
