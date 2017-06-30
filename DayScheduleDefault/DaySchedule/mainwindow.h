@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <mainmenu.h>
 #include <QGridLayout>
+#include <QVBoxLayout>
 #include <QSpacerItem>
 #include <layoutdeleter.h>
 #include <QSharedPointer>
@@ -25,14 +26,18 @@ class MainWindow : public QMainWindow
 
 private:
     Ui::MainWindow * ui;
+    QVBoxLayout * centralWidgetLayout;
     QSharedPointer<QDate> currentlyUsedDate;
 
     void setIconsInTheMenu(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
 
     void clearMainWindow();
+    void resetCentralWidget();
 
+    void initializeCentralWidgetLayout();
     void showWidgetOnCenter(QWidget * widget);
+    void showMenuBar();
 
 private slots:
     void errorReaction(QString errorText);

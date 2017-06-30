@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setWindowState(Qt::WindowMaximized);
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
+    centralWidgetLayout = nullptr;
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
     currentlyUsedDate->setDate(2017, 6, 26);
 
@@ -20,6 +21,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::displayMainMenu()
 {
+    resetCentralWidget();
+
     int menuSize = 500;
     MainMenu * menu = new MainMenu(menuSize, menuSize, this);
     menu->setFixedSize(menuSize, menuSize);
@@ -51,7 +54,8 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
 
 void MainWindow::showYearsList()
 {
-    clearMainWindow();
+    resetCentralWidget();
+    showMenuBar();
 
     ListOfYearsBoard * years = new ListOfYearsBoard(currentlyUsedDate, this);
     connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showYear()));
@@ -61,7 +65,8 @@ void MainWindow::showYearsList()
 
 void MainWindow::showYear()
 {
-    clearMainWindow();
+    resetCentralWidget();
+    showMenuBar();
 
     YearBoard * year = new YearBoard(currentlyUsedDate, this);
     connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showMonth()));
@@ -72,7 +77,8 @@ void MainWindow::showYear()
 
 void MainWindow::showMonth()
 {
-    clearMainWindow();
+    resetCentralWidget();
+    showMenuBar();
 
     MonthBoard * month = new MonthBoard(currentlyUsedDate, this);
     connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showDay()));
@@ -82,7 +88,8 @@ void MainWindow::showMonth()
 
 void MainWindow::showDay()
 {
-    clearMainWindow();
+    resetCentralWidget();
+    showMenuBar();
 
     DayBoard * day = new DayBoard(currentlyUsedDate, this);
 
@@ -94,55 +101,76 @@ void MainWindow::showWidgetOnCenter(QWidget * widget)
     QGridLayout * centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
     QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QWidget * containter = new QWidget(this);
 
-    centeringLayout->addItem(leftSpacer, 1, 0);
-    centeringLayout->addWidget(widget, 1, 1);
-    centeringLayout->addItem(rightSpacer, 1, 2);
+    centeringLayout->addItem(leftSpacer, 0, 0);
+    centeringLayout->addWidget(widget, 0, 1);
+    centeringLayout->addItem(rightSpacer, 0, 2);
 
-    //
-    centeringLayout->setContentsMargins(11, 0, 11, 11);
-    QSpacerItem * leftSpacer0 = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QSpacerItem * rightSpacer0 = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    centralWidgetLayout->addLayout(centeringLayout);
+}
 
-    Bar * menuBar = new Bar();
+void MainWindow::showMenuBar()
+{
+    if(centralWidgetLayout != nullptr)
+    {
+        Bar * menuBar = new Bar();
 
-    QPushButton * menuButton = new QPushButton(QString("Menu"));
-    menuButton->setObjectName("BarLeftWidget");
-    menuBar->addWidget(menuButton);
+        QPushButton * menuButton = new QPushButton(QString("Menu"));
+        menuButton->setObjectName("BarLeftWidget");
+        menuButton->setMinimumWidth(110);
+        menuBar->addWidget(menuButton);
 
-    QPushButton * yearsButton = new QPushButton(QString("Years"));
-    yearsButton->setObjectName("BarMiddleWidget");
-    menuBar->addWidget(yearsButton);
+        QPushButton * yearsButton = new QPushButton(QString("Years"));
+        yearsButton->setMinimumWidth(80);
+        yearsButton->setObjectName("BarMiddleWidget");
+        menuBar->addWidget(yearsButton);
 
-    QPushButton * yearButton = new QPushButton(QString("Year"));
-    yearButton->setObjectName("BarMiddleWidget");
-    menuBar->addWidget(yearButton);
+        QPushButton * yearButton = new QPushButton(QString("Year"));
+        yearButton->setMinimumWidth(80);
+        yearButton->setObjectName("BarMiddleWidget");
+        menuBar->addWidget(yearButton);
 
-    QPushButton * time = new QPushButton(QString("Time"));
-    time->setObjectName("BarMiddleWidget");
-    menuBar->addWidget(time);
+        QPushButton * time = new QPushButton(QString("Time"));
+        time->setMinimumWidth(80);
+        time->setObjectName("BarMiddleWidget");
+        menuBar->addWidget(time);
 
-    QPushButton * monthButton = new QPushButton(QString("Month"));
-    monthButton->setObjectName("BarMiddleWidget");
-    menuBar->addWidget(monthButton);
+        QPushButton * monthButton = new QPushButton(QString("Month"));
+        monthButton->setMinimumWidth(80);
+        monthButton->setObjectName("BarMiddleWidget");
+        menuBar->addWidget(monthButton);
 
-    QPushButton * dayButton = new QPushButton(QString("Day"));
-    dayButton->setObjectName("BarMiddleWidget");
-    menuBar->addWidget(dayButton);
+        QPushButton * dayButton = new QPushButton(QString("Day"));
+        dayButton->setMinimumWidth(80);
+        dayButton->setObjectName("BarMiddleWidget");
+        menuBar->addWidget(dayButton);
 
-    QPushButton * saveButton = new QPushButton(QString("Save"));
-    saveButton->setObjectName("BarRightWidget");
-    menuBar->addWidget(saveButton);
+        QPushButton * saveButton = new QPushButton(QString("Save"));
+        saveButton->setObjectName("BarRightWidget");
+        saveButton->setMinimumWidth(110);
+        menuBar->addWidget(saveButton);
 
-    centeringLayout->addItem(leftSpacer0, 0, 0);
-    centeringLayout->addWidget(menuBar, 0, 1);
-    centeringLayout->addItem(rightSpacer0, 0, 2);
+        centralWidgetLayout->insertWidget(0, menuBar);
+    }
+}
 
-    //
+void MainWindow::initializeCentralWidgetLayout()
+{
+    centralWidgetLayout = new QVBoxLayout();
+    centralWidgetLayout->setContentsMargins(11, 0, 11, 11);
 
-    containter->setLayout(centeringLayout);
-    setCentralWidget(containter);
+    QWidget * container = new QWidget();
+    container->setLayout(centralWidgetLayout);
+    setCentralWidget(container);
+}
+
+void MainWindow::resetCentralWidget()
+{
+    if(this->layout())
+    {
+        clearMainWindow();
+        initializeCentralWidgetLayout();
+    }
 }
 
 void MainWindow::clearMainWindow()

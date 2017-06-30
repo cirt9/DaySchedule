@@ -14,10 +14,13 @@ border: none;
 
 #BarLeftWidget
 {
+border: none;
 background: rgb(51,102,153);
 border-bottom-left-radius: 40px;
 color: rgb(255,240,235);
-font-size: 20px;
+font: bold 15px;
+border-left: 2px solid rgb(46, 48, 51);
+border-bottom: 2px solid rgb(46, 48, 51);
 }
 
 #BarMiddleWidget
@@ -25,28 +28,36 @@ font-size: 20px;
 border: none;
 background: rgb(51,102,153);
 color: rgb(255,240,235);
-font-size: 20px;
+font: bold 15px;
+border-left: 2px solid rgb(46, 48, 51);
+border-bottom: 2px solid rgb(46, 48, 51);
 }
 
 #BarRightWidget
 {
+border: none;
 background: rgb(51,102,153);
 border-bottom-right-radius: 40px;
 color: rgb(255,240,235);
-font-size: 20px;
+font: bold 15px;
+border-left: 2px solid  rgb(46, 48, 51);
+border-right: 2px solid rgb(46, 48, 51);
+border-bottom: 2px solid rgb(46, 48, 51);
 }
+
 #BarLeftWidget:hover,
 #BarMiddleWidget:hover,
 #BarRightWidget:hover
 {
-background: rgb(77, 148, 255);
+background: rgb(255,240,235);
+color: rgb(51,102,153);
 }
 
 #BarLeftWidget:pressed,
 #BarMiddleWidget:pressed,
 #BarRightWidget:pressed
 {
-font-size: 25px;
+font-size: 20px;
 }
 
 
