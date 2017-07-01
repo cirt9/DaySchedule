@@ -1,13 +1,14 @@
 #include "monthboard.h"
 
-MonthBoard::MonthBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent)
+MonthBoard::MonthBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent)
+: BoardTemplate(currUsedDate, parent)
 {
     maxNumberOfCards = 42;
 
     QString headerDate = createHeaderDate();
     createHeaderLayout(headerDate);
     createDayCardsLayout();
-    createFooterLayout(QString("Footer"));
+    createFooterLayout(footerText);
 }
 
 QString MonthBoard::createHeaderDate()

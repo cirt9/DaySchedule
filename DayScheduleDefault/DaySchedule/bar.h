@@ -10,12 +10,14 @@ class Bar : public QGroupBox
 private:
     QHBoxLayout * barLayout;
     int barHeight;
+    int barWidgetsWidth;
 
 public:
     explicit Bar(QWidget * parent = 0);
     ~Bar() {}
 
     void setBarHeight(int height);
+    void setBarWidgetsMinimumWidth(int width);
     void addWidget(QWidget * widget);
 };
 

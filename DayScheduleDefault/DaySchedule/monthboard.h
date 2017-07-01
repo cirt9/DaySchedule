@@ -31,7 +31,7 @@ private slots:
     void updateCurrentlyUsedDateDay(QString & dayValue);
 
 public:
-    explicit MonthBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
+    explicit MonthBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~MonthBoard() {;}
 };
 

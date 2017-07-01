@@ -19,8 +19,8 @@ void BoardTemplate::createHeaderLayout(QString headerText)
 {
     headerLayout = new QHBoxLayout();
 
-    QLabel * headerLabel = new QLabel(QString(headerText));
-    headerLabel->setObjectName("BoardTemplateHeaderLabel");
+    QLabel * headerLabel = new QLabel(headerText);
+    headerLabel->setObjectName("BoardTemplateHeader");
     headerLabel->setMaximumHeight(80);
     headerLabel->setAlignment(Qt::AlignCenter);
 
@@ -33,8 +33,8 @@ void BoardTemplate::createFooterLayout(QString footerText)
 {
     footerLayout = new QHBoxLayout();
 
-    QLabel * footerLabel = new QLabel(QString(footerText));
-    footerLabel->setObjectName("BoardTemplateFooterLabel");
+    QLineEdit * footerLabel = new QLineEdit(footerText);
+    footerLabel->setObjectName("BoardTemplateFooter");
     footerLabel->setMaximumHeight(80);
     footerLabel->setAlignment(Qt::AlignCenter);
 

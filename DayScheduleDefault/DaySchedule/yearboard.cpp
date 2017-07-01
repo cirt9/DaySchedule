@@ -1,10 +1,11 @@
 #include "yearboard.h"
 
-YearBoard::YearBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent)
+YearBoard::YearBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent)
+: BoardTemplate(currUsedDate, parent)
 {
     createHeaderLayout(QString::number(currentlyUsedDate->year()));
     createMonthCardsLayout();
-    createFooterLayout(QString("Footer"));
+    createFooterLayout(footerText);
 }
 
 void YearBoard::createMonthCardsLayout()
@@ -43,7 +44,7 @@ void YearBoard::updateCurrentlyUsedDateMonth(QString & monthName)
     if(newMonth == 0)
         emit errorDetected(QString("The application has encountered an unexpected error."));
 
-    int day = currentlyUsedDate->day();
+    int day = 1;
 
     currentlyUsedDate->setDate(year, newMonth, day);
     emit currentlyUsedDateHasChanged();

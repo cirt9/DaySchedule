@@ -23,7 +23,7 @@ private slots:
     void updateCurrentlyUsedDateMonth(QString & monthName);
 
 public:
-    explicit YearBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
+    explicit YearBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~YearBoard() {;}
 
 signals:

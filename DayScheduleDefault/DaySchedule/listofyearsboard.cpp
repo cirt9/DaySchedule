@@ -1,10 +1,11 @@
 #include "listofyearsboard.h"
 
-ListOfYearsBoard::ListOfYearsBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) : BoardTemplate(currUsedDate, parent)
+ListOfYearsBoard::ListOfYearsBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent)
+: BoardTemplate(currUsedDate, parent)
 {
     createHeaderLayout(QString("Header"));
     createYearsCardsLayout();
-    createFooterLayout(QString("Footer"));
+    createFooterLayout(footerText);
 }
 
 void ListOfYearsBoard::createYearsCardsLayout()
@@ -35,8 +36,8 @@ void ListOfYearsBoard::createYearsCardsLayout()
 void ListOfYearsBoard::updateCurrentlyUsedDateYear(QString & yearValue)
 {
     int newYear = yearValue.toInt();
-    int month = currentlyUsedDate->month();
-    int day = currentlyUsedDate->day();
+    int month = 1;
+    int day = 1;
 
     currentlyUsedDate->setDate(newYear, month, day);
     emit currentlyUsedDateHasChanged();

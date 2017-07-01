@@ -57,7 +57,7 @@ void MainWindow::showYearsList()
     resetCentralWidget();
     showMenuBar();
 
-    ListOfYearsBoard * years = new ListOfYearsBoard(currentlyUsedDate, this);
+    ListOfYearsBoard * years = new ListOfYearsBoard("Your goal or note", currentlyUsedDate, this);
     connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showYear()));
 
     showWidgetOnCenter(years);
@@ -68,7 +68,7 @@ void MainWindow::showYear()
     resetCentralWidget();
     showMenuBar();
 
-    YearBoard * year = new YearBoard(currentlyUsedDate, this);
+    YearBoard * year = new YearBoard("Your goal or note", currentlyUsedDate, this);
     connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showMonth()));
     connect(year, SIGNAL(errorDetected(QString)), this, SLOT(errorReaction(QString)));
 
@@ -80,7 +80,7 @@ void MainWindow::showMonth()
     resetCentralWidget();
     showMenuBar();
 
-    MonthBoard * month = new MonthBoard(currentlyUsedDate, this);
+    MonthBoard * month = new MonthBoard("Your goal or note", currentlyUsedDate, this);
     connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showDay()));
 
     showWidgetOnCenter(month);
@@ -117,37 +117,35 @@ void MainWindow::showMenuBar()
 
         QPushButton * menuButton = new QPushButton(QString("Menu"));
         menuButton->setObjectName("BarLeftWidget");
-        menuButton->setMinimumWidth(110);
+        connect(menuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
         menuBar->addWidget(menuButton);
 
         QPushButton * yearsButton = new QPushButton(QString("Years"));
-        yearsButton->setMinimumWidth(80);
         yearsButton->setObjectName("BarMiddleWidget");
+        connect(yearsButton, SIGNAL(clicked()), this, SLOT(showYearsList()));
         menuBar->addWidget(yearsButton);
 
         QPushButton * yearButton = new QPushButton(QString("Year"));
-        yearButton->setMinimumWidth(80);
         yearButton->setObjectName("BarMiddleWidget");
+        connect(yearButton, SIGNAL(clicked()), this, SLOT(showYear()));
         menuBar->addWidget(yearButton);
 
-        QPushButton * time = new QPushButton(QString("Time"));
-        time->setMinimumWidth(80);
-        time->setObjectName("BarMiddleWidget");
-        menuBar->addWidget(time);
-
         QPushButton * monthButton = new QPushButton(QString("Month"));
-        monthButton->setMinimumWidth(80);
         monthButton->setObjectName("BarMiddleWidget");
+        connect(monthButton, SIGNAL(clicked()), this, SLOT(showMonth()));
         menuBar->addWidget(monthButton);
 
         QPushButton * dayButton = new QPushButton(QString("Day"));
-        dayButton->setMinimumWidth(80);
         dayButton->setObjectName("BarMiddleWidget");
+        connect(dayButton, SIGNAL(clicked()), this, SLOT(showDay()));
         menuBar->addWidget(dayButton);
+
+        QPushButton * resultsButton = new QPushButton(QString("Results"));
+        resultsButton->setObjectName("BarMiddleWidget");
+        menuBar->addWidget(resultsButton);
 
         QPushButton * saveButton = new QPushButton(QString("Save"));
         saveButton->setObjectName("BarRightWidget");
-        saveButton->setMinimumWidth(110);
         menuBar->addWidget(saveButton);
 
         centralWidgetLayout->insertWidget(0, menuBar);
