@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 
     centralWidgetLayout = nullptr;
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
-    currentlyUsedDate->setDate(2017, 6, 26);
+    setCurrentlyUsedDate(QDate::currentDate());
 
     clearMainWindow();
 }
@@ -17,6 +17,15 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setCurrentlyUsedDate(QDate date)
+{
+    int currentYear = date.year();
+    int currentMonth = date.month();
+    int currentDay = date.day();
+
+    currentlyUsedDate->setDate(currentYear, currentMonth, currentDay);
 }
 
 void MainWindow::displayMainMenu()
@@ -120,25 +129,11 @@ void MainWindow::showMenuBar()
         connect(menuButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
         menuBar->addWidget(menuButton);
 
-        QPushButton * yearsButton = new QPushButton(QString("Years"));
-        yearsButton->setObjectName("BarMiddleWidget");
-        connect(yearsButton, SIGNAL(clicked()), this, SLOT(showYearsList()));
-        menuBar->addWidget(yearsButton);
+        QToolButton * pagesButton = createPagesButton();
+        menuBar->addWidget(pagesButton);
 
-        QPushButton * yearButton = new QPushButton(QString("Year"));
-        yearButton->setObjectName("BarMiddleWidget");
-        connect(yearButton, SIGNAL(clicked()), this, SLOT(showYear()));
-        menuBar->addWidget(yearButton);
-
-        QPushButton * monthButton = new QPushButton(QString("Month"));
-        monthButton->setObjectName("BarMiddleWidget");
-        connect(monthButton, SIGNAL(clicked()), this, SLOT(showMonth()));
-        menuBar->addWidget(monthButton);
-
-        QPushButton * dayButton = new QPushButton(QString("Day"));
-        dayButton->setObjectName("BarMiddleWidget");
-        connect(dayButton, SIGNAL(clicked()), this, SLOT(showDay()));
-        menuBar->addWidget(dayButton);
+        QToolButton * shortcutsButton = createShortcutsButton();
+        menuBar->addWidget(shortcutsButton);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));
         resultsButton->setObjectName("BarMiddleWidget");
@@ -148,8 +143,74 @@ void MainWindow::showMenuBar()
         saveButton->setObjectName("BarRightWidget");
         menuBar->addWidget(saveButton);
 
-        centralWidgetLayout->insertWidget(0, menuBar);
+        QHBoxLayout * barLayout = new QHBoxLayout();
+        QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+        barLayout->addItem(leftSpacer);
+        barLayout->addWidget(menuBar);
+        barLayout->addItem(rightSpacer);
+
+        centralWidgetLayout->insertLayout(0, barLayout);
     }
+}
+
+QToolButton * MainWindow::createPagesButton()
+{
+    QMenu * pagesMenu = new QMenu();
+    pagesMenu->setObjectName("MenuToolButton");
+
+    QAction * yearsAction = new QAction("Years List", this);
+    connect(yearsAction, SIGNAL(triggered()), this, SLOT(showYearsList()));
+
+    QAction * yearAction = new QAction("Year", this);
+    connect(yearAction, SIGNAL(triggered()), this, SLOT(showYear()));
+
+    QAction * monthAction = new QAction("Month", this);
+    connect(monthAction, SIGNAL(triggered()), this, SLOT(showMonth()));
+
+    QAction * dayAction = new QAction("Day", this);
+    connect(dayAction, SIGNAL(triggered()), this, SLOT(showDay()));
+
+    pagesMenu->addAction(yearsAction);
+    pagesMenu->addAction(yearAction);
+    pagesMenu->addAction(monthAction);
+    pagesMenu->addAction(dayAction);
+
+    QToolButton * pagesButton = new QToolButton();
+    pagesButton->setText(QString("Pages"));
+    pagesButton->setMenu(pagesMenu);
+    pagesButton->setObjectName("BarMiddleWidget");
+    pagesButton->setPopupMode(QToolButton::InstantPopup);
+    return pagesButton;
+}
+
+QToolButton * MainWindow::createShortcutsButton()
+{
+    QMenu * shortcutsMenu = new QMenu();
+    shortcutsMenu->setObjectName("MenuToolButton");
+
+    QAction * yesterdayAction = new QAction("Yesterday", this);
+    connect(yesterdayAction, &QAction::triggered, this, [=]{setCurrentlyUsedDate(QDate::currentDate().addDays(-1));} );
+    connect(yesterdayAction, SIGNAL(triggered()), this, SLOT(showDay()));
+
+    QAction * todayAction = new QAction("Today", this);
+    connect(todayAction, &QAction::triggered, this, [=]{setCurrentlyUsedDate(QDate::currentDate());} );
+    connect(todayAction, SIGNAL(triggered()), this, SLOT(showDay()));
+
+    QAction * tomorrowAction = new QAction("Tomorrow", this);
+    connect(tomorrowAction, &QAction::triggered, this, [=]{setCurrentlyUsedDate(QDate::currentDate().addDays(1));} );
+    connect(tomorrowAction, SIGNAL(triggered()), this, SLOT(showDay()));
+
+    shortcutsMenu->addAction(yesterdayAction);
+    shortcutsMenu->addAction(todayAction);
+    shortcutsMenu->addAction(tomorrowAction);
+
+    QToolButton * shortcutsButton = new QToolButton();
+    shortcutsButton->setText(QString("Shortcuts"));
+    shortcutsButton->setMenu(shortcutsMenu);
+    shortcutsButton->setObjectName("BarMiddleWidget");
+    shortcutsButton->setPopupMode(QToolButton::InstantPopup);
+    return shortcutsButton;
 }
 
 void MainWindow::initializeCentralWidgetLayout()

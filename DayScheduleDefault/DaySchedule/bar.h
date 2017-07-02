@@ -17,7 +17,7 @@ public:
     ~Bar() {}
 
     void setBarHeight(int height);
-    void setBarWidgetsMinimumWidth(int width);
+    void setBarWidgetsWidth(int width);
     void addWidget(QWidget * widget);
 };
 

@@ -60,6 +60,18 @@ color: rgb(51,102,153);
 font-size: 20px;
 }
 
+#MenuToolButton
+{
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+width: 100%
+}
+
+#MenuToolButton::item:selected
+{
+background: rgb(255,240,235);
+color: rgb(51,102,153);
+}
 
 /* BoardTemplate Style */
 

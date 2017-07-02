@@ -15,6 +15,7 @@
 #include <yearboard.h>
 #include <listofyearsboard.h>
 #include <bar.h>
+#include <QToolButton>
 
 namespace Ui {
 class MainWindow;
@@ -37,10 +38,15 @@ private:
 
     void initializeCentralWidgetLayout();
     void showWidgetOnCenter(QWidget * widget);
+
     void showMenuBar();
+    QToolButton * createPagesButton();
+    QToolButton * createShortcutsButton();
 
 private slots:
     void errorReaction(QString errorText);
+
+    void setCurrentlyUsedDate(QDate date);
 
     void showYearsList();
     void showYear();
