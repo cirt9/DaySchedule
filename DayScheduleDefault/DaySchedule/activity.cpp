@@ -92,6 +92,7 @@ QHBoxLayout * Activity::createDescriptionLayout()
     descriptionLabel->setObjectName("ActivityDescriptionLabel");
 
     description = new QLineEdit();
+    description->setMaxLength(100);
     description->setFixedHeight(50);
     description->setObjectName("ActivityDescriptionLineEdit");
 

@@ -57,6 +57,8 @@ public:
     explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
 
+    void sqlTest();
+
 public slots:
     void displayMainMenu();
 };

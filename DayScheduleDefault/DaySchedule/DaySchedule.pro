@@ -5,7 +5,7 @@
 #-------------------------------------------------
 include(../defaults.pri)
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     listofyearsboard.cpp \
     boardtemplate.cpp \
     calendarcard.cpp \
-    bar.cpp
+    bar.cpp \
+    databasemanager.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     listofyearsboard.h \
     boardtemplate.h \
     calendarcard.h \
-    bar.h
+    bar.h \
+    databasemanager.h
 
 FORMS    += \
     mainwindow.ui

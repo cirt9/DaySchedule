@@ -33,12 +33,13 @@ void BoardTemplate::createFooterLayout(QString footerText)
 {
     footerLayout = new QHBoxLayout();
 
-    QLineEdit * footerLabel = new QLineEdit(footerText);
-    footerLabel->setObjectName("BoardTemplateFooter");
-    footerLabel->setMaximumHeight(80);
-    footerLabel->setAlignment(Qt::AlignCenter);
+    QLineEdit * footerLineEdit = new QLineEdit(footerText);
+    footerLineEdit->setObjectName("BoardTemplateFooter");
+    footerLineEdit->setMaxLength(100);
+    footerLineEdit->setMaximumHeight(80);
+    footerLineEdit->setAlignment(Qt::AlignCenter);
 
-    footerLayout->addWidget(footerLabel);
+    footerLayout->addWidget(footerLineEdit);
 
     boardLayout->insertLayout(boardLayout->count(), footerLayout);
 }
