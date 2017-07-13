@@ -23,6 +23,9 @@ public:
     ~DatabaseManager();
 
     void connect(QString databaseAddress);
+    void closeDatabase();
+
+    void execQuery(QSqlQuery * query);
 
 
 };

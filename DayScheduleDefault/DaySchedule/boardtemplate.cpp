@@ -3,6 +3,7 @@
 BoardTemplate::BoardTemplate(QSharedPointer<QDate> currUsedDate, QWidget * parent) : QGroupBox(parent)
 {
     currentlyUsedDate = currUsedDate;
+    footerLineEdit = nullptr;
 
     boardLayout = new QVBoxLayout();
     boardLayout->setSpacing(20);
@@ -33,7 +34,7 @@ void BoardTemplate::createFooterLayout(QString footerText)
 {
     footerLayout = new QHBoxLayout();
 
-    QLineEdit * footerLineEdit = new QLineEdit(footerText);
+    footerLineEdit = new QLineEdit(footerText);
     footerLineEdit->setObjectName("BoardTemplateFooter");
     footerLineEdit->setMaxLength(100);
     footerLineEdit->setMaximumHeight(80);

@@ -16,6 +16,7 @@
 #include <listofyearsboard.h>
 #include <bar.h>
 #include <QToolButton>
+#include <databasemanager.h>
 
 namespace Ui {
 class MainWindow;
@@ -61,6 +62,9 @@ public:
 
 public slots:
     void displayMainMenu();
+
+signals:
+    void boardWillBeDestroyed();
 };
 
 #endif // MAINWINDOW_H

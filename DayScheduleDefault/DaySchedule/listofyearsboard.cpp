@@ -42,3 +42,30 @@ void ListOfYearsBoard::updateCurrentlyUsedDateYear(QString & yearValue)
     currentlyUsedDate->setDate(newYear, month, day);
     emit currentlyUsedDateHasChanged();
 }
+
+void ListOfYearsBoard::save()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+
+    QSqlQuery * query = new QSqlQuery();
+    query->prepare("INSERT INTO years (years_id, description)"
+                   "VALUES (:id, :description)");
+    query->bindValue(":id", 1);
+    query->bindValue(":description", footerLineEdit->text());
+
+    db.execQuery(query);
+}
+
+void ListOfYearsBoard::load()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+
+    QSqlQuery * query = new QSqlQuery();
+    query->prepare("SELECT description FROM years WHERE years_id=1");
+    db.execQuery(query);
+
+    query->first();
+    QString footerText = query->value(0).toString();
+
+    footerLineEdit->setText(footerText);
+}

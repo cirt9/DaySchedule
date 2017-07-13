@@ -16,12 +16,14 @@ DatabaseManager::~DatabaseManager()
 
 bool DatabaseManager::alreadyConnected()
 {
-    QSqlQuery * query = new QSqlQuery(database);
-    query->prepare("SELECT 1 FROM years");
+    if(database.isOpen())
+    {
+        QSqlQuery * query = new QSqlQuery(database);
+        query->prepare("SELECT 1 FROM years");
 
-    if(query->exec())
-        return true;
-
+        if(query->exec())
+            return true;
+    }
     return false;
 }
 
@@ -33,7 +35,7 @@ void DatabaseManager::connect(QString databaseAddress)
         {
             dbAddress = databaseAddress;
 
-            QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE");
+            database = QSqlDatabase::addDatabase("QSQLITE");
             database.setDatabaseName(dbAddress);
 
             if(!database.open())
@@ -45,5 +47,22 @@ void DatabaseManager::connect(QString databaseAddress)
             qDebug() << "Database does not exsists";
     }
     else
-         qDebug() << "Already connected";
+        qDebug() << "Already connected";
+}
+
+void DatabaseManager::closeDatabase()
+{
+    database.close();
+}
+
+void DatabaseManager::execQuery(QSqlQuery * query)
+{
+    if(alreadyConnected())
+    {
+        if(query->exec())
+            qDebug() << "query success";
+
+        else
+            qDebug() << query->lastError();
+    }
 }

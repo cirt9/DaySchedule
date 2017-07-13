@@ -22,6 +22,10 @@ private slots:
 public:
     explicit ListOfYearsBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~ListOfYearsBoard() {;}
+
+public slots:
+    void save();
+    void load();
 };
 
 #endif // LISTOFYEARSBOARD_H

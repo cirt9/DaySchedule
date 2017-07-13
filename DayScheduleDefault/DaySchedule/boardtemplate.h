@@ -9,6 +9,7 @@
 #include <QList>
 #include <QDate>
 #include <QSharedPointer>
+#include <databasemanager.h>
 
 class BoardTemplate : public QGroupBox
 {
@@ -20,6 +21,8 @@ protected:
     QVBoxLayout * boardLayout;
     QHBoxLayout * headerLayout;
     QHBoxLayout * footerLayout;
+
+    QLineEdit * footerLineEdit;
 
     void createHeaderLayout(QString headerText);
     void createFooterLayout(QString footerText);

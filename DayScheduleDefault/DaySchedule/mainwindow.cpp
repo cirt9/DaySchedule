@@ -21,40 +21,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 //
-#include <databasemanager.h>
 
 void MainWindow::sqlTest()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.connect("dayScheduleTest.dsch");
 
-    /*QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("C:\\Users\\Bartek\\Desktop\\dayScheduleTest.dsch");
-
-    if(!db.open())
-        qDebug() << "Failed to open database.";
-    else
-    {
-        qDebug() << "Database opened.";
-
-        QSqlQuery * query = new QSqlQuery(db);
-        query->prepare("SELECT * FROM month");
-
-        if(query->exec())
-        {
-            while (query->next())
-            {
-                qDebug() << query->value(0);
-                qDebug() << query->value(1);
-                qDebug() << query->value(2);
-
-            }
-        }
-        else
-            qDebug() << query->lastError();
-
-        db.close();
-    }*/
+    //QSqlQuery * query = new QSqlQuery();
+    //query->prepare("SELECT * FROM month");
+    //db.execQuery(query);
 }
 //
 void MainWindow::setCurrentlyUsedDate(QDate date)
@@ -106,6 +81,11 @@ void MainWindow::showYearsList()
 
     ListOfYearsBoard * years = new ListOfYearsBoard("Your goal or note", currentlyUsedDate, this);
     connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showYear()));
+
+    years->load();
+
+    //connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(boardWillBeDestroyed()));
+    //connect(this, SIGNAL(boardWillBeDestroyed()), years, SLOT(save()));
 
     showWidgetOnCenter(years);
 }
