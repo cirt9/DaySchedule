@@ -27,9 +27,6 @@ void MainWindow::sqlTest()
     DatabaseManager & db = DatabaseManager::getInstance();
     db.connect("dayScheduleTest.dsch");
 
-    //QSqlQuery * query = new QSqlQuery();
-    //query->prepare("SELECT * FROM month");
-    //db.execQuery(query);
 }
 //
 void MainWindow::setCurrentlyUsedDate(QDate date)

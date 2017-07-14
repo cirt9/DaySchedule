@@ -25,7 +25,7 @@ public:
     void connect(QString databaseAddress);
     void closeDatabase();
 
-    void execQuery(QSqlQuery * query);
+    void execQuery(QSqlQuery & query);
 
 
 };

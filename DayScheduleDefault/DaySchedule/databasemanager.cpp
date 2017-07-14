@@ -55,14 +55,14 @@ void DatabaseManager::closeDatabase()
     database.close();
 }
 
-void DatabaseManager::execQuery(QSqlQuery * query)
+void DatabaseManager::execQuery(QSqlQuery & query)
 {
     if(alreadyConnected())
     {
-        if(query->exec())
+        if(query.exec())
             qDebug() << "query success";
 
         else
-            qDebug() << query->lastError();
+            qDebug() << query.lastError();
     }
 }

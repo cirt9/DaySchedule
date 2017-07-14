@@ -46,22 +46,22 @@ void ListOfYearsBoard::updateCurrentlyUsedDateYear(QString & yearValue)
 void ListOfYearsBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery * query = new QSqlQuery();
+    QSqlQuery query;
 
     if(recordAlreadyExists())
     {
         if(somethingChanged())
         {
-            query->prepare("UPDATE years SET description = :description WHERE years_id=1");
-            query->bindValue(":description", footerLineEdit->text());
+            query.prepare("UPDATE years SET description = :description WHERE years_id=1");
+            query.bindValue(":description", footerLineEdit->text());
             db.execQuery(query);
         }
     }
     else
     {
-        query->prepare("INSERT INTO years (years_id, description)"
+        query.prepare("INSERT INTO years (years_id, description)"
                        "VALUES (1, :description)");
-        query->bindValue(":description", footerLineEdit->text());
+        query.bindValue(":description", footerLineEdit->text());
         db.execQuery(query);
     }
 }
@@ -72,12 +72,12 @@ void ListOfYearsBoard::load()
     {
         DatabaseManager & db = DatabaseManager::getInstance();
 
-        QSqlQuery * query = new QSqlQuery();
-        query->prepare("SELECT description FROM years WHERE years_id=1");
+        QSqlQuery query;
+        query.prepare("SELECT description FROM years WHERE years_id=1");
         db.execQuery(query);
 
-        query->first();
-        QString footerText = query->value(0).toString();
+        query.first();
+        QString footerText = query.value(0).toString();
 
         footerLineEdit->setText(footerText);
     }
@@ -87,21 +87,21 @@ bool ListOfYearsBoard::recordAlreadyExists()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
 
-    QSqlQuery * validationQuery = new QSqlQuery();
-    validationQuery->prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
+    QSqlQuery validationQuery;
+    validationQuery.prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
     db.execQuery(validationQuery);
 
-    return validationQuery->next();
+    return validationQuery.next();
 }
 
 bool ListOfYearsBoard::somethingChanged()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
 
-    QSqlQuery * validationQuery = new QSqlQuery();
-    validationQuery->prepare("SELECT description FROM years WHERE years_id=1");
+    QSqlQuery validationQuery;
+    validationQuery.prepare("SELECT description FROM years WHERE years_id=1");
     db.execQuery(validationQuery);
 
-    validationQuery->first();
-    return footerLineEdit->text() == validationQuery->value(0).toString() ? false : true;
+    validationQuery.first();
+    return footerLineEdit->text() == validationQuery.value(0).toString() ? false : true;
 }
