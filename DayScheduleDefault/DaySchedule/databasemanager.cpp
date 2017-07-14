@@ -18,10 +18,10 @@ bool DatabaseManager::alreadyConnected()
 {
     if(database.isOpen())
     {
-        QSqlQuery * query = new QSqlQuery(database);
-        query->prepare("SELECT 1 FROM years");
+        QSqlQuery query(database);
+        query.prepare("SELECT 1 FROM years");
 
-        if(query->exec())
+        if(query.exec())
             return true;
     }
     return false;

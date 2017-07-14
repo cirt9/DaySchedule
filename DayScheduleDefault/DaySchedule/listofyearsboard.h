@@ -16,6 +16,9 @@ private:
 
     void createYearsCardsLayout();
 
+    bool recordAlreadyExists();
+    bool somethingChanged();
+
 private slots:
     void updateCurrentlyUsedDateYear(QString & yearValue);
 

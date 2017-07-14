@@ -84,8 +84,8 @@ void MainWindow::showYearsList()
 
     years->load();
 
-    //connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(boardWillBeDestroyed()));
-    //connect(this, SIGNAL(boardWillBeDestroyed()), years, SLOT(save()));
+    connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(boardWillBeDestroyed()));
+    connect(this, SIGNAL(boardWillBeDestroyed()), years, SLOT(save()));
 
     showWidgetOnCenter(years);
 }
