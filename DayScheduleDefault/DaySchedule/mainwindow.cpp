@@ -81,8 +81,8 @@ void MainWindow::showYearsList()
 
     years->load();
 
-    connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(boardWillBeDestroyed()));
-    connect(this, SIGNAL(boardWillBeDestroyed()), years, SLOT(save()));
+    connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(yearsBoardWillBeDestroyed()));
+    connect(this, SIGNAL(yearsBoardWillBeDestroyed()), years, SLOT(save()));
 
     showWidgetOnCenter(years);
 }
@@ -96,6 +96,11 @@ void MainWindow::showYear()
     connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showMonth()));
     connect(year, SIGNAL(errorDetected(QString)), this, SLOT(errorReaction(QString)));
 
+    year->load();
+
+    connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(yearBoardWillBeDestroyed()));
+    connect(this, SIGNAL(yearBoardWillBeDestroyed()), year, SLOT(save()));
+
     showWidgetOnCenter(year);
 }
 
@@ -106,6 +111,11 @@ void MainWindow::showMonth()
 
     MonthBoard * month = new MonthBoard("Your goal or note", currentlyUsedDate, this);
     connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showDay()));
+
+    month->load();
+
+    connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(monthBoardWillBeDestroyed()));
+    connect(this, SIGNAL(monthBoardWillBeDestroyed()), month, SLOT(save()));
 
     showWidgetOnCenter(month);
 }

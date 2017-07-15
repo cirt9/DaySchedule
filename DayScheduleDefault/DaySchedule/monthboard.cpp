@@ -137,3 +137,80 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
         column++;
     }
 }
+
+void MonthBoard::save()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query;
+
+    if(recordAlreadyExists())
+    {
+        if(somethingChanged())
+        {
+            query.prepare("UPDATE month SET description = :description "
+                          "WHERE month_id=:mid AND year_id=:yid");
+            query.bindValue(":description", footerLineEdit->text());
+            query.bindValue(":mid", currentlyUsedDate->month());
+            query.bindValue(":yid", currentlyUsedDate->year());
+            db.execQuery(query);
+        }
+    }
+    else
+    {
+        query.prepare("INSERT INTO month (month_id, year_id, description)"
+                       "VALUES (:mid, :yid, :description)");
+        query.bindValue(":mid", currentlyUsedDate->month());
+        query.bindValue(":yid", currentlyUsedDate->year());
+        query.bindValue(":description", footerLineEdit->text());
+        db.execQuery(query);
+    }
+}
+
+void MonthBoard::load()
+{
+    if(recordAlreadyExists())
+    {
+        DatabaseManager & db = DatabaseManager::getInstance();
+
+        QSqlQuery query;
+        query.prepare("SELECT description FROM month "
+                      "WHERE month_id=:mid AND year_id=:yid");
+        query.bindValue(":mid", currentlyUsedDate->month());
+        query.bindValue(":yid", currentlyUsedDate->year());
+        db.execQuery(query);
+
+        query.first();
+        QString footerText = query.value(0).toString();
+
+        footerLineEdit->setText(footerText);
+    }
+}
+
+bool MonthBoard::recordAlreadyExists()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+
+    QSqlQuery validationQuery;
+    validationQuery.prepare("SELECT 1 FROM month "
+                            "WHERE month_id=:mid AND year_id=:yid LIMIT 1");
+    validationQuery.bindValue(":mid", currentlyUsedDate->month());
+    validationQuery.bindValue(":yid", currentlyUsedDate->year());
+    db.execQuery(validationQuery);
+
+    return validationQuery.next();
+}
+
+bool MonthBoard::somethingChanged()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+
+    QSqlQuery validationQuery;
+    validationQuery.prepare("SELECT description FROM month "
+                            "WHERE month_id=:mid AND year_id=:yid");
+    validationQuery.bindValue(":mid", currentlyUsedDate->month());
+    validationQuery.bindValue(":yid", currentlyUsedDate->year());
+    db.execQuery(validationQuery);
+
+    validationQuery.first();
+    return footerLineEdit->text() == validationQuery.value(0).toString() ? false : true;
+}

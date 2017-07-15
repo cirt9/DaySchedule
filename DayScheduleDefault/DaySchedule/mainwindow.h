@@ -64,7 +64,9 @@ public slots:
     void displayMainMenu();
 
 signals:
-    void boardWillBeDestroyed();
+    void yearsBoardWillBeDestroyed();
+    void yearBoardWillBeDestroyed();
+    void monthBoardWillBeDestroyed();
 };
 
 #endif // MAINWINDOW_H

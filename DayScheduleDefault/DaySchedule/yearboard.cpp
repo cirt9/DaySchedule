@@ -61,3 +61,71 @@ int YearBoard::convertMonthNameToMonthValue(QString & name)
     }
     return 0;
 }
+
+void YearBoard::save()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query;
+
+    if(recordAlreadyExists())
+    {
+        if(somethingChanged())
+        {
+            query.prepare("UPDATE year SET description = :description WHERE years_id=:id");
+            query.bindValue(":description", footerLineEdit->text());
+            query.bindValue(":id", currentlyUsedDate->year());
+            db.execQuery(query);
+        }
+    }
+    else
+    {
+        query.prepare("INSERT INTO year (year_id, description)"
+                       "VALUES (:id, :description)");
+        query.bindValue(":id", currentlyUsedDate->year());
+        query.bindValue(":description", footerLineEdit->text());
+        db.execQuery(query);
+    }
+}
+
+void YearBoard::load()
+{
+    if(recordAlreadyExists())
+    {
+        DatabaseManager & db = DatabaseManager::getInstance();
+
+        QSqlQuery query;
+        query.prepare("SELECT description FROM year WHERE year_id=:id");
+        query.bindValue(":id", currentlyUsedDate->year());
+        db.execQuery(query);
+
+        query.first();
+        QString footerText = query.value(0).toString();
+
+        footerLineEdit->setText(footerText);
+    }
+}
+
+bool YearBoard::recordAlreadyExists()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+
+    QSqlQuery validationQuery;
+    validationQuery.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
+    validationQuery.bindValue(":id", currentlyUsedDate->year());
+    db.execQuery(validationQuery);
+
+    return validationQuery.next();
+}
+
+bool YearBoard::somethingChanged()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+
+    QSqlQuery validationQuery;
+    validationQuery.prepare("SELECT description FROM year WHERE year_id=:id");
+    validationQuery.bindValue(":id", currentlyUsedDate->year());
+    db.execQuery(validationQuery);
+
+    validationQuery.first();
+    return footerLineEdit->text() == validationQuery.value(0).toString() ? false : true;
+}

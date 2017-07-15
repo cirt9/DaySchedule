@@ -27,12 +27,19 @@ private:
 
     int calculateFirstDayOfTheMonthValue();
 
+    bool recordAlreadyExists();
+    bool somethingChanged();
+
 private slots:
     void updateCurrentlyUsedDateDay(QString & dayValue);
 
 public:
     explicit MonthBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~MonthBoard() {;}
+
+public slots:
+    void save();
+    void load();
 };
 
 #endif // MONTHBOARD_H
