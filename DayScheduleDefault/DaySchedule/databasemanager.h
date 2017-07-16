@@ -26,8 +26,7 @@ public:
     void closeDatabase();
 
     void execQuery(QSqlQuery & query);
-
-
+    bool recordAlreadyExists(QSqlQuery & query);
 };
 
 #endif // DATABASEMANAGER_H

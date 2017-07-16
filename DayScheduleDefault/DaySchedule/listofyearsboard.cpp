@@ -47,8 +47,9 @@ void ListOfYearsBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     QSqlQuery query;
+    query.prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
 
-    if(recordAlreadyExists())
+    if(db.recordAlreadyExists(query))
     {
         if(somethingChanged())
         {
@@ -68,11 +69,12 @@ void ListOfYearsBoard::save()
 
 void ListOfYearsBoard::load()
 {
-    if(recordAlreadyExists())
-    {
-        DatabaseManager & db = DatabaseManager::getInstance();
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query;
+    query.prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
 
-        QSqlQuery query;
+    if(db.recordAlreadyExists(query))
+    {
         query.prepare("SELECT description FROM years WHERE years_id=1");
         db.execQuery(query);
 
@@ -81,17 +83,6 @@ void ListOfYearsBoard::load()
 
         footerLineEdit->setText(footerText);
     }
-}
-
-bool ListOfYearsBoard::recordAlreadyExists()
-{
-    DatabaseManager & db = DatabaseManager::getInstance();
-
-    QSqlQuery validationQuery;
-    validationQuery.prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
-    db.execQuery(validationQuery);
-
-    return validationQuery.next();
 }
 
 bool ListOfYearsBoard::somethingChanged()

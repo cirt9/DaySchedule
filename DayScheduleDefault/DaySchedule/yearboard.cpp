@@ -66,12 +66,14 @@ void YearBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     QSqlQuery query;
+    query.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
+    query.bindValue(":id", currentlyUsedDate->year());
 
-    if(recordAlreadyExists())
+    if(db.recordAlreadyExists(query))
     {
         if(somethingChanged())
         {
-            query.prepare("UPDATE year SET description = :description WHERE years_id=:id");
+            query.prepare("UPDATE year SET description=:description WHERE year_id=:id");
             query.bindValue(":description", footerLineEdit->text());
             query.bindValue(":id", currentlyUsedDate->year());
             db.execQuery(query);
@@ -89,11 +91,13 @@ void YearBoard::save()
 
 void YearBoard::load()
 {
-    if(recordAlreadyExists())
-    {
-        DatabaseManager & db = DatabaseManager::getInstance();
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query;
+    query.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
+    query.bindValue(":id", currentlyUsedDate->year());
 
-        QSqlQuery query;
+    if(db.recordAlreadyExists(query))
+    {
         query.prepare("SELECT description FROM year WHERE year_id=:id");
         query.bindValue(":id", currentlyUsedDate->year());
         db.execQuery(query);
@@ -103,18 +107,6 @@ void YearBoard::load()
 
         footerLineEdit->setText(footerText);
     }
-}
-
-bool YearBoard::recordAlreadyExists()
-{
-    DatabaseManager & db = DatabaseManager::getInstance();
-
-    QSqlQuery validationQuery;
-    validationQuery.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
-    validationQuery.bindValue(":id", currentlyUsedDate->year());
-    db.execQuery(validationQuery);
-
-    return validationQuery.next();
 }
 
 bool YearBoard::somethingChanged()

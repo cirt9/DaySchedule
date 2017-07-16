@@ -66,3 +66,10 @@ void DatabaseManager::execQuery(QSqlQuery & query)
             qDebug() << query.lastError();
     }
 }
+
+bool DatabaseManager::recordAlreadyExists(QSqlQuery & query)
+{
+    execQuery(query);
+
+    return query.next();
+}

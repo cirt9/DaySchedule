@@ -19,7 +19,6 @@ private:
 
     int convertMonthNameToMonthValue(QString & name);
 
-    bool recordAlreadyExists();
     bool somethingChanged();
 
 private slots:

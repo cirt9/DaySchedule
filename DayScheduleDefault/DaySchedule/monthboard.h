@@ -27,7 +27,6 @@ private:
 
     int calculateFirstDayOfTheMonthValue();
 
-    bool recordAlreadyExists();
     bool somethingChanged();
 
 private slots:
