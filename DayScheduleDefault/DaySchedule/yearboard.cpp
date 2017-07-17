@@ -65,26 +65,19 @@ int YearBoard::convertMonthNameToMonthValue(QString & name)
 void YearBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
-    query.bindValue(":id", currentlyUsedDate->year());
+    QSqlQuery query = db.yearCheckIfExistsQuery(currentlyUsedDate->year());
 
     if(db.recordAlreadyExists(query))
     {
         if(somethingChanged())
         {
-            query.prepare("UPDATE year SET description=:description WHERE year_id=:id");
-            query.bindValue(":description", footerLineEdit->text());
-            query.bindValue(":id", currentlyUsedDate->year());
+            query = db.yearUpdateQuery(currentlyUsedDate->year(), footerLineEdit->text());
             db.execQuery(query);
         }
     }
     else
     {
-        query.prepare("INSERT INTO year (year_id, description)"
-                       "VALUES (:id, :description)");
-        query.bindValue(":id", currentlyUsedDate->year());
-        query.bindValue(":description", footerLineEdit->text());
+        query = db.yearInsertQuery(currentlyUsedDate->year(), footerLineEdit->text());
         db.execQuery(query);
     }
 }
@@ -92,14 +85,11 @@ void YearBoard::save()
 void YearBoard::load()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
-    query.bindValue(":id", currentlyUsedDate->year());
+    QSqlQuery query = db.yearCheckIfExistsQuery(currentlyUsedDate->year());
 
     if(db.recordAlreadyExists(query))
     {
-        query.prepare("SELECT description FROM year WHERE year_id=:id");
-        query.bindValue(":id", currentlyUsedDate->year());
+        query = db.yearSelectDescriptionQuery(currentlyUsedDate->year());
         db.execQuery(query);
 
         query.first();
@@ -112,12 +102,10 @@ void YearBoard::load()
 bool YearBoard::somethingChanged()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.yearSelectDescriptionQuery(currentlyUsedDate->year());
 
-    QSqlQuery validationQuery;
-    validationQuery.prepare("SELECT description FROM year WHERE year_id=:id");
-    validationQuery.bindValue(":id", currentlyUsedDate->year());
-    db.execQuery(validationQuery);
+    db.execQuery(query);
 
-    validationQuery.first();
-    return footerLineEdit->text() == validationQuery.value(0).toString() ? false : true;
+    query.first();
+    return footerLineEdit->text() == query.value(0).toString() ? false : true;
 }

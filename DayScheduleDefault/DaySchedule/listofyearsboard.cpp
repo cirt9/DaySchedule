@@ -46,23 +46,19 @@ void ListOfYearsBoard::updateCurrentlyUsedDateYear(QString & yearValue)
 void ListOfYearsBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
+    QSqlQuery query = db.yearsCheckIfExistsQuery(1);
 
     if(db.recordAlreadyExists(query))
     {
         if(somethingChanged())
         {
-            query.prepare("UPDATE years SET description = :description WHERE years_id=1");
-            query.bindValue(":description", footerLineEdit->text());
+            query = db.yearsUpdateQuery(1, footerLineEdit->text());
             db.execQuery(query);
         }
     }
     else
     {
-        query.prepare("INSERT INTO years (years_id, description)"
-                       "VALUES (1, :description)");
-        query.bindValue(":description", footerLineEdit->text());
+        query = db.yearsInsertQuery(1, footerLineEdit->text());
         db.execQuery(query);
     }
 }
@@ -70,12 +66,11 @@ void ListOfYearsBoard::save()
 void ListOfYearsBoard::load()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM years WHERE years_id=1 LIMIT 1");
+    QSqlQuery query = db.yearsCheckIfExistsQuery(1);
 
     if(db.recordAlreadyExists(query))
     {
-        query.prepare("SELECT description FROM years WHERE years_id=1");
+        query = db.yearsSelectDescriptionQuery(1);
         db.execQuery(query);
 
         query.first();
@@ -88,11 +83,9 @@ void ListOfYearsBoard::load()
 bool ListOfYearsBoard::somethingChanged()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.yearsSelectDescriptionQuery(1);
+    db.execQuery(query);
 
-    QSqlQuery validationQuery;
-    validationQuery.prepare("SELECT description FROM years WHERE years_id=1");
-    db.execQuery(validationQuery);
-
-    validationQuery.first();
-    return footerLineEdit->text() == validationQuery.value(0).toString() ? false : true;
+    query.first();
+    return footerLineEdit->text() == query.value(0).toString() ? false : true;
 }

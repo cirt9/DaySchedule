@@ -141,31 +141,23 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
 void MonthBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM month "
-                            "WHERE month_id=:mid AND year_id=:yid LIMIT 1");
-    query.bindValue(":mid", currentlyUsedDate->month());
-    query.bindValue(":yid", currentlyUsedDate->year());
+    QSqlQuery query = db.monthCheckIfExists(currentlyUsedDate->month(), currentlyUsedDate->year());
 
     if(db.recordAlreadyExists(query))
     {
         if(somethingChanged())
         {
-            query.prepare("UPDATE month SET description = :description "
-                          "WHERE month_id=:mid AND year_id=:yid");
-            query.bindValue(":description", footerLineEdit->text());
-            query.bindValue(":mid", currentlyUsedDate->month());
-            query.bindValue(":yid", currentlyUsedDate->year());
+            query = db.monthUpdateQuery(currentlyUsedDate->month(),
+                                        currentlyUsedDate->year(),
+                                        footerLineEdit->text() );
             db.execQuery(query);
         }
     }
     else
     {
-        query.prepare("INSERT INTO month (month_id, year_id, description)"
-                       "VALUES (:mid, :yid, :description)");
-        query.bindValue(":mid", currentlyUsedDate->month());
-        query.bindValue(":yid", currentlyUsedDate->year());
-        query.bindValue(":description", footerLineEdit->text());
+        query = db.monthInsertQuery(currentlyUsedDate->month(),
+                                    currentlyUsedDate->year(),
+                                    footerLineEdit->text() );
         db.execQuery(query);
     }
 }
@@ -173,18 +165,12 @@ void MonthBoard::save()
 void MonthBoard::load()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM month "
-                            "WHERE month_id=:mid AND year_id=:yid LIMIT 1");
-    query.bindValue(":mid", currentlyUsedDate->month());
-    query.bindValue(":yid", currentlyUsedDate->year());
+    QSqlQuery query = db.monthCheckIfExists(currentlyUsedDate->month(), currentlyUsedDate->year());
 
     if(db.recordAlreadyExists(query))
     {
-        query.prepare("SELECT description FROM month "
-                      "WHERE month_id=:mid AND year_id=:yid");
-        query.bindValue(":mid", currentlyUsedDate->month());
-        query.bindValue(":yid", currentlyUsedDate->year());
+        query = db.monthSelectDescriptionQuery(currentlyUsedDate->month(),
+                                               currentlyUsedDate->year());
         db.execQuery(query);
 
         query.first();
@@ -197,14 +183,10 @@ void MonthBoard::load()
 bool MonthBoard::somethingChanged()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.monthSelectDescriptionQuery(currentlyUsedDate->month(),
+                                                     currentlyUsedDate->year());
+    db.execQuery(query);
 
-    QSqlQuery validationQuery;
-    validationQuery.prepare("SELECT description FROM month "
-                            "WHERE month_id=:mid AND year_id=:yid");
-    validationQuery.bindValue(":mid", currentlyUsedDate->month());
-    validationQuery.bindValue(":yid", currentlyUsedDate->year());
-    db.execQuery(validationQuery);
-
-    validationQuery.first();
-    return footerLineEdit->text() == validationQuery.value(0).toString() ? false : true;
+    query.first();
+    return footerLineEdit->text() == query.value(0).toString() ? false : true;
 }
