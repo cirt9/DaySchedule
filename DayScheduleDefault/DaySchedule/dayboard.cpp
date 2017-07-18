@@ -95,10 +95,10 @@ void DayBoard::createBottomMenuLayout()
     clearButton->setObjectName("DayBoardButton");
     connect(clearButton, SIGNAL(clicked()), this, SLOT(clearActivities()));
 
-    QCheckBox * alarmsButton = new QCheckBox();
+    alarmsButton = new QCheckBox();
     alarmsButton->setObjectName("DayBoardAlarmsButton");
     alarmsButton->setFixedSize(40, 40);
-    connect(alarmsButton, SIGNAL(toggled(bool)), this, SLOT(setAlarmsState(bool)));
+    connect(alarmsButton, SIGNAL(toggled(bool)), this, SLOT(setAlarmsEnabled(bool)));
 
     buttonsBarLayout->addWidget(addActivityButton);
     buttonsBarLayout->addWidget(copyButton);
@@ -140,11 +140,6 @@ void DayBoard::clearActivities()
         else
             ++it;
     }
-}
-
-void DayBoard::setAlarmsState(bool state)
-{
-    alarmsEnabled = state;
 }
 
 void DayBoard::eraseActivityFromList(QWidget * activity)
@@ -192,3 +187,19 @@ void DayBoard::setAlarmsEnabled(bool value)
     alarmsEnabled = value;
 }
 
+bool DayBoard::somethingChanged()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.daySelectDataQuery(*currentlyUsedDate);
+
+    db.execQuery(query);
+
+    query.first();
+    if(query.value(0).toString() == progress->text() &&
+       query.value(1).toBool() == alarmsButton->isChecked() )
+    {
+        return false;
+    }
+    else
+        return true;
+}

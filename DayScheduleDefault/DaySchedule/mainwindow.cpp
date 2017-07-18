@@ -126,6 +126,7 @@ void MainWindow::showDay()
     showMenuBar();
 
     DayBoard * day = new DayBoard(currentlyUsedDate, this);
+    qDebug() << day->somethingChanged();
 
     showWidgetOnCenter(day);
 }

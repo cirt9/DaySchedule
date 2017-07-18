@@ -141,7 +141,7 @@ void MonthBoard::createBlankCardsOnTheEnd(int & row, int & column, QGridLayout *
 void MonthBoard::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.monthCheckIfExists(currentlyUsedDate->month(), currentlyUsedDate->year());
+    QSqlQuery query = db.monthCheckIfExistsQuery(currentlyUsedDate->month(), currentlyUsedDate->year());
 
     if(db.recordAlreadyExists(query))
     {
@@ -165,7 +165,7 @@ void MonthBoard::save()
 void MonthBoard::load()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.monthCheckIfExists(currentlyUsedDate->month(), currentlyUsedDate->year());
+    QSqlQuery query = db.monthCheckIfExistsQuery(currentlyUsedDate->month(), currentlyUsedDate->year());
 
     if(db.recordAlreadyExists(query))
     {

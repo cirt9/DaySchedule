@@ -4,6 +4,7 @@
 #include <QString>
 #include <QtSql>
 #include <QFile>
+#include <QDate>
 
 class DatabaseManager
 {
@@ -38,10 +39,15 @@ public:
     QSqlQuery yearInsertQuery(int id, QString description);
     QSqlQuery yearSelectDescriptionQuery(int id);
 
-    QSqlQuery monthCheckIfExists(int m_id, int y_id);
+    QSqlQuery monthCheckIfExistsQuery(int m_id, int y_id);
     QSqlQuery monthUpdateQuery(int m_id, int y_id, QString description);
     QSqlQuery monthInsertQuery(int m_id, int y_id, QString description);
     QSqlQuery monthSelectDescriptionQuery(int m_id, int y_id);
+
+    QSqlQuery dayCheckIfExistsQuery(const QDate id);
+    QSqlQuery dayUpdateQuery(const QDate id, int progress, bool alarms_enabled);
+    QSqlQuery dayInsertQuery(const QDate id, int progress, bool alarms_enabled);
+    QSqlQuery daySelectDataQuery(const QDate id);
 };
 
 #endif // DATABASEMANAGER_H

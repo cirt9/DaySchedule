@@ -11,6 +11,7 @@
 #include <timerangesystem.h>
 #include <QSharedPointer>
 #include <QLocale>
+#include <databasemanager.h>
 
 class DayBoard : public BoardTemplate
 {
@@ -23,6 +24,7 @@ private:
     bool alarmsEnabled;
 
     QLabel * progress;
+    QCheckBox * alarmsButton;
 
     void createDateAndProgressLayout();
     QString createHeaderDate();
@@ -32,10 +34,10 @@ private:
 
     int calculateProgress();
 
+
 private slots:
     void addNewActivity();
     void clearActivities();
-    void setAlarmsState(bool state);
     void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:
@@ -43,10 +45,11 @@ public:
     ~DayBoard() {;}
 
     bool getAlarmsEnabled() const;
-    void setAlarmsEnabled(bool value);
+    bool somethingChanged();
 
 public slots:
     void updateProgress();
+    void setAlarmsEnabled(bool value);
 };
 
 #endif // DAYBOARD_H
