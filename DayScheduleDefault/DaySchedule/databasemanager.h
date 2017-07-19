@@ -44,10 +44,10 @@ public:
     QSqlQuery monthInsertQuery(int m_id, int y_id, QString description);
     QSqlQuery monthSelectDescriptionQuery(int m_id, int y_id);
 
-    QSqlQuery dayCheckIfExistsQuery(const QDate id);
-    QSqlQuery dayUpdateQuery(const QDate id, int progress, bool alarms_enabled);
-    QSqlQuery dayInsertQuery(const QDate id, int progress, bool alarms_enabled);
-    QSqlQuery daySelectDataQuery(const QDate id);
+    QSqlQuery dayCheckIfExistsQuery(QDate id);
+    QSqlQuery dayUpdateQuery(QDate id, int progress, bool alarms_enabled);
+    QSqlQuery dayInsertQuery(QDate id, int progress, bool alarms_enabled);
+    QSqlQuery daySelectDataQuery(QDate id);
 };
 
 #endif // DATABASEMANAGER_H

@@ -31,6 +31,10 @@ void MainWindow::sqlTest()
 //
 void MainWindow::setCurrentlyUsedDate(QDate date)
 {
+    //
+    emit dayBoardWillBeDestroyed();
+    //
+
     int currentYear = date.year();
     int currentMonth = date.month();
     int currentDay = date.day();
@@ -126,7 +130,10 @@ void MainWindow::showDay()
     showMenuBar();
 
     DayBoard * day = new DayBoard(currentlyUsedDate, this);
-    qDebug() << day->somethingChanged();
+
+    day->load();
+
+    connect(this, SIGNAL(dayBoardWillBeDestroyed()), day, SLOT(save()));
 
     showWidgetOnCenter(day);
 }

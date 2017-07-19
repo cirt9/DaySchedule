@@ -189,7 +189,7 @@ QSqlQuery DatabaseManager::monthSelectDescriptionQuery(int m_id, int y_id)
     return query;
 }
 
-QSqlQuery DatabaseManager::dayCheckIfExistsQuery(const QDate id)
+QSqlQuery DatabaseManager::dayCheckIfExistsQuery(QDate id)
 {
     QSqlQuery query;
     query.prepare("SELECT 1 FROM day WHERE day_id=:id LIMIT 1");
@@ -197,7 +197,7 @@ QSqlQuery DatabaseManager::dayCheckIfExistsQuery(const QDate id)
     return query;
 }
 
-QSqlQuery DatabaseManager::dayUpdateQuery(const QDate id, int progress, bool alarms_enabled)
+QSqlQuery DatabaseManager::dayUpdateQuery(QDate id, int progress, bool alarms_enabled)
 {
     QSqlQuery query;
     query.prepare("UPDATE day SET progress=:progress, alarms_enabled=:alarms_enabled "
@@ -208,18 +208,18 @@ QSqlQuery DatabaseManager::dayUpdateQuery(const QDate id, int progress, bool ala
     return query;
 }
 
-QSqlQuery DatabaseManager::dayInsertQuery(const QDate id, int progress, bool alarms_enabled)
+QSqlQuery DatabaseManager::dayInsertQuery(QDate id, int progress, bool alarms_enabled)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO day (day_id, progress, alarms_enabled)"
                   "VALUES (:id, :progress, :alarms_enabled)");
     query.bindValue(":id", id);
     query.bindValue(":progress", progress);
-    query.bindValue(":alarms_enalbed", alarms_enabled);
+    query.bindValue(":alarms_enabled", alarms_enabled);
     return query;
 }
 
-QSqlQuery DatabaseManager::daySelectDataQuery(const QDate id)
+QSqlQuery DatabaseManager::daySelectDataQuery(QDate id)
 {
     QSqlQuery query;
     query.prepare("SELECT progress, alarms_enabled FROM day "

@@ -4,7 +4,6 @@ DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) :
 BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
 {
     progress = nullptr;
-    alarmsEnabled = false;
 
     createDateAndProgressLayout();
     createActivitiesLayout();
@@ -98,7 +97,6 @@ void DayBoard::createBottomMenuLayout()
     alarmsButton = new QCheckBox();
     alarmsButton->setObjectName("DayBoardAlarmsButton");
     alarmsButton->setFixedSize(40, 40);
-    connect(alarmsButton, SIGNAL(toggled(bool)), this, SLOT(setAlarmsEnabled(bool)));
 
     buttonsBarLayout->addWidget(addActivityButton);
     buttonsBarLayout->addWidget(copyButton);
@@ -161,6 +159,14 @@ void DayBoard::updateProgress()
     progress->setText(updatedProgress);
 }
 
+int DayBoard::getProgress()
+{
+    QString stringProgress = progress->text();
+    stringProgress.chop(1);
+
+    return stringProgress.toInt();
+}
+
 int DayBoard::calculateProgress()
 {
     int numberOfSucceededActivities = 0;
@@ -177,14 +183,47 @@ int DayBoard::calculateProgress()
         return numberOfSucceededActivities * 100 / activities.size();
 }
 
-bool DayBoard::getAlarmsEnabled() const
+void DayBoard::save()
 {
-    return alarmsEnabled;
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.dayCheckIfExistsQuery(*currentlyUsedDate);
+
+    if(db.recordAlreadyExists(query))
+    {
+        if(somethingChanged())
+        {
+            query = db.dayUpdateQuery(*currentlyUsedDate,
+                                      getProgress(),
+                                      alarmsButton->isChecked());
+            db.execQuery(query);
+        }
+    }
+    else
+    {
+        query = db.dayInsertQuery(*currentlyUsedDate,
+                                  getProgress(),
+                                  alarmsButton->isChecked());
+        db.execQuery(query);
+    }
 }
 
-void DayBoard::setAlarmsEnabled(bool value)
+void DayBoard::load()
 {
-    alarmsEnabled = value;
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.dayCheckIfExistsQuery(*currentlyUsedDate);
+
+    if(db.recordAlreadyExists(query))
+    {
+        query = db.daySelectDataQuery(*currentlyUsedDate);
+        db.execQuery(query);
+
+        query.first();
+        QString loadedProgress = query.value(0).toString() + QString("%");
+        bool loadedAlarmsState = query.value(1).toBool();
+
+        progress->setText(loadedProgress);
+        alarmsButton->setChecked(loadedAlarmsState);
+    }
 }
 
 bool DayBoard::somethingChanged()
@@ -193,13 +232,12 @@ bool DayBoard::somethingChanged()
     QSqlQuery query = db.daySelectDataQuery(*currentlyUsedDate);
 
     db.execQuery(query);
-
     query.first();
-    if(query.value(0).toString() == progress->text() &&
-       query.value(1).toBool() == alarmsButton->isChecked() )
-    {
+
+    if(query.value(0).toString() == progress->text())
         return false;
-    }
+    else if(query.value(1).toBool() == alarmsButton->isChecked())
+        return false;
     else
         return true;
 }

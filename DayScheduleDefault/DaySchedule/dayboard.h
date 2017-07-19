@@ -21,7 +21,6 @@ private:
     QVBoxLayout * activitiesLayout;
     QList<Activity *> activities;
     QSharedPointer<TimeRangeSystem> timeSystem;
-    bool alarmsEnabled;
 
     QLabel * progress;
     QCheckBox * alarmsButton;
@@ -34,6 +33,8 @@ private:
 
     int calculateProgress();
 
+    bool somethingChanged();
+    int getProgress();
 
 private slots:
     void addNewActivity();
@@ -44,12 +45,11 @@ public:
     explicit DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~DayBoard() {;}
 
-    bool getAlarmsEnabled() const;
-    bool somethingChanged();
-
 public slots:
     void updateProgress();
-    void setAlarmsEnabled(bool value);
+
+    void save();
+    void load();
 };
 
 #endif // DAYBOARD_H

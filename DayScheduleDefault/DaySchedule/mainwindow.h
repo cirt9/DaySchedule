@@ -67,6 +67,7 @@ signals:
     void yearsBoardWillBeDestroyed();
     void yearBoardWillBeDestroyed();
     void monthBoardWillBeDestroyed();
+    void dayBoardWillBeDestroyed();
 };
 
 #endif // MAINWINDOW_H
