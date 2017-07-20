@@ -40,6 +40,8 @@ private:
     void initializeCentralWidgetLayout();
     void showWidgetOnCenter(QWidget * widget);
 
+    void setCurrentlyUsedDate(QDate date);
+
     void showMenuBar();
     QToolButton * createPagesButton();
     QToolButton * createShortcutsButton();
@@ -47,12 +49,11 @@ private:
 private slots:
     void errorReaction(QString errorText);
 
-    void setCurrentlyUsedDate(QDate date);
-
     void showYearsList();
     void showYear();
     void showMonth();
     void showDay();
+    void showExactDay(QDate date);
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);
@@ -64,10 +65,7 @@ public slots:
     void displayMainMenu();
 
 signals:
-    void yearsBoardWillBeDestroyed();
-    void yearBoardWillBeDestroyed();
-    void monthBoardWillBeDestroyed();
-    void dayBoardWillBeDestroyed();
+    void centralWidgetWillBeDestroyed();
 };
 
 #endif // MAINWINDOW_H

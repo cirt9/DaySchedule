@@ -39,15 +39,20 @@ public:
     QSqlQuery yearInsertQuery(int id, QString description);
     QSqlQuery yearSelectDescriptionQuery(int id);
 
-    QSqlQuery monthCheckIfExistsQuery(int m_id, int y_id);
-    QSqlQuery monthUpdateQuery(int m_id, int y_id, QString description);
-    QSqlQuery monthInsertQuery(int m_id, int y_id, QString description);
-    QSqlQuery monthSelectDescriptionQuery(int m_id, int y_id);
+    QSqlQuery monthCheckIfExistsQuery(int monthId, int yearId);
+    QSqlQuery monthUpdateQuery(int monthId, int yearId, QString description);
+    QSqlQuery monthInsertQuery(int monthId, int yearId, QString description);
+    QSqlQuery monthSelectDescriptionQuery(int monthId, int yearId);
 
     QSqlQuery dayCheckIfExistsQuery(QDate id);
-    QSqlQuery dayUpdateQuery(QDate id, int progress, bool alarms_enabled);
-    QSqlQuery dayInsertQuery(QDate id, int progress, bool alarms_enabled);
+    QSqlQuery dayUpdateQuery(QDate id, int progress, bool alarmsEnabled);
+    QSqlQuery dayInsertQuery(QDate id, int progress, bool alarmsEnabled);
     QSqlQuery daySelectDataQuery(QDate id);
+    QSqlQuery dayCountActivities(QDate id);
+
+    QSqlQuery actvCheckIfExistsQuery(QDate dayId, QTime fromTime, QTime toTime);
+
+    QSqlQuery actvSelectDataQuery(QDate dayId, QTime fromTime, QTime toTime);
 };
 
 #endif // DATABASEMANAGER_H

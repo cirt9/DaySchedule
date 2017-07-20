@@ -26,15 +26,10 @@ void MainWindow::sqlTest()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.connect("dayScheduleTest.dsch");
-
 }
 //
 void MainWindow::setCurrentlyUsedDate(QDate date)
 {
-    //
-    emit dayBoardWillBeDestroyed();
-    //
-
     int currentYear = date.year();
     int currentMonth = date.month();
     int currentDay = date.day();
@@ -84,9 +79,7 @@ void MainWindow::showYearsList()
     connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showYear()));
 
     years->load();
-
-    connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(yearsBoardWillBeDestroyed()));
-    connect(this, SIGNAL(yearsBoardWillBeDestroyed()), years, SLOT(save()));
+    connect(this, SIGNAL(centralWidgetWillBeDestroyed()), years, SLOT(save()));
 
     showWidgetOnCenter(years);
 }
@@ -101,9 +94,7 @@ void MainWindow::showYear()
     connect(year, SIGNAL(errorDetected(QString)), this, SLOT(errorReaction(QString)));
 
     year->load();
-
-    connect(year, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(yearBoardWillBeDestroyed()));
-    connect(this, SIGNAL(yearBoardWillBeDestroyed()), year, SLOT(save()));
+    connect(this, SIGNAL(centralWidgetWillBeDestroyed()), year, SLOT(save()));
 
     showWidgetOnCenter(year);
 }
@@ -117,9 +108,7 @@ void MainWindow::showMonth()
     connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showDay()));
 
     month->load();
-
-    connect(month, SIGNAL(currentlyUsedDateHasChanged()), this, SIGNAL(monthBoardWillBeDestroyed()));
-    connect(this, SIGNAL(monthBoardWillBeDestroyed()), month, SLOT(save()));
+    connect(this, SIGNAL(centralWidgetWillBeDestroyed()), month, SLOT(save()));
 
     showWidgetOnCenter(month);
 }
@@ -132,8 +121,22 @@ void MainWindow::showDay()
     DayBoard * day = new DayBoard(currentlyUsedDate, this);
 
     day->load();
+    connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
 
-    connect(this, SIGNAL(dayBoardWillBeDestroyed()), day, SLOT(save()));
+    showWidgetOnCenter(day);
+}
+
+void MainWindow::showExactDay(QDate date)
+{
+    resetCentralWidget();
+    showMenuBar();
+
+    setCurrentlyUsedDate(date);
+
+    DayBoard * day = new DayBoard(currentlyUsedDate, this);
+
+    day->load();
+    connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
 
     showWidgetOnCenter(day);
 }
@@ -223,16 +226,13 @@ QToolButton * MainWindow::createShortcutsButton()
     shortcutsMenu->setObjectName("MenuToolButton");
 
     QAction * yesterdayAction = new QAction("Yesterday", this);
-    connect(yesterdayAction, &QAction::triggered, this, [=]{setCurrentlyUsedDate(QDate::currentDate().addDays(-1));} );
-    connect(yesterdayAction, SIGNAL(triggered()), this, SLOT(showDay()));
+    connect(yesterdayAction, &QAction::triggered, this, [=]{showExactDay(QDate::currentDate().addDays(-1));} );
 
     QAction * todayAction = new QAction("Today", this);
-    connect(todayAction, &QAction::triggered, this, [=]{setCurrentlyUsedDate(QDate::currentDate());} );
-    connect(todayAction, SIGNAL(triggered()), this, SLOT(showDay()));
+    connect(todayAction, &QAction::triggered, this, [=]{showExactDay(QDate::currentDate());} );
 
     QAction * tomorrowAction = new QAction("Tomorrow", this);
-    connect(tomorrowAction, &QAction::triggered, this, [=]{setCurrentlyUsedDate(QDate::currentDate().addDays(1));} );
-    connect(tomorrowAction, SIGNAL(triggered()), this, SLOT(showDay()));
+    connect(tomorrowAction, &QAction::triggered, this, [=]{showExactDay(QDate::currentDate().addDays(1));} );
 
     shortcutsMenu->addAction(yesterdayAction);
     shortcutsMenu->addAction(todayAction);
@@ -267,6 +267,8 @@ void MainWindow::resetCentralWidget()
 
 void MainWindow::clearMainWindow()
 {
+    emit centralWidgetWillBeDestroyed();
+
     LayoutDeleter deleter(this->layout());
     deleter.clearLayout();
 }

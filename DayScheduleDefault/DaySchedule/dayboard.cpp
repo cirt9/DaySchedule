@@ -234,10 +234,10 @@ bool DayBoard::somethingChanged()
     db.execQuery(query);
     query.first();
 
-    if(query.value(0).toString() == progress->text())
-        return false;
-    else if(query.value(1).toBool() == alarmsButton->isChecked())
-        return false;
-    else
-        return true;
+    if(query.value(0).toInt() == getProgress())
+    {
+        if(query.value(1).toBool() == alarmsButton->isChecked())
+            return false;
+    }
+    return true;
 }
