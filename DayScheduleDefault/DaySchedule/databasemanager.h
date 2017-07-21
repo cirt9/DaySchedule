@@ -51,8 +51,10 @@ public:
     QSqlQuery dayCountActivities(QDate id);
 
     QSqlQuery actvCheckIfExistsQuery(QDate dayId, QTime fromTime, QTime toTime);
-
+    QSqlQuery actvInsertQuery(QDate dayId, QString state, QString description,
+                              QTime fromTime, QTime toTime);
     QSqlQuery actvSelectDataQuery(QDate dayId, QTime fromTime, QTime toTime);
+    QSqlQuery actvDeleteQuery(QDate dayId, QTime fromTime, QTime toTime);
 };
 
 #endif // DATABASEMANAGER_H

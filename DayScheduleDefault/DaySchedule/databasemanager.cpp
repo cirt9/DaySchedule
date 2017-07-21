@@ -231,7 +231,7 @@ QSqlQuery DatabaseManager::daySelectDataQuery(QDate id)
 QSqlQuery DatabaseManager::dayCountActivities(QDate id)
 {
     QSqlQuery query;
-    query.prepare("SELECT count(description) FROM activity WHERE day_id=:id");
+    query.prepare("SELECT count(*) FROM activity WHERE day_id=:id");
     query.bindValue(":id", id);
     return query;
 }
@@ -247,11 +247,37 @@ QSqlQuery DatabaseManager::actvCheckIfExistsQuery(QDate dayId, QTime fromTime, Q
     return query;
 }
 
+QSqlQuery DatabaseManager::actvInsertQuery(QDate dayId, QString state, QString description,
+                                           QTime fromTime, QTime toTime)
+{
+    QSqlQuery query;
+    query.prepare("INSERT INTO activity (day_id, state, description, from_time, to_time)"
+                  "VALUES (:id, :state, :description, :from, :to)");
+    query.bindValue(":id", dayId);
+    query.bindValue(":state", state);
+    query.bindValue(":description", description);
+    query.bindValue(":from", fromTime);
+    query.bindValue(":to", toTime);
+    return query;
+}
+
 QSqlQuery DatabaseManager::actvSelectDataQuery(QDate dayId, QTime fromTime, QTime toTime)
 {
     QSqlQuery query;
-    query.prepare("SELECT 1 FROM activity WHERE day_id=:id "
+    query.prepare("SELECT state, from_time, to_time, description "
+                  "FROM activity WHERE day_id=:id "
                   "AND from_time=:from AND to_time=:to");
+    query.bindValue(":id", dayId);
+    query.bindValue(":from", fromTime);
+    query.bindValue(":to", toTime);
+    return query;
+}
+
+QSqlQuery DatabaseManager::actvDeleteQuery(QDate dayId, QTime fromTime, QTime toTime)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM activity WHERE day_id=:id AND "
+                  "from_time=:from AND to_time=:to");
     query.bindValue(":id", dayId);
     query.bindValue(":from", fromTime);
     query.bindValue(":to", toTime);
