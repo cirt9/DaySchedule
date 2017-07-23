@@ -1,6 +1,7 @@
 #include "activity.h"
 
-Activity::Activity(QSharedPointer<TimeRangeSystem> tSystem, QWidget * parent) : QGroupBox(parent)
+Activity::Activity(QSharedPointer<TimeRangeSystem> tSystem, QDate date, QWidget * parent)
+                   : QGroupBox(parent)
 {
     fromTime = nullptr;
     toTime = nullptr;
@@ -8,6 +9,7 @@ Activity::Activity(QSharedPointer<TimeRangeSystem> tSystem, QWidget * parent) : 
     summaryLayout = nullptr;
     state = ActivityState();
     timeSystem = tSystem;
+    assignedDate = date;
     setFixedHeight(FIXED_HEIGHT_START_END);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
@@ -132,6 +134,8 @@ void Activity::deleteActivity()
         LayoutDeleter deleter(this->layout(), true);
         deleter.clearLayout();
 
+        deleteActivityFromDatabase();
+
         delete this;
     }
 }
@@ -223,4 +227,80 @@ void Activity::clearSummaryLayout()
 QString Activity::getState() const
 {
     return state.getState();
+}
+
+void Activity::save()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDate, fromTime->time(), toTime->time());
+
+    if(db.recordAlreadyExists(query))
+    {
+        if(stateChanged())
+        {
+            query = db.actvUpdateQuery(assignedDate, fromTime->time(), toTime->time(), state.getState());
+            db.execQuery(query);
+        }
+    }
+    else
+    {
+        query = db.actvInsertQuery(assignedDate, getState(), description->text(),
+                                   fromTime->time(), toTime->time());
+        db.execQuery(query);
+    }
+}
+
+void Activity::load(const QTime & fromT, const QTime & toT)
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDate, fromT, toT);
+
+    if(db.recordAlreadyExists(query))
+    {
+        query = db.actvSelectDataQuery(assignedDate, fromT, toT);
+        db.execQuery(query);
+
+        query.first();
+        QString loadedState = query.value(0).toString();
+        QTime loadedFromTime = query.value(1).toTime();
+        QTime loadedToTime = query.value(2).toTime();
+        QString loadedDescription = query.value(3).toString();
+
+        fromTime->setTime(loadedFromTime);
+        toTime->setTime(loadedToTime);
+        description->setText(loadedDescription);
+
+        startActivity();
+        if(loadedState == ActivityState::SUCCESS)
+            succeeded();
+
+        else if(loadedState == ActivityState::FAIL)
+            failed();
+    }
+}
+
+bool Activity::stateChanged()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.actvSelectStateQuery(assignedDate, fromTime->time(), toTime->time());
+
+    db.execQuery(query);
+    query.first();
+
+    if(query.value(0).toString() == state.getState())
+        return false;
+
+    return true;
+}
+
+void Activity::deleteActivityFromDatabase()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDate, fromTime->time(), toTime->time());
+
+    if(db.recordAlreadyExists(query))
+    {
+        query = db.actvDeleteQuery(assignedDate, fromTime->time(), toTime->time());
+        db.execQuery(query);
+    }
 }

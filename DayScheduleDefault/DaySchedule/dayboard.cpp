@@ -109,17 +109,24 @@ void DayBoard::createBottomMenuLayout()
 
 void DayBoard::addNewActivity()
 {
-    Activity * activity = new Activity(timeSystem);
-    connect(activity, SIGNAL(activityDeleted(QWidget*)), this, SLOT(eraseActivityFromList(QWidget*)));
-
-    connect(activity, SIGNAL(fail()), this, SLOT(updateProgress()));
-    connect(activity, SIGNAL(success()), this, SLOT(updateProgress()));
-    connect(activity, SIGNAL(destroyed()), this, SLOT(updateProgress()));
-
+    Activity * activity = createActivity();
     activitiesLayout->addWidget(activity);
     activities.push_back(activity);
 
     updateProgress();
+}
+
+Activity * DayBoard::createActivity()
+{
+    Activity * activity = new Activity(timeSystem, *currentlyUsedDate);
+    connect(activity, SIGNAL(activityDeleted(QWidget*)), this, SLOT(eraseActivityFromList(QWidget*)));
+
+    connect(activity, SIGNAL(fail()), this, SLOT(updateProgress()));
+    connect(activity, SIGNAL(activityStarted()), this, SLOT(updateProgress()));
+    connect(activity, SIGNAL(success()), this, SLOT(updateProgress()));
+    connect(activity, SIGNAL(destroyed()), this, SLOT(updateProgress()));
+
+    return activity;
 }
 
 void DayBoard::clearActivities()
@@ -170,17 +177,22 @@ int DayBoard::getProgress()
 int DayBoard::calculateProgress()
 {
     int numberOfSucceededActivities = 0;
+    int numberOfInactiveActivities = 0;
 
     for(auto activity : activities)
     {
         if(activity->getState() == ActivityState::SUCCESS)
             numberOfSucceededActivities++;
-    }
-    if(activities.size() == 0)
-        return 0;
 
+        else if(activity->getState() == ActivityState::INACTIVE)
+            numberOfInactiveActivities++;
+    }
+    int divider = activities.size() - numberOfInactiveActivities;
+
+    if(divider == 0)
+        return 0;
     else
-        return numberOfSucceededActivities * 100 / activities.size();
+        return numberOfSucceededActivities * 100 / divider;
 }
 
 void DayBoard::save()
@@ -197,6 +209,7 @@ void DayBoard::save()
                                       alarmsButton->isChecked());
             db.execQuery(query);
         }
+        saveActivities();
     }
     else
     {
@@ -204,7 +217,9 @@ void DayBoard::save()
                                   getProgress(),
                                   alarmsButton->isChecked());
         db.execQuery(query);
+        saveActivities();
     }
+
 }
 
 void DayBoard::load()
@@ -223,6 +238,8 @@ void DayBoard::load()
 
         progress->setText(loadedProgress);
         alarmsButton->setChecked(loadedAlarmsState);
+
+        loadActivities();
     }
 }
 
@@ -240,4 +257,29 @@ bool DayBoard::somethingChanged()
             return false;
     }
     return true;
+}
+
+void DayBoard::saveActivities()
+{
+    for(auto activity : activities)
+        activity->save();
+}
+
+void DayBoard::loadActivities()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.daySelectActivityIntervals(*currentlyUsedDate);
+    db.execQuery(query);
+
+    while(query.next())
+    {
+        QTime from = query.value(0).toTime();
+        QTime to = query.value(1).toTime();
+
+        Activity * activity = createActivity();
+        activitiesLayout->addWidget(activity);
+        activities.push_back(activity);
+
+        activity->load(from, to);
+    }
 }

@@ -31,10 +31,14 @@ private:
     void createScrollBar();
     void createBottomMenuLayout();
 
+    Activity * createActivity();
     int calculateProgress();
 
     bool somethingChanged();
     int getProgress();
+
+    void saveActivities();
+    void loadActivities();
 
 private slots:
     void addNewActivity();

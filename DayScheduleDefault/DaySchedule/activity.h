@@ -13,6 +13,8 @@
 #include <QMessageBox>
 #include <timerangesystem.h>
 #include <QSharedPointer>
+#include <databasemanager.h>
+#include <QDate>
 
 class Activity : public QGroupBox
 {
@@ -23,6 +25,7 @@ private:
     static const int FIXED_HEIGHT_START_END = 130;
     ActivityState state;
     QSharedPointer<TimeRangeSystem> timeSystem;
+    QDate assignedDate;
 
     QVBoxLayout * activityLayout;
     QHBoxLayout * summaryLayout;
@@ -44,6 +47,9 @@ private:
 
     void clearSummaryLayout();
 
+    bool stateChanged();
+    void deleteActivityFromDatabase();
+
 private slots:
     void deleteActivity();
     void startActivity();
@@ -51,10 +57,13 @@ private slots:
     void succeeded();
 
 public:
-    explicit Activity(QSharedPointer<TimeRangeSystem> tSystem, QWidget * parent = nullptr);
+    explicit Activity(QSharedPointer<TimeRangeSystem> tSystem, QDate date, QWidget * parent = nullptr);
     ~Activity() {}
 
     QString getState() const;
+
+    void save();
+    void load(const QTime & fromT, const QTime & toT);
 
 signals:
     void activityDeleted(QWidget * = nullptr);

@@ -189,7 +189,7 @@ QSqlQuery DatabaseManager::monthSelectDescriptionQuery(int m_id, int yearId)
     return query;
 }
 
-QSqlQuery DatabaseManager::dayCheckIfExistsQuery(QDate id)
+QSqlQuery DatabaseManager::dayCheckIfExistsQuery(const QDate & id)
 {
     QSqlQuery query;
     query.prepare("SELECT 1 FROM day WHERE day_id=:id LIMIT 1");
@@ -197,7 +197,7 @@ QSqlQuery DatabaseManager::dayCheckIfExistsQuery(QDate id)
     return query;
 }
 
-QSqlQuery DatabaseManager::dayUpdateQuery(QDate id, int progress, bool alarmsEnabled)
+QSqlQuery DatabaseManager::dayUpdateQuery(const QDate & id, int progress, bool alarmsEnabled)
 {
     QSqlQuery query;
     query.prepare("UPDATE day SET progress=:progress, alarms_enabled=:alarmsEnabled "
@@ -208,7 +208,7 @@ QSqlQuery DatabaseManager::dayUpdateQuery(QDate id, int progress, bool alarmsEna
     return query;
 }
 
-QSqlQuery DatabaseManager::dayInsertQuery(QDate id, int progress, bool alarmsEnabled)
+QSqlQuery DatabaseManager::dayInsertQuery(const QDate & id, int progress, bool alarmsEnabled)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO day (day_id, progress, alarms_enabled)"
@@ -219,7 +219,7 @@ QSqlQuery DatabaseManager::dayInsertQuery(QDate id, int progress, bool alarmsEna
     return query;
 }
 
-QSqlQuery DatabaseManager::daySelectDataQuery(QDate id)
+QSqlQuery DatabaseManager::daySelectDataQuery(const QDate & id)
 {
     QSqlQuery query;
     query.prepare("SELECT progress, alarms_enabled FROM day "
@@ -228,15 +228,16 @@ QSqlQuery DatabaseManager::daySelectDataQuery(QDate id)
     return query;
 }
 
-QSqlQuery DatabaseManager::dayCountActivities(QDate id)
+QSqlQuery DatabaseManager::daySelectActivityIntervals(const QDate & id)
 {
     QSqlQuery query;
-    query.prepare("SELECT count(*) FROM activity WHERE day_id=:id");
+    query.prepare("SELECT from_time, to_time FROM activity WHERE day_id=:id");
     query.bindValue(":id", id);
     return query;
 }
 
-QSqlQuery DatabaseManager::actvCheckIfExistsQuery(QDate dayId, QTime fromTime, QTime toTime)
+QSqlQuery DatabaseManager::actvCheckIfExistsQuery(const QDate & dayId,
+                          const QTime & fromTime, const QTime & toTime)
 {
     QSqlQuery query;
     query.prepare("SELECT 1 FROM activity WHERE day_id=:id "
@@ -247,8 +248,8 @@ QSqlQuery DatabaseManager::actvCheckIfExistsQuery(QDate dayId, QTime fromTime, Q
     return query;
 }
 
-QSqlQuery DatabaseManager::actvInsertQuery(QDate dayId, QString state, QString description,
-                                           QTime fromTime, QTime toTime)
+QSqlQuery DatabaseManager::actvInsertQuery(const QDate & dayId, QString state, QString description,
+                                           const QTime & fromTime, const QTime & toTime)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO activity (day_id, state, description, from_time, to_time)"
@@ -261,7 +262,21 @@ QSqlQuery DatabaseManager::actvInsertQuery(QDate dayId, QString state, QString d
     return query;
 }
 
-QSqlQuery DatabaseManager::actvSelectDataQuery(QDate dayId, QTime fromTime, QTime toTime)
+QSqlQuery DatabaseManager::actvUpdateQuery(const QDate & dayId, const QTime & fromTime,
+                                           const QTime & toTime, QString state)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE activity SET state=:state WHERE day_id=:id "
+                  "AND from_time=:from AND to_time=:to");
+    query.bindValue(":id", dayId);
+    query.bindValue(":state", state);
+    query.bindValue(":from", fromTime);
+    query.bindValue(":to", toTime);
+    return query;
+}
+
+QSqlQuery DatabaseManager::actvSelectDataQuery(const QDate & dayId, const QTime & fromTime,
+                                               const QTime & toTime)
 {
     QSqlQuery query;
     query.prepare("SELECT state, from_time, to_time, description "
@@ -273,7 +288,20 @@ QSqlQuery DatabaseManager::actvSelectDataQuery(QDate dayId, QTime fromTime, QTim
     return query;
 }
 
-QSqlQuery DatabaseManager::actvDeleteQuery(QDate dayId, QTime fromTime, QTime toTime)
+QSqlQuery DatabaseManager::actvSelectStateQuery(const QDate &dayId, const QTime &fromTime,
+                                                const QTime &toTime)
+{
+    QSqlQuery query;
+    query.prepare("SELECT state FROM activity WHERE day_id=:id "
+                  "AND from_time=:from AND to_time=:to");
+    query.bindValue(":id", dayId);
+    query.bindValue(":from", fromTime);
+    query.bindValue(":to", toTime);
+    return query;
+}
+
+QSqlQuery DatabaseManager::actvDeleteQuery(const QDate & dayId, const QTime & fromTime,
+                                           const QTime & toTime)
 {
     QSqlQuery query;
     query.prepare("DELETE FROM activity WHERE day_id=:id AND "

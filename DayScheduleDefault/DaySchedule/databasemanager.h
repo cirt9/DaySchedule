@@ -44,17 +44,20 @@ public:
     QSqlQuery monthInsertQuery(int monthId, int yearId, QString description);
     QSqlQuery monthSelectDescriptionQuery(int monthId, int yearId);
 
-    QSqlQuery dayCheckIfExistsQuery(QDate id);
-    QSqlQuery dayUpdateQuery(QDate id, int progress, bool alarmsEnabled);
-    QSqlQuery dayInsertQuery(QDate id, int progress, bool alarmsEnabled);
-    QSqlQuery daySelectDataQuery(QDate id);
-    QSqlQuery dayCountActivities(QDate id);
+    QSqlQuery dayCheckIfExistsQuery(const QDate & id);
+    QSqlQuery dayUpdateQuery(const QDate & id, int progress, bool alarmsEnabled);
+    QSqlQuery dayInsertQuery(const QDate & id, int progress, bool alarmsEnabled);
+    QSqlQuery daySelectDataQuery(const QDate & id);
+    QSqlQuery daySelectActivityIntervals(const QDate & id);
 
-    QSqlQuery actvCheckIfExistsQuery(QDate dayId, QTime fromTime, QTime toTime);
-    QSqlQuery actvInsertQuery(QDate dayId, QString state, QString description,
-                              QTime fromTime, QTime toTime);
-    QSqlQuery actvSelectDataQuery(QDate dayId, QTime fromTime, QTime toTime);
-    QSqlQuery actvDeleteQuery(QDate dayId, QTime fromTime, QTime toTime);
+    QSqlQuery actvCheckIfExistsQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
+    QSqlQuery actvInsertQuery(const QDate & dayId, QString state, QString description,
+                              const QTime & fromTime, const QTime & toTime);
+    QSqlQuery actvUpdateQuery(const QDate & dayId, const QTime & fromTime,
+                              const QTime & toTime, QString state);
+    QSqlQuery actvSelectDataQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
+    QSqlQuery actvSelectStateQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
+    QSqlQuery actvDeleteQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
 };
 
 #endif // DATABASEMANAGER_H
