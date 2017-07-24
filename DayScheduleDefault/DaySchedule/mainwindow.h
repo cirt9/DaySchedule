@@ -17,6 +17,7 @@
 #include <bar.h>
 #include <QToolButton>
 #include <databasemanager.h>
+#include <timecounter.h>
 
 namespace Ui {
 class MainWindow;
@@ -44,7 +45,7 @@ private:
 
     void showMenuBar();
     QToolButton * createPagesButton();
-    QToolButton * createShortcutsButton();
+    void createPagesActions(QMenu * pagesMenu);
 
 private slots:
     void errorReaction(QString errorText);

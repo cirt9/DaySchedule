@@ -18,7 +18,7 @@ public:
 
     void setBarHeight(int height);
     void setBarWidgetsWidth(int width);
-    void addWidget(QWidget * widget);
+    void addWidget(QWidget * widget, int width = -1);
 };
 
 #endif // BAR_H

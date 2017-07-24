@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     boardtemplate.cpp \
     calendarcard.cpp \
     bar.cpp \
-    databasemanager.cpp
+    databasemanager.cpp \
+    timecounter.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -42,7 +43,8 @@ HEADERS  += mainwindow.h \
     boardtemplate.h \
     calendarcard.h \
     bar.h \
-    databasemanager.h
+    databasemanager.h \
+    timecounter.h
 
 FORMS    += \
     mainwindow.ui

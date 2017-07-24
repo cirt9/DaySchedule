@@ -22,10 +22,14 @@ void Bar::setBarWidgetsWidth(int width)
     barWidgetsWidth = width;
 }
 
-void Bar::addWidget(QWidget * widget)
+void Bar::addWidget(QWidget * widget, int width)
 {
     widget->setFixedHeight(barHeight);
-    widget->setFixedWidth(barWidgetsWidth);
+
+    if(width <= 0)
+        widget->setFixedWidth(barWidgetsWidth);
+    else
+        widget->setFixedWidth(width);
 
     barLayout->addWidget(widget);
 }
