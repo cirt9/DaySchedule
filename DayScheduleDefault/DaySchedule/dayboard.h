@@ -43,6 +43,7 @@ private:
 private slots:
     void addNewActivity();
     void clearActivities();
+    void copyActivity();
     void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:

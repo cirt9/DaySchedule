@@ -11,9 +11,15 @@ class TimeCounter : public QPushButton
 
 private:
     QTimer * timer;
+    QTime countdownTime;
+
+    void enterEvent(QEvent * e);
+    void leaveEvent(QEvent * e);
 
 private slots:
-    void updateTimeText();
+    void showCurrentTime();
+    void showCountdownTime();
+    void updateCountdownTime();
 
 public:
     explicit TimeCounter(QWidget * parent = nullptr);

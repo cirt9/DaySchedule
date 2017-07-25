@@ -60,6 +60,27 @@ color: rgb(51,102,153);
 font-size: 20px;
 }
 
+#BarTimeCounter
+{
+border: none;
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 25px;
+border-left: 2px solid rgb(46, 48, 51);
+border-bottom: 2px solid rgb(46, 48, 51);
+}
+
+#BarTimeCounter:hover
+{
+background: rgb(255,240,235);
+color: rgb(51,102,153);
+}
+
+#BarTimeCounter:pressed
+{
+font-size: 28px;
+}
+
 #MenuToolButton
 {
 background: rgb(51,102,153);

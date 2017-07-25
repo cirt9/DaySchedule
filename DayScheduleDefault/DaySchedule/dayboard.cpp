@@ -87,8 +87,9 @@ void DayBoard::createBottomMenuLayout()
     addActivityButton->setObjectName("DayBoardButton");
     connect(addActivityButton, SIGNAL(clicked()), this, SLOT(addNewActivity()));
 
-    QPushButton * copyButton = new QPushButton("Copy Other Day");
+    QPushButton * copyButton = new QPushButton("Copy Day");
     copyButton->setObjectName("DayBoardButton");
+    connect(copyButton, SIGNAL(clicked()), this, SLOT(copyActivity()));
 
     QPushButton * clearButton = new QPushButton("Clear Activities");
     clearButton->setObjectName("DayBoardButton");
@@ -127,6 +128,13 @@ Activity * DayBoard::createActivity()
     connect(activity, SIGNAL(destroyed()), this, SLOT(updateProgress()));
 
     return activity;
+}
+
+#include <QDateEdit>
+void DayBoard::copyActivity()
+{
+    //QDateEdit * test = new QDateEdit();
+    //boardLayout->insertWidget(2, test);
 }
 
 void DayBoard::clearActivities()

@@ -2,16 +2,51 @@
 
 TimeCounter::TimeCounter(QWidget * parent) : QPushButton(parent)
 {
-    updateTimeText();
+    countdownTime = QTime(1, 0, 5);
 
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateTimeText()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateCountdownTime()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
     timer->start(1000);
+
+    showCurrentTime();
 }
 
-void TimeCounter::updateTimeText()
+void TimeCounter::showCurrentTime()
 {
     QTime time = QTime::currentTime();
-    QString time_text = time.toString("hh : mm");
-    setText(time_text);
+    QString timeText = time.toString("hh : mm");
+    setText(timeText);
+}
+
+void TimeCounter::showCountdownTime()
+{
+    QString timeText = countdownTime.toString("hh : mm : ss");
+    setText(timeText);
+}
+
+void TimeCounter::updateCountdownTime()
+{
+    if(countdownTime > QTime(0, 0, 0))
+        countdownTime = countdownTime.addSecs(-1);
+}
+
+void TimeCounter::enterEvent(QEvent * e)
+{
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
+
+    showCountdownTime();
+    connect(timer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
+
+    QWidget::enterEvent(e);
+}
+
+void TimeCounter::leaveEvent(QEvent *e)
+{
+    disconnect(timer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
+
+    showCurrentTime();
+    connect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
+
+    QWidget::enterEvent(e);
 }

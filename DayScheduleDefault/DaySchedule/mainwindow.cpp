@@ -169,7 +169,7 @@ void MainWindow::showMenuBar()
         menuBar->addWidget(pagesButton);
 
         TimeCounter * timeCounter = new TimeCounter();
-        timeCounter->setObjectName("BarMiddleWidget");
+        timeCounter->setObjectName("BarTimeCounter");
         menuBar->addWidget(timeCounter, 180);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));
