@@ -25,7 +25,7 @@ private:
     static const int FIXED_HEIGHT_START_END = 130;
     ActivityState state;
     QSharedPointer<TimeRangeSystem> timeSystem;
-    QDate assignedDate;
+    QDate assignedDay;
 
     QVBoxLayout * activityLayout;
     QHBoxLayout * summaryLayout;
@@ -60,7 +60,10 @@ public:
     explicit Activity(QSharedPointer<TimeRangeSystem> tSystem, QDate date, QWidget * parent = nullptr);
     ~Activity() {}
 
+    void removeTimeIntervalFromTimeSystem();
+
     QString getState() const;
+    void setAssignedDay(QDate day);
 
     void save();
     void load(const QTime & fromT, const QTime & toT);

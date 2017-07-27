@@ -9,7 +9,7 @@ Activity::Activity(QSharedPointer<TimeRangeSystem> tSystem, QDate date, QWidget 
     summaryLayout = nullptr;
     state = ActivityState();
     timeSystem = tSystem;
-    assignedDate = date;
+    assignedDay = date;
     setFixedHeight(FIXED_HEIGHT_START_END);
 
     QHBoxLayout * timeRangeLayout = createTimeRangeLayout();
@@ -128,9 +128,7 @@ void Activity::deleteActivity()
     {
         emit activityDeleted(this);
 
-        if(state.getState() != ActivityState::INACTIVE)
-            timeSystem->removeInterval(fromTime->time(), toTime->time());
-
+        removeTimeIntervalFromTimeSystem();
         LayoutDeleter deleter(this->layout(), true);
         deleter.clearLayout();
 
@@ -138,6 +136,12 @@ void Activity::deleteActivity()
 
         delete this;
     }
+}
+
+void Activity::removeTimeIntervalFromTimeSystem()
+{
+    if(state.getState() != ActivityState::INACTIVE)
+        timeSystem->removeInterval(fromTime->time(), toTime->time());
 }
 
 bool Activity::getConfirmationOfActiveActivityDeletion()
@@ -229,22 +233,27 @@ QString Activity::getState() const
     return state.getState();
 }
 
+void Activity::setAssignedDay(QDate day)
+{
+    assignedDay = day;
+}
+
 void Activity::save()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDate, fromTime->time(), toTime->time());
+    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDay, fromTime->time(), toTime->time());
 
-    if(db.recordAlreadyExists(query))
+    if(db.recordAlreadyExists(query) && state.getState() != ActivityState::INACTIVE)
     {
         if(stateChanged())
         {
-            query = db.actvUpdateQuery(assignedDate, fromTime->time(), toTime->time(), state.getState());
+            query = db.actvUpdateQuery(assignedDay, fromTime->time(), toTime->time(), state.getState());
             db.execQuery(query);
         }
     }
-    else
+    else if(state.getState() != ActivityState::INACTIVE)
     {
-        query = db.actvInsertQuery(assignedDate, getState(), description->text(),
+        query = db.actvInsertQuery(assignedDay, getState(), description->text(),
                                    fromTime->time(), toTime->time());
         db.execQuery(query);
     }
@@ -253,11 +262,11 @@ void Activity::save()
 void Activity::load(const QTime & fromT, const QTime & toT)
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDate, fromT, toT);
+    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDay, fromT, toT);
 
     if(db.recordAlreadyExists(query))
     {
-        query = db.actvSelectDataQuery(assignedDate, fromT, toT);
+        query = db.actvSelectDataQuery(assignedDay, fromT, toT);
         db.execQuery(query);
 
         query.first();
@@ -282,7 +291,7 @@ void Activity::load(const QTime & fromT, const QTime & toT)
 bool Activity::stateChanged()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.actvSelectStateQuery(assignedDate, fromTime->time(), toTime->time());
+    QSqlQuery query = db.actvSelectStateQuery(assignedDay, fromTime->time(), toTime->time());
 
     db.execQuery(query);
     query.first();
@@ -296,11 +305,11 @@ bool Activity::stateChanged()
 void Activity::deleteActivityFromDatabase()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDate, fromTime->time(), toTime->time());
+    QSqlQuery query = db.actvCheckIfExistsQuery(assignedDay, fromTime->time(), toTime->time());
 
     if(db.recordAlreadyExists(query))
     {
-        query = db.actvDeleteQuery(assignedDate, fromTime->time(), toTime->time());
+        query = db.actvDeleteQuery(assignedDay, fromTime->time(), toTime->time());
         db.execQuery(query);
     }
 }

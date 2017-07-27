@@ -4,6 +4,7 @@ DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) :
 BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
 {
     progress = nullptr;
+    footerButtonsBarContainer = nullptr;
 
     createDateAndProgressLayout();
     createActivitiesLayout();
@@ -18,13 +19,14 @@ void DayBoard::createDateAndProgressLayout()
     QString headerDateText = createHeaderDate();
     QLabel * date = new QLabel(headerDateText);
     date->setMaximumHeight(80);
+    date->setMinimumWidth(400);
     date->setAlignment(Qt::AlignCenter);
     date->setObjectName("DayBoardDateLabel");
 
     progress = new QLabel("0%");
     progress->setMaximumHeight(80);
     progress->setAlignment(Qt::AlignCenter);
-    progress->setMaximumWidth(120);
+    progress->setFixedWidth(120);
     progress->setObjectName("DayBoardProgressLabel");
 
     dateProgressLayout->addWidget(date);
@@ -78,10 +80,10 @@ void DayBoard::createScrollBar()
 void DayBoard::createBottomMenuLayout()
 {
     QHBoxLayout * buttonsBarLayout = new QHBoxLayout();
-    QGroupBox * buttonsBarContainer = new QGroupBox();
-    buttonsBarContainer->setMaximumHeight(80);
-    buttonsBarContainer->setLayout(buttonsBarLayout);
-    buttonsBarContainer->setObjectName("DayBoardButtonsBarContainer");
+    footerButtonsBarContainer = new QGroupBox();
+    footerButtonsBarContainer->setMaximumHeight(80);
+    footerButtonsBarContainer->setLayout(buttonsBarLayout);
+    footerButtonsBarContainer->setObjectName("DayBoardButtonsBarContainer");
 
     QPushButton * addActivityButton = new QPushButton("Add New Activity");
     addActivityButton->setObjectName("DayBoardButton");
@@ -89,11 +91,11 @@ void DayBoard::createBottomMenuLayout()
 
     QPushButton * copyButton = new QPushButton("Copy Day");
     copyButton->setObjectName("DayBoardButton");
-    connect(copyButton, SIGNAL(clicked()), this, SLOT(copyActivity()));
+    connect(copyButton, SIGNAL(clicked()), this, SLOT(selectDateToCopyActivity()));
 
     QPushButton * clearButton = new QPushButton("Clear Activities");
     clearButton->setObjectName("DayBoardButton");
-    connect(clearButton, SIGNAL(clicked()), this, SLOT(clearActivities()));
+    connect(clearButton, SIGNAL(clicked()), this, SLOT(clearInactiveActivities()));
 
     alarmsButton = new QCheckBox();
     alarmsButton->setObjectName("DayBoardAlarmsButton");
@@ -104,8 +106,8 @@ void DayBoard::createBottomMenuLayout()
     buttonsBarLayout->addWidget(clearButton);
     buttonsBarLayout->addWidget(alarmsButton);
 
-    boardLayout->addWidget(buttonsBarContainer);
-    boardLayout->setAlignment(buttonsBarContainer, Qt::AlignBottom);
+    boardLayout->addWidget(footerButtonsBarContainer);
+    boardLayout->setAlignment(footerButtonsBarContainer, Qt::AlignBottom);
 }
 
 void DayBoard::addNewActivity()
@@ -130,14 +132,82 @@ Activity * DayBoard::createActivity()
     return activity;
 }
 
-#include <QDateEdit>
-void DayBoard::copyActivity()
+void DayBoard::assignActivitesToCurrentlyUsedDate()
 {
-    //QDateEdit * test = new QDateEdit();
-    //boardLayout->insertWidget(2, test);
+    for(auto activity : activities)
+        activity->setAssignedDay(*currentlyUsedDate);
 }
 
-void DayBoard::clearActivities()
+void DayBoard::selectDateToCopyActivity()
+{
+    footerButtonsBarContainer->setVisible(false);
+
+    DateSelectingWidget * dateSelecting = new DateSelectingWidget();
+    dateSelecting->setMaximumHeight(80);
+    dateSelecting->setConfirmButtonText(QString("Copy"));
+    dateSelecting->setDateRanges(QDate(2017, 1, 1), QDate(2093, 12, 31));
+
+    connect(dateSelecting, SIGNAL(canceled()), this, SLOT(copyingCanceled()));
+    connect(dateSelecting, SIGNAL(confirmed(QDate)), this, SLOT(copyingConfirmed(QDate)));
+
+    boardLayout->insertWidget(boardLayout->count(), dateSelecting);
+}
+
+void DayBoard::copyingConfirmed(QDate selectedDate)
+{
+    deleteCopyDateSelectingWidget();
+    footerButtonsBarContainer->setVisible(true);
+
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.dayCheckIfExistsQuery(selectedDate);
+
+    if(db.recordAlreadyExists(query))
+    {
+        clearAllActivities();
+        QDate savedDate = *currentlyUsedDate;
+
+        currentlyUsedDate->setDate(selectedDate.year(), selectedDate.month(), selectedDate.day());
+        assignActivitesToCurrentlyUsedDate();
+        load();
+
+        currentlyUsedDate->setDate(savedDate.year(), savedDate.month(), savedDate.day());
+        assignActivitesToCurrentlyUsedDate();
+        save();
+    }
+    else
+        QMessageBox::information(this, QString("Information"), QString("Day to copy doesn't exist."));
+}
+
+void DayBoard::copyingCanceled()
+{
+    deleteCopyDateSelectingWidget();
+    footerButtonsBarContainer->setVisible(true);
+}
+
+void DayBoard::deleteCopyDateSelectingWidget()
+{
+    QWidget * dateSelectingWidget = boardLayout->itemAt(boardLayout->count()-1)->widget();
+
+    LayoutDeleter deleter(dateSelectingWidget->layout(), true);
+    deleter.clearLayout();
+    delete dateSelectingWidget;
+}
+
+void DayBoard::clearAllActivities()
+{
+    auto it = activities.begin();
+    while(it != activities.end())
+    {
+        (*it)->removeTimeIntervalFromTimeSystem();
+        LayoutDeleter deleter((*it)->layout(), true);
+        deleter.clearLayout();
+        (*it)->deleteLater();
+
+        it = activities.erase(it);
+    }
+}
+
+void DayBoard::clearInactiveActivities()
 {
     auto it = activities.begin();
     while(it != activities.end())

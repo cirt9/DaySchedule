@@ -12,6 +12,8 @@
 #include <QSharedPointer>
 #include <QLocale>
 #include <databasemanager.h>
+#include <dateselectingwidget.h>
+#include <QMessageBox>
 
 class DayBoard : public BoardTemplate
 {
@@ -21,6 +23,7 @@ private:
     QVBoxLayout * activitiesLayout;
     QList<Activity *> activities;
     QSharedPointer<TimeRangeSystem> timeSystem;
+    QGroupBox * footerButtonsBarContainer;
 
     QLabel * progress;
     QCheckBox * alarmsButton;
@@ -32,8 +35,11 @@ private:
     void createBottomMenuLayout();
 
     Activity * createActivity();
+    void assignActivitesToCurrentlyUsedDate();
+    void clearAllActivities();
     int calculateProgress();
 
+    void deleteCopyDateSelectingWidget();
     bool somethingChanged();
     int getProgress();
 
@@ -42,8 +48,10 @@ private:
 
 private slots:
     void addNewActivity();
-    void clearActivities();
-    void copyActivity();
+    void clearInactiveActivities();
+    void selectDateToCopyActivity();
+    void copyingConfirmed(QDate selectedDate);
+    void copyingCanceled();
     void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:

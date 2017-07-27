@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     calendarcard.cpp \
     bar.cpp \
     databasemanager.cpp \
-    timecounter.cpp
+    timecounter.cpp \
+    dateselectingwidget.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -44,7 +45,8 @@ HEADERS  += mainwindow.h \
     calendarcard.h \
     bar.h \
     databasemanager.h \
-    timecounter.h
+    timecounter.h \
+    dateselectingwidget.h
 
 FORMS    += \
     mainwindow.ui
