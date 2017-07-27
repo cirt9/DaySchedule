@@ -128,20 +128,15 @@ void Activity::deleteActivity()
     {
         emit activityDeleted(this);
 
-        removeTimeIntervalFromTimeSystem();
+        if(state.getState() != ActivityState::INACTIVE)
+            timeSystem->removeInterval(fromTime->time(), toTime->time());
+
         LayoutDeleter deleter(this->layout(), true);
         deleter.clearLayout();
 
         deleteActivityFromDatabase();
-
         delete this;
     }
-}
-
-void Activity::removeTimeIntervalFromTimeSystem()
-{
-    if(state.getState() != ActivityState::INACTIVE)
-        timeSystem->removeInterval(fromTime->time(), toTime->time());
 }
 
 bool Activity::getConfirmationOfActiveActivityDeletion()
@@ -236,6 +231,16 @@ QString Activity::getState() const
 void Activity::setAssignedDay(QDate day)
 {
     assignedDay = day;
+}
+
+QTime Activity::getFromTime()
+{
+    return fromTime->time();
+}
+
+QTime Activity::getToTime()
+{
+    return toTime->time();
 }
 
 void Activity::save()

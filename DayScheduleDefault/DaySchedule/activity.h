@@ -60,10 +60,10 @@ public:
     explicit Activity(QSharedPointer<TimeRangeSystem> tSystem, QDate date, QWidget * parent = nullptr);
     ~Activity() {}
 
-    void removeTimeIntervalFromTimeSystem();
-
     QString getState() const;
     void setAssignedDay(QDate day);
+    QTime getFromTime();
+    QTime getToTime();
 
     void save();
     void load(const QTime & fromT, const QTime & toT);

@@ -198,7 +198,9 @@ void DayBoard::clearAllActivities()
     auto it = activities.begin();
     while(it != activities.end())
     {
-        (*it)->removeTimeIntervalFromTimeSystem();
+        if((*it)->getState() != ActivityState::INACTIVE)
+            timeSystem->removeInterval((*it)->getFromTime(), (*it)->getToTime());
+
         LayoutDeleter deleter((*it)->layout(), true);
         deleter.clearLayout();
         (*it)->deleteLater();
