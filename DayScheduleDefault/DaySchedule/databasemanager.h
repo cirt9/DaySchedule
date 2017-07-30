@@ -58,6 +58,8 @@ public:
     QSqlQuery actvSelectDataQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
     QSqlQuery actvSelectStateQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
     QSqlQuery actvDeleteQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
+
+    QSqlQuery taskSelectCurrentActivity();
 };
 
 #endif // DATABASEMANAGER_H

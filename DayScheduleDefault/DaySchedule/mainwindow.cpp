@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <taskmanager.h>
+
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -26,6 +28,14 @@ void MainWindow::sqlTest()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.connect("dayScheduleTest.dsch");
+
+    TaskManager manager;
+    QTime from;
+    QTime to;
+    QString description;
+    manager.getCurrentTask(from, to, description);
+
+    qDebug() << from << " " << to << " " << description;
 }
 //
 void MainWindow::setCurrentlyUsedDate(QDate date)

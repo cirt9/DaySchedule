@@ -62,8 +62,8 @@ public:
 
     QString getState() const;
     void setAssignedDay(QDate day);
-    QTime getFromTime();
-    QTime getToTime();
+    QTime getFromTime() const;
+    QTime getToTime() const;
 
     void save();
     void load(const QTime & fromT, const QTime & toT);

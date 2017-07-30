@@ -233,12 +233,12 @@ void Activity::setAssignedDay(QDate day)
     assignedDay = day;
 }
 
-QTime Activity::getFromTime()
+QTime Activity::getFromTime() const
 {
     return fromTime->time();
 }
 
-QTime Activity::getToTime()
+QTime Activity::getToTime() const
 {
     return toTime->time();
 }
