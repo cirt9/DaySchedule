@@ -2,10 +2,10 @@
 
 TaskManager::TaskManager()
 {
-
+    updateTask();
 }
 
-void TaskManager::getCurrentTask(QTime & fromTime, QTime & toTime, QString & description)
+void TaskManager::updateTask()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     QSqlQuery query = db.taskSelectCurrentActivity();
@@ -20,6 +20,23 @@ void TaskManager::getCurrentTask(QTime & fromTime, QTime & toTime, QString & des
     }
     else
     {
-        qDebug() << "Not valid";
+        fromTime = QTime(0, 0, 0);
+        toTime = QTime(0, 0, 0);
+        description = QString("No task");
     }
+}
+
+QTime TaskManager::getFromTime() const
+{
+    return fromTime;
+}
+
+QTime TaskManager::getToTime() const
+{
+    return toTime;
+}
+
+QString TaskManager::getDescription() const
+{
+    return description;
 }

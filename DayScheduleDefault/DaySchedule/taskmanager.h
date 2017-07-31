@@ -3,13 +3,28 @@
 
 #include <databasemanager.h>
 #include <QDate>
+#include <QSharedPointer>
+#include <QObject>
 
-class TaskManager
-{    
+class TaskManager : public QObject
+{
+    Q_OBJECT
+
+private:
+    QTime fromTime;
+    QTime toTime;
+    QString description;
+
 public:
     TaskManager();
+    ~TaskManager() {}
 
-    void getCurrentTask(QTime & fromTime, QTime & toTime, QString & description);
+    QTime getFromTime() const;
+    QTime getToTime() const;
+    QString getDescription() const;
+
+public slots:
+    void updateTask();
 };
 
 #endif // TASKMANAGER_H

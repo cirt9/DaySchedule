@@ -30,10 +30,9 @@ void MainWindow::sqlTest()
     db.connect("dayScheduleTest.dsch");
 
     TaskManager manager;
-    QTime from;
-    QTime to;
-    QString description;
-    manager.getCurrentTask(from, to, description);
+    QTime from = manager.getFromTime();
+    QTime to = manager.getToTime();
+    QString description = manager.getDescription();
 
     qDebug() << from << " " << to << " " << description;
 }

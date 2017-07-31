@@ -317,7 +317,7 @@ QSqlQuery DatabaseManager::taskSelectCurrentActivity()
     QSqlQuery query;
     query.prepare("SELECT from_time, to_time, description FROM activity "
                   "WHERE :time >= from_time AND :time <= to_time "
-                  "AND day_id = :date");
+                  "AND day_id = :date AND state = 'active'");
     query.bindValue(":time", QTime::currentTime());
     query.bindValue(":date", QDate::currentDate());
     return query;
