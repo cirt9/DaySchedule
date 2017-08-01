@@ -2,7 +2,7 @@
 
 TimeCounter::TimeCounter(QWidget * parent) : QPushButton(parent)
 {
-    countdownTime = QTime(1, 0, 5);
+    countdownTime = QTime(0, 0, 0);
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateCountdownTime()));
@@ -49,4 +49,9 @@ void TimeCounter::leaveEvent(QEvent *e)
     connect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
 
     QWidget::enterEvent(e);
+}
+
+void TimeCounter::setCountdownTime(QTime time)
+{
+    countdownTime = time;
 }

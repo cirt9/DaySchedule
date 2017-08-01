@@ -18,6 +18,7 @@
 #include <QToolButton>
 #include <databasemanager.h>
 #include <timecounter.h>
+#include <taskmanager.h>
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +32,7 @@ private:
     Ui::MainWindow * ui;
     QVBoxLayout * centralWidgetLayout;
     QSharedPointer<QDate> currentlyUsedDate;
+    TaskManager taskManager;
 
     void setIconsInTheMenu(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
@@ -60,7 +62,7 @@ public:
     explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
 
-    void sqlTest();
+    void test();
 
 public slots:
     void displayMainMenu();

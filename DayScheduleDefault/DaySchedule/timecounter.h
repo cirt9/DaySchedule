@@ -24,6 +24,9 @@ private slots:
 public:
     explicit TimeCounter(QWidget * parent = nullptr);
     ~TimeCounter() {}
+
+public slots:
+    void setCountdownTime(QTime time);
 };
 
 #endif // TIMECOUNTER_H

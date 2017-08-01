@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <taskmanager.h>
-
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -15,7 +13,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 
     clearMainWindow();
 
-    sqlTest();
+    test();
 }
 
 MainWindow::~MainWindow()
@@ -24,17 +22,12 @@ MainWindow::~MainWindow()
 }
 //
 
-void MainWindow::sqlTest()
+void MainWindow::test()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.connect("dayScheduleTest.dsch");
 
-    TaskManager manager;
-    QTime from = manager.getFromTime();
-    QTime to = manager.getToTime();
-    QString description = manager.getDescription();
-
-    qDebug() << from << " " << to << " " << description;
+    taskManager.updateTask();
 }
 //
 void MainWindow::setCurrentlyUsedDate(QDate date)
@@ -131,6 +124,7 @@ void MainWindow::showDay()
 
     day->load();
     connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
+    connect(day, SIGNAL(destroyed(QObject*)), &taskManager, SLOT(updateTask()));
 
     showWidgetOnCenter(day);
 }
@@ -146,6 +140,7 @@ void MainWindow::showExactDay(QDate date)
 
     day->load();
     connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
+    connect(day, SIGNAL(destroyed(QObject*)), &taskManager, SLOT(updateTask()));
 
     showWidgetOnCenter(day);
 }
@@ -179,6 +174,11 @@ void MainWindow::showMenuBar()
 
         TimeCounter * timeCounter = new TimeCounter();
         timeCounter->setObjectName("BarTimeCounter");
+        timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());
+        connect(&taskManager, &TaskManager::updated, timeCounter, [=]{timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());});
+
+        //connect(playAgainButton, &Button::clicked, this, [=]{startGame(player->getPlayerName()); } );
+
         menuBar->addWidget(timeCounter, 180);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));

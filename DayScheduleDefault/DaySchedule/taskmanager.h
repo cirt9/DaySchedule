@@ -9,7 +9,6 @@
 class TaskManager : public QObject
 {
     Q_OBJECT
-
 private:
     QTime fromTime;
     QTime toTime;
@@ -23,8 +22,13 @@ public:
     QTime getToTime() const;
     QString getDescription() const;
 
+    QTime getTimeTillEndOfTask() const;
+
 public slots:
     void updateTask();
+
+signals:
+    void updated();
 };
 
 #endif // TASKMANAGER_H

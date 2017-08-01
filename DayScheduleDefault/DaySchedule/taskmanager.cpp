@@ -2,7 +2,9 @@
 
 TaskManager::TaskManager()
 {
-    updateTask();
+    fromTime = QTime(0, 0, 0);
+    toTime = QTime(0, 0, 0);
+    description = QString("No task");
 }
 
 void TaskManager::updateTask()
@@ -24,6 +26,7 @@ void TaskManager::updateTask()
         toTime = QTime(0, 0, 0);
         description = QString("No task");
     }
+    emit updated();
 }
 
 QTime TaskManager::getFromTime() const
@@ -39,4 +42,11 @@ QTime TaskManager::getToTime() const
 QString TaskManager::getDescription() const
 {
     return description;
+}
+
+QTime TaskManager::getTimeTillEndOfTask() const
+{
+    int msecTillEndOfTask = QTime::currentTime().msecsTo(toTime);
+
+    return QTime(0, 0).addMSecs(msecTillEndOfTask);
 }
