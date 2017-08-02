@@ -1,10 +1,15 @@
 #include "taskmanager.h"
 
-TaskManager::TaskManager()
+void TaskManager::resetTask()
 {
     fromTime = QTime(0, 0, 0);
     toTime = QTime(0, 0, 0);
     description = QString("No task");
+}
+
+TaskManager::TaskManager()
+{
+    resetTask();
 }
 
 void TaskManager::updateTask()
@@ -21,11 +26,8 @@ void TaskManager::updateTask()
         description = query.value(2).toString();
     }
     else
-    {
-        fromTime = QTime(0, 0, 0);
-        toTime = QTime(0, 0, 0);
-        description = QString("No task");
-    }
+        resetTask();
+
     emit updated();
 }
 
@@ -44,9 +46,16 @@ QString TaskManager::getDescription() const
     return description;
 }
 
-QTime TaskManager::getTimeTillEndOfTask() const
+QTime TaskManager::getTimeTillEndOfTask()
 {
-    int msecTillEndOfTask = QTime::currentTime().msecsTo(toTime);
+    if(toTime < QTime::currentTime())
+        resetTask();
 
-    return QTime(0, 0).addMSecs(msecTillEndOfTask);
+    if(toTime == QTime(0, 0, 0))
+        return QTime(0, 0, 0);
+    else
+    {
+        int msecTillEndOfTask = QTime::currentTime().msecsTo(toTime);
+        return QTime(0, 0).addMSecs(msecTillEndOfTask);
+    }
 }

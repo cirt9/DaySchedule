@@ -14,6 +14,8 @@ private:
     QTime toTime;
     QString description;
 
+    void resetTask();
+
 public:
     TaskManager();
     ~TaskManager() {}
@@ -22,7 +24,7 @@ public:
     QTime getToTime() const;
     QString getDescription() const;
 
-    QTime getTimeTillEndOfTask() const;
+    QTime getTimeTillEndOfTask();
 
 public slots:
     void updateTask();

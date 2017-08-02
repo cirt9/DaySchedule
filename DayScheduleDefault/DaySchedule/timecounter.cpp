@@ -24,7 +24,6 @@ void TimeCounter::showCountdownTime()
     QString timeText = countdownTime.toString("hh : mm : ss");
     setText(timeText);
 }
-
 void TimeCounter::updateCountdownTime()
 {
     if(countdownTime > QTime(0, 0, 0))
@@ -54,4 +53,5 @@ void TimeCounter::leaveEvent(QEvent *e)
 void TimeCounter::setCountdownTime(QTime time)
 {
     countdownTime = time;
+    countdownTime = countdownTime.addMSecs(-countdownTime.msec());
 }

@@ -175,10 +175,8 @@ void MainWindow::showMenuBar()
         TimeCounter * timeCounter = new TimeCounter();
         timeCounter->setObjectName("BarTimeCounter");
         timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());
-        connect(&taskManager, &TaskManager::updated, timeCounter, [=]{timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());});
-
-        //connect(playAgainButton, &Button::clicked, this, [=]{startGame(player->getPlayerName()); } );
-
+        connect(&taskManager, &TaskManager::updated, timeCounter,
+        [=]{timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());});
         menuBar->addWidget(timeCounter, 180);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));
