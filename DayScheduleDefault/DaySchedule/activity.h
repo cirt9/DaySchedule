@@ -64,6 +64,7 @@ public:
     void setAssignedDay(QDate day);
     QTime getFromTime() const;
     QTime getToTime() const;
+    QString getDescription() const;
 
     void save();
     void load(const QTime & fromT, const QTime & toT);

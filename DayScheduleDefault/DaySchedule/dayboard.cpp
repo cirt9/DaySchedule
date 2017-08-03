@@ -5,6 +5,7 @@ BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
 {
     progress = nullptr;
     footerButtonsBarContainer = nullptr;
+    currentActivityIndex = -1;
 
     createDateAndProgressLayout();
     createActivitiesLayout();
@@ -126,6 +127,8 @@ Activity * DayBoard::createActivity()
 
     connect(activity, SIGNAL(fail()), this, SLOT(updateProgress()));
     connect(activity, SIGNAL(activityStarted()), this, SLOT(updateProgress()));
+    connect(activity, &Activity::activityStarted, this,
+           [=]{setCurrentActivityIndex(findCurrentActivityIndex());});
     connect(activity, SIGNAL(success()), this, SLOT(updateProgress()));
     connect(activity, SIGNAL(destroyed()), this, SLOT(updateProgress()));
 
@@ -225,6 +228,7 @@ void DayBoard::clearInactiveActivities()
         else
             ++it;
     }
+    setCurrentActivityIndex(findCurrentActivityIndex());
 }
 
 void DayBoard::eraseActivityFromList(QWidget * activity)
@@ -234,6 +238,7 @@ void DayBoard::eraseActivityFromList(QWidget * activity)
         if(*it == activity)
         {
             it = activities.erase(it);
+            setCurrentActivityIndex(findCurrentActivityIndex());
             break;
         }
     }
@@ -361,5 +366,39 @@ void DayBoard::loadActivities()
         activities.push_back(activity);
 
         activity->load(from, to);
+    }
+}
+
+int DayBoard::findCurrentActivityIndex()
+{
+    for(int i=0; i<activities.size(); i++)
+    {
+        if(QTime::currentTime() >= activities[i]->getFromTime() &&
+           QTime::currentTime() <= activities[i]->getToTime() &&
+           activities[i]->getState() == ActivityState::ACTIVE )
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void DayBoard::setCurrentActivityIndex(int index)
+{
+    if(QDate::currentDate() == *currentlyUsedDate)
+    {
+        if(currentActivityIndex != index)
+        {
+            currentActivityIndex = index;
+            if(currentActivityIndex == -1)
+                emit currentActivityChanged(QTime(0, 0), QTime(0, 0), QString("No task"));
+
+            else
+            {
+                emit currentActivityChanged(activities[currentActivityIndex]->getFromTime(),
+                                            activities[currentActivityIndex]->getToTime(),
+                                            activities[currentActivityIndex]->getDescription());
+            }
+        }
     }
 }

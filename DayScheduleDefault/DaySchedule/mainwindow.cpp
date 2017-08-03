@@ -125,8 +125,10 @@ void MainWindow::showDay()
     day->load();
     connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
     connect(day, SIGNAL(destroyed(QObject*)), &taskManager, SLOT(updateTask()));
+    connect(day, SIGNAL(currentActivityChanged(QTime,QTime,QString)),
+            &taskManager, SLOT(updateTaskLive(QTime,QTime,QString)));
 
-    showWidgetOnCenter(day);
+    showWidgetOnCenter(day); 
 }
 
 void MainWindow::showExactDay(QDate date)
@@ -141,6 +143,8 @@ void MainWindow::showExactDay(QDate date)
     day->load();
     connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
     connect(day, SIGNAL(destroyed(QObject*)), &taskManager, SLOT(updateTask()));
+    connect(day, SIGNAL(currentActivityChanged(QTime,QTime,QString)),
+            &taskManager, SLOT(updateTaskLive(QTime,QTime,QString)));
 
     showWidgetOnCenter(day);
 }

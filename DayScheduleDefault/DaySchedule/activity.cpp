@@ -134,7 +134,9 @@ void Activity::deleteActivity()
         LayoutDeleter deleter(this->layout(), true);
         deleter.clearLayout();
 
-        deleteActivityFromDatabase();
+        if(state.getState() != ActivityState::INACTIVE)
+            deleteActivityFromDatabase();
+
         delete this;
     }
 }
@@ -241,6 +243,11 @@ QTime Activity::getFromTime() const
 QTime Activity::getToTime() const
 {
     return toTime->time();
+}
+
+QString Activity::getDescription() const
+{
+    return description->text();
 }
 
 void Activity::save()

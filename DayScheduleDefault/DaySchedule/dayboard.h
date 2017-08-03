@@ -22,6 +22,7 @@ class DayBoard : public BoardTemplate
 private:
     QVBoxLayout * activitiesLayout;
     QList<Activity *> activities;
+    int currentActivityIndex;
     QSharedPointer<TimeRangeSystem> timeSystem;
     QGroupBox * footerButtonsBarContainer;
 
@@ -46,6 +47,10 @@ private:
     void saveActivities();
     void loadActivities();
 
+    int findCurrentActivityIndex();
+    void setCurrentActivityIndex(int index);
+    void prepareCurrentActivity();
+
 private slots:
     void addNewActivity();
     void clearInactiveActivities();
@@ -63,6 +68,9 @@ public slots:
 
     void save();
     void load();
+
+signals:
+    void currentActivityChanged(QTime fromTime, QTime toTime, QString description);
 };
 
 #endif // DAYBOARD_H

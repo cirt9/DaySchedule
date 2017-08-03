@@ -28,6 +28,7 @@ public:
 
 public slots:
     void updateTask();
+    void updateTaskLive(QTime fromT, QTime toT, QString descript);
 
 signals:
     void updated();

@@ -31,6 +31,14 @@ void TaskManager::updateTask()
     emit updated();
 }
 
+void TaskManager::updateTaskLive(QTime fromT, QTime toT, QString descript)
+{
+    fromTime = fromT;
+    toTime = toT;
+    description = descript;
+    emit updated();
+}
+
 QTime TaskManager::getFromTime() const
 {
     return fromTime;
