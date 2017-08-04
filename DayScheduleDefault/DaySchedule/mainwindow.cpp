@@ -181,6 +181,7 @@ void MainWindow::showMenuBar()
         timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());
         connect(&taskManager, &TaskManager::updated, timeCounter,
         [=]{timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());});
+        connect(timeCounter, SIGNAL(countdownCompleted()), &taskManager, SLOT(startSeekingForTask()));
         menuBar->addWidget(timeCounter, 180);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));

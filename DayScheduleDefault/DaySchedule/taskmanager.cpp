@@ -1,15 +1,17 @@
 #include "taskmanager.h"
 
+TaskManager::TaskManager()
+{
+    resetTask();
+    taskSeekingTimer = new QTimer(this);
+    connect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(updateTask()));
+}
+
 void TaskManager::resetTask()
 {
     fromTime = QTime(0, 0, 0);
     toTime = QTime(0, 0, 0);
     description = QString("No task");
-}
-
-TaskManager::TaskManager()
-{
-    resetTask();
 }
 
 void TaskManager::updateTask()
@@ -24,19 +26,37 @@ void TaskManager::updateTask()
         fromTime = query.value(0).toTime();
         toTime = query.value(1).toTime();
         description = query.value(2).toString();
-    }
-    else
-        resetTask();
 
-    emit updated();
+        taskSeekingTimer->stop();
+        emit updated();
+    }
+    else if(toTime != QTime(0, 0, 0, 0))
+    {
+        resetTask();
+        emit updated();
+    }
 }
 
 void TaskManager::updateTaskLive(QTime fromT, QTime toT, QString descript)
 {
-    fromTime = fromT;
-    toTime = toT;
-    description = descript;
-    emit updated();
+    if(toT != QTime(0, 0, 0, 0))
+    {
+        fromTime = fromT;
+        toTime = toT;
+        description = descript;
+        emit updated();
+    }
+    else
+    {
+        resetTask();
+        emit updated();
+    }
+}
+
+void TaskManager::startSeekingForTask()
+{
+    taskSeekingTimer->start(60000);
+    updateTask();
 }
 
 QTime TaskManager::getFromTime() const

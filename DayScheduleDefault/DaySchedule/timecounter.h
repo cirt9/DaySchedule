@@ -27,6 +27,9 @@ public:
 
 public slots:
     void setCountdownTime(QTime time);
+
+signals:
+    void countdownCompleted();
 };
 
 #endif // TIMECOUNTER_H

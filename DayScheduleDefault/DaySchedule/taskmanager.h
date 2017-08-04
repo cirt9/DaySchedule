@@ -13,6 +13,7 @@ private:
     QTime fromTime;
     QTime toTime;
     QString description;
+    QTimer * taskSeekingTimer;
 
     void resetTask();
 
@@ -29,6 +30,7 @@ public:
 public slots:
     void updateTask();
     void updateTaskLive(QTime fromT, QTime toT, QString descript);
+    void startSeekingForTask();
 
 signals:
     void updated();
