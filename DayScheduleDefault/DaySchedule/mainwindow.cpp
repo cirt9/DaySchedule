@@ -120,13 +120,7 @@ void MainWindow::showDay()
     resetCentralWidget();
     showMenuBar();
 
-    DayBoard * day = new DayBoard(currentlyUsedDate, this);
-
-    day->load();
-    connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
-    connect(day, SIGNAL(destroyed(QObject*)), &taskManager, SLOT(updateTask()));
-    connect(day, SIGNAL(currentActivityChanged(QTime,QTime,QString)),
-            &taskManager, SLOT(updateTaskLive(QTime,QTime,QString)));
+    DayBoard * day = createDayBoard();
 
     showWidgetOnCenter(day); 
 }
@@ -137,16 +131,25 @@ void MainWindow::showExactDay(QDate date)
     showMenuBar();
 
     setCurrentlyUsedDate(date);
+    DayBoard * day = createDayBoard();
 
+    showWidgetOnCenter(day);
+}
+
+DayBoard * MainWindow::createDayBoard()
+{
     DayBoard * day = new DayBoard(currentlyUsedDate, this);
-
     day->load();
+
     connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
     connect(day, SIGNAL(destroyed(QObject*)), &taskManager, SLOT(updateTask()));
     connect(day, SIGNAL(currentActivityChanged(QTime,QTime,QString)),
             &taskManager, SLOT(updateTaskLive(QTime,QTime,QString)));
 
-    showWidgetOnCenter(day);
+    if(QDate::currentDate() == *currentlyUsedDate)
+        connect(&taskManager, SIGNAL(lookingForTask()), day, SLOT(updateCurrentActivity()));
+
+    return day;
 }
 
 void MainWindow::showWidgetOnCenter(QWidget * widget)
@@ -176,12 +179,7 @@ void MainWindow::showMenuBar()
         QToolButton * pagesButton = createPagesButton();
         menuBar->addWidget(pagesButton);
 
-        TimeCounter * timeCounter = new TimeCounter();
-        timeCounter->setObjectName("BarTimeCounter");
-        timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());
-        connect(&taskManager, &TaskManager::updated, timeCounter,
-        [=]{timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());});
-        connect(timeCounter, SIGNAL(countdownCompleted()), &taskManager, SLOT(startSeekingForTask()));
+        TimeCounter * timeCounter = createTimeCounter();
         menuBar->addWidget(timeCounter, 180);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));
@@ -201,6 +199,19 @@ void MainWindow::showMenuBar()
 
         centralWidgetLayout->insertLayout(0, barLayout);
     }
+}
+
+TimeCounter * MainWindow::createTimeCounter()
+{
+    TimeCounter * timeCounter = new TimeCounter();
+    timeCounter->setObjectName("BarTimeCounter");
+    timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());
+
+    connect(&taskManager, &TaskManager::updated, timeCounter,
+    [=]{timeCounter->setCountdownTime(taskManager.getTimeTillEndOfTask());});
+    connect(timeCounter, SIGNAL(countdownCompleted()), &taskManager, SLOT(startSeekingForTask()));
+
+    return timeCounter;
 }
 
 QToolButton * MainWindow::createPagesButton()

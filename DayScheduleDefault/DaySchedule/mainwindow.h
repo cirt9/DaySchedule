@@ -49,6 +49,9 @@ private:
     QToolButton * createPagesButton();
     void createPagesActions(QMenu * pagesMenu);
 
+    DayBoard * createDayBoard();
+    TimeCounter * createTimeCounter();
+
 private slots:
     void errorReaction(QString errorText);
 

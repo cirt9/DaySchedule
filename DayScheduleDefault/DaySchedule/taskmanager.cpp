@@ -4,7 +4,7 @@ TaskManager::TaskManager()
 {
     resetTask();
     taskSeekingTimer = new QTimer(this);
-    connect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(updateTask()));
+    connect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(lookForTask()));
 }
 
 void TaskManager::resetTask()
@@ -44,9 +44,11 @@ void TaskManager::updateTaskLive(QTime fromT, QTime toT, QString descript)
         fromTime = fromT;
         toTime = toT;
         description = descript;
+
+        taskSeekingTimer->stop();
         emit updated();
     }
-    else
+    else if(toT != toTime)
     {
         resetTask();
         emit updated();
@@ -56,7 +58,14 @@ void TaskManager::updateTaskLive(QTime fromT, QTime toT, QString descript)
 void TaskManager::startSeekingForTask()
 {
     taskSeekingTimer->start(60000);
+    lookForTask();
+}
+
+void TaskManager::lookForTask()
+{
     updateTask();
+    if(toTime == QTime(0, 0, 0))
+        emit lookingForTask();
 }
 
 QTime TaskManager::getFromTime() const

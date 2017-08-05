@@ -49,7 +49,6 @@ private:
 
     int findCurrentActivityIndex();
     void setCurrentActivityIndex(int index);
-    void prepareCurrentActivity();
 
 private slots:
     void addNewActivity();
@@ -68,6 +67,8 @@ public slots:
 
     void save();
     void load();
+
+    void updateCurrentActivity();
 
 signals:
     void currentActivityChanged(QTime fromTime, QTime toTime, QString description);

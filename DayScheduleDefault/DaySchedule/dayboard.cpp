@@ -402,3 +402,8 @@ void DayBoard::setCurrentActivityIndex(int index)
         }
     }
 }
+
+void DayBoard::updateCurrentActivity()
+{
+    setCurrentActivityIndex(findCurrentActivityIndex());
+}

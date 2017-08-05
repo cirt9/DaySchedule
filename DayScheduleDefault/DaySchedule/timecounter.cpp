@@ -4,9 +4,12 @@ TimeCounter::TimeCounter(QWidget * parent) : QPushButton(parent)
 {
     countdownTime = QTime(0, 0, 0);
 
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(updateCountdownTime()));
-    connect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
+    oneSecTimer = new QTimer(this);
+    connect(oneSecTimer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
+    oneSecTimer->start(1000);
+
+    countdownTimer = new QTimer(this);
+    connect(countdownTimer, SIGNAL(timeout()), this, SLOT(updateCountdownTime()));
 
     showCurrentTime();
 }
@@ -23,33 +26,34 @@ void TimeCounter::showCountdownTime()
     QString timeText = countdownTime.toString("hh : mm : ss");
     setText(timeText);
 }
+
 void TimeCounter::updateCountdownTime()
 {
     if(countdownTime > QTime(0, 0, 0))
         countdownTime = countdownTime.addSecs(-1);
     else
     {
-        timer->stop();
+        countdownTimer->stop();
         emit countdownCompleted();
     }
 }
 
 void TimeCounter::enterEvent(QEvent * e)
 {
-    disconnect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
+    disconnect(oneSecTimer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
 
     showCountdownTime();
-    connect(timer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
+    connect(oneSecTimer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
 
     QWidget::enterEvent(e);
 }
 
 void TimeCounter::leaveEvent(QEvent *e)
 {
-    disconnect(timer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
+    disconnect(oneSecTimer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
 
     showCurrentTime();
-    connect(timer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
+    connect(oneSecTimer, SIGNAL(timeout()), this, SLOT(showCurrentTime()));
 
     QWidget::enterEvent(e);
 }
@@ -58,5 +62,5 @@ void TimeCounter::setCountdownTime(QTime time)
 {
     countdownTime = time;
     countdownTime = countdownTime.addMSecs(-countdownTime.msec());
-    timer->start(1000);
+    countdownTimer->start(1000);
 }

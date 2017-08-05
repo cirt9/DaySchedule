@@ -17,6 +17,9 @@ private:
 
     void resetTask();
 
+private slots:
+    void lookForTask();
+
 public:
     TaskManager();
     ~TaskManager() {}
@@ -34,6 +37,7 @@ public slots:
 
 signals:
     void updated();
+    void lookingForTask();
 };
 
 #endif // TASKMANAGER_H

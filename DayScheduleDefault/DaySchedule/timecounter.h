@@ -10,7 +10,8 @@ class TimeCounter : public QPushButton
     Q_OBJECT
 
 private:
-    QTimer * timer;
+    QTimer * oneSecTimer;
+    QTimer * countdownTimer;
     QTime countdownTime;
 
     void enterEvent(QEvent * e);
