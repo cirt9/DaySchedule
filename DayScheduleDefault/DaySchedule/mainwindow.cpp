@@ -7,29 +7,27 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setWindowState(Qt::WindowMaximized);
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
+    setupDatabase();
+
     centralWidgetLayout = nullptr;
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
     setCurrentlyUsedDate(QDate::currentDate());
+    taskManager.updateTask();
 
     clearMainWindow();
-
-    test();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-//
 
-void MainWindow::test()
+void MainWindow::setupDatabase()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    db.connect("dayScheduleTest.dsch");
-
-    taskManager.updateTask();
+    db.connect("db.dsch");
 }
-//
+
 void MainWindow::setCurrentlyUsedDate(QDate date)
 {
     int currentYear = date.year();

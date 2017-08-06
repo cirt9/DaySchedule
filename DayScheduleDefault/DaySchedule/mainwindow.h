@@ -52,6 +52,8 @@ private:
     DayBoard * createDayBoard();
     TimeCounter * createTimeCounter();
 
+    void setupDatabase();
+
 private slots:
     void errorReaction(QString errorText);
 
@@ -64,8 +66,6 @@ private slots:
 public:
     explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();
-
-    void test();
 
 public slots:
     void displayMainMenu();
