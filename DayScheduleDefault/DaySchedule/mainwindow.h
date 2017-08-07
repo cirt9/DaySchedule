@@ -34,7 +34,7 @@ private:
     QSharedPointer<QDate> currentlyUsedDate;
     TaskManager taskManager;
 
-    void setIconsInTheMenu(MainMenu * menu);
+    void setMenuIcons(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
 
     void clearMainWindow();
@@ -62,6 +62,9 @@ private slots:
     void showMonth();
     void showDay();
     void showExactDay(QDate date);
+
+    void showAboutScreen();
+    void showSettingsScreen();
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

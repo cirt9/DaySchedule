@@ -17,4 +17,7 @@
     <qresource prefix="/style">
         <file>style.css</file>
     </qresource>
+    <qresource prefix="/txt">
+        <file>about.txt</file>
+    </qresource>
 </RCC>

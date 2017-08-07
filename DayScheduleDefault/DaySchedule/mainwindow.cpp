@@ -44,13 +44,13 @@ void MainWindow::displayMainMenu()
     int menuSize = 500;
     MainMenu * menu = new MainMenu(menuSize, menuSize, this);
     menu->setFixedSize(menuSize, menuSize);
-    setIconsInTheMenu(menu);
+    setMenuIcons(menu);
     connectMenuToSlots(menu);
 
     showWidgetOnCenter(menu);
 }
 
-void MainWindow::setIconsInTheMenu(MainMenu * menu)
+void MainWindow::setMenuIcons(MainMenu * menu)
 {
     menu->getCentralButton()->setIconSize(QSize(100,100));
     menu->getCentralButton()->setIcon(QIcon(":/icons/icons/start.png"));
@@ -67,7 +67,74 @@ void MainWindow::setIconsInTheMenu(MainMenu * menu)
 void MainWindow::connectMenuToSlots(MainMenu * menu)
 {
     connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
+    connect(menu->getLeftButton(), SIGNAL(clicked()), this, SLOT(showAboutScreen()));
+    connect(menu->getRightButton(), SIGNAL(clicked()), this, SLOT(showSettingsScreen()));
     connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(showYearsList()));
+}
+
+void MainWindow::showAboutScreen()
+{
+    QFile file(":/txt/about.txt");
+
+    if(file.open(QIODevice::ReadOnly))
+    {
+        resetCentralWidget();
+        QTextStream fileText(&file);
+
+        QLabel * aboutTitle = new QLabel("About");
+        aboutTitle->setObjectName("MainWindowTitle");
+        aboutTitle->setAlignment(Qt::AlignCenter);
+
+        QLabel * aboutLabel = new QLabel(fileText.readAll());
+        aboutLabel->setObjectName("MainWindowAboutText");
+        aboutLabel->setAlignment(Qt::AlignCenter);
+
+        QPushButton * backButton = new QPushButton("Back");
+        backButton->setObjectName("MainWindowBackButton");
+        connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+
+        QVBoxLayout * aboutLayout = new QVBoxLayout();
+        aboutLayout->addWidget(aboutTitle);
+        aboutLayout->addWidget(aboutLabel, Qt::AlignTop);
+        aboutLayout->addWidget(backButton);
+
+        QWidget * aboutContainer = new QWidget();
+        aboutContainer->setLayout(aboutLayout);
+        showWidgetOnCenter(aboutContainer);
+
+        file.close();
+    }
+    else
+    {
+        QMessageBox::critical(this, QString("Error"), QString("This copy of DaySchedule is corrupted."));
+        close();
+    }
+}
+
+void MainWindow::showSettingsScreen()
+{
+    resetCentralWidget();
+
+    QLabel * settingsTitle = new QLabel("Settings");
+    settingsTitle->setObjectName("MainWindowTitle");
+    settingsTitle->setAlignment(Qt::AlignCenter);
+
+    QWidget * placeHolder = new QWidget();
+    placeHolder->setStyleSheet("background: white;");
+    placeHolder->setMinimumWidth(500);
+
+    QPushButton * backButton = new QPushButton("Back");
+    backButton->setObjectName("MainWindowBackButton");
+    connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+
+    QVBoxLayout * settingsLayout = new QVBoxLayout();
+    settingsLayout->addWidget(settingsTitle);
+    settingsLayout->addWidget(placeHolder, Qt::AlignTop);
+    settingsLayout->addWidget(backButton);
+
+    QWidget * settingsContainer = new QWidget();
+    settingsContainer->setLayout(settingsLayout);
+    showWidgetOnCenter(settingsContainer);
 }
 
 void MainWindow::showYearsList()
