@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <optionwidget.h>
+
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -119,9 +121,20 @@ void MainWindow::showSettingsScreen()
     settingsTitle->setObjectName("MainWindowTitle");
     settingsTitle->setAlignment(Qt::AlignCenter);
 
-    QWidget * placeHolder = new QWidget();
-    placeHolder->setStyleSheet("background: white;");
-    placeHolder->setMinimumWidth(500);
+    OptionWidget * alarmsOption = new OptionWidget("Alarms enabled by default");
+    alarmsOption->setFixedHeight(60);
+
+    OptionWidget * option2 = new OptionWidget("Test option");
+    option2->setFixedHeight(60);
+
+    QVBoxLayout * optionsLayout = new QVBoxLayout();
+    optionsLayout->addWidget(alarmsOption);
+    optionsLayout->addWidget(option2);
+    optionsLayout->setAlignment(option2, Qt::AlignTop);
+
+    QWidget * optionsContainer = new QWidget();
+    optionsContainer->setObjectName("MainWindowOptionsContainer");
+    optionsContainer->setLayout(optionsLayout);
 
     QPushButton * backButton = new QPushButton("Back");
     backButton->setObjectName("MainWindowBackButton");
@@ -129,7 +142,7 @@ void MainWindow::showSettingsScreen()
 
     QVBoxLayout * settingsLayout = new QVBoxLayout();
     settingsLayout->addWidget(settingsTitle);
-    settingsLayout->addWidget(placeHolder, Qt::AlignTop);
+    settingsLayout->addWidget(optionsContainer, Qt::AlignTop);
     settingsLayout->addWidget(backButton);
 
     QWidget * settingsContainer = new QWidget();
@@ -329,9 +342,18 @@ void MainWindow::initializeCentralWidgetLayout()
     centralWidgetLayout = new QVBoxLayout();
     centralWidgetLayout->setContentsMargins(11, 0, 11, 11);
 
+    QScrollArea * scrollArea = new QScrollArea();
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setObjectName("MainWindowScrollArea");
+
     QWidget * container = new QWidget();
     container->setLayout(centralWidgetLayout);
-    setCentralWidget(container);
+    scrollArea->setWidget(container);
+    container->setObjectName("MainWindowContainer");
+
+    setCentralWidget(scrollArea);
 }
 
 void MainWindow::resetCentralWidget()

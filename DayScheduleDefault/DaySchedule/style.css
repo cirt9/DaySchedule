@@ -1,14 +1,26 @@
 /* MainWindow Style */
 
-MainWindow
+QScrollBar
+{
+background: rgb(51,102,153);
+}
+
+#MainWindowContainer
 {
 background: qradialgradient(radius: 1.5, stop:0 rgb(197,239,247), stop:1 rgb(82,179,217));
+border: none;
+}
+
+#MainWindowScrollArea
+{
+background: transparent;
+border: none;
 }
 
 #MainWindowTitle
 {
 padding: 10px;
-background: rgb(46, 48, 51);
+background: rgb(51,102,153);
 font: bold 40px;
 border-radius: 3px;
 color: rgb(255,240,235);
@@ -26,7 +38,7 @@ color: rgb(46, 48, 51);
 #MainWindowBackButton
 {
 padding: 10px;
-background: rgb(46, 48, 51);
+background: rgb(51,102,153);
 border: 2px solid transparent;
 border-radius: 3px;
 font-size: 35px;
@@ -35,7 +47,7 @@ color: rgb(255,240,235);
 
 #MainWindowBackButton:hover
 {
-background: rgb(22, 25, 27);
+background: rgb(55,105,150);
 border: 1px solid rgb(255,240,235);
 }
 
@@ -47,6 +59,27 @@ border: 2px solid rgb(255,240,235);
 QGroupBox
 {
 border: none;
+}
+
+/* OptionsWidget Style */
+
+#MainWindowOptionsContainer
+{
+border-radius: 3px;
+background: rgb(51,102,153);
+}
+
+#OptionWidget
+{
+background: rgb(255,240,235);
+border-radius: 3px;
+}
+
+#OptionWidgetText
+{
+background: transparent;
+font: 25px solid;
+color: rgb(51,102,153);
 }
 
 /* Bar Style */
@@ -461,11 +494,6 @@ image: url(:/icons/icons/alarmsActive.jpg);
 {
 background: transparent;
 border: none;
-}
-
-QScrollBar
-{
-background: rgb(51,102,153);
 }
 
 #DayBoardScrollArea
