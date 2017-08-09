@@ -1,6 +1,6 @@
 #include "dayboard.h"
 
-DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent) :
+DayBoard::DayBoard(QSharedPointer<QDate> currUsedDate, bool alarmsEnabled, QWidget * parent) :
 BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
 {
     progress = nullptr;
@@ -10,6 +10,8 @@ BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
     createDateAndProgressLayout();
     createActivitiesLayout();
     createBottomMenuLayout();
+
+    alarmsButton->setChecked(alarmsEnabled);
 }
 
 void DayBoard::createDateAndProgressLayout()

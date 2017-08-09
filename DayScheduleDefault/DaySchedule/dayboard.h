@@ -59,7 +59,7 @@ private slots:
     void eraseActivityFromList(QWidget * activity = nullptr);
 
 public:
-    explicit DayBoard(QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
+    explicit DayBoard(QSharedPointer<QDate> currUsedDate, bool alarmsEnabled, QWidget * parent = nullptr);
     ~DayBoard() {;}
 
 public slots:
@@ -67,7 +67,6 @@ public slots:
 
     void save();
     void load();
-
     void updateCurrentActivity();
 
 signals:

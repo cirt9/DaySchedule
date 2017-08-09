@@ -1,6 +1,6 @@
 #include "optionwidget.h"
 
-OptionWidget::OptionWidget(QString text, QWidget * parent) : QGroupBox(parent)
+OptionWidget::OptionWidget(QString text, bool defaultValue, QWidget * parent) : QGroupBox(parent)
 {
     setObjectName("OptionWidget");
 
@@ -8,6 +8,7 @@ OptionWidget::OptionWidget(QString text, QWidget * parent) : QGroupBox(parent)
     optionText->setObjectName("OptionWidgetText");
 
     checkBox = new QCheckBox();
+    checkBox->setChecked(defaultValue);
     checkBox->setObjectName("OptionWidgetCheckBox");
 
     QHBoxLayout * layout = new QHBoxLayout();

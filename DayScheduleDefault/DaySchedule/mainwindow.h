@@ -19,6 +19,8 @@
 #include <databasemanager.h>
 #include <timecounter.h>
 #include <taskmanager.h>
+#include <optionwidget.h>
+
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +35,7 @@ private:
     QVBoxLayout * centralWidgetLayout;
     QSharedPointer<QDate> currentlyUsedDate;
     TaskManager taskManager;
+    bool alarmsEnabledByDefault;
 
     void setMenuIcons(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
@@ -65,6 +68,10 @@ private slots:
 
     void showAboutScreen();
     void showSettingsScreen();
+
+    void setAlarmsEnabledByDefault(bool newAlarmsEnabledState);
+    void saveSettings();
+    void loadSettings();
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

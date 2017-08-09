@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <optionwidget.h>
-
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -14,7 +12,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     centralWidgetLayout = nullptr;
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
     setCurrentlyUsedDate(QDate::currentDate());
+    alarmsEnabledByDefault = false;
     taskManager.updateTask();
+    loadSettings();
 
     clearMainWindow();
 }
@@ -121,16 +121,13 @@ void MainWindow::showSettingsScreen()
     settingsTitle->setObjectName("MainWindowTitle");
     settingsTitle->setAlignment(Qt::AlignCenter);
 
-    OptionWidget * alarmsOption = new OptionWidget("Alarms enabled by default");
+    OptionWidget * alarmsOption = new OptionWidget("Alarms enabled by default", alarmsEnabledByDefault);
+    connect(alarmsOption->getCheckBox(), SIGNAL(toggled(bool)), this, SLOT(setAlarmsEnabledByDefault(bool)));
     alarmsOption->setFixedHeight(60);
-
-    OptionWidget * option2 = new OptionWidget("Test option");
-    option2->setFixedHeight(60);
 
     QVBoxLayout * optionsLayout = new QVBoxLayout();
     optionsLayout->addWidget(alarmsOption);
-    optionsLayout->addWidget(option2);
-    optionsLayout->setAlignment(option2, Qt::AlignTop);
+    optionsLayout->setAlignment(alarmsOption, Qt::AlignTop);
 
     QWidget * optionsContainer = new QWidget();
     optionsContainer->setObjectName("MainWindowOptionsContainer");
@@ -138,6 +135,7 @@ void MainWindow::showSettingsScreen()
 
     QPushButton * backButton = new QPushButton("Back");
     backButton->setObjectName("MainWindowBackButton");
+    connect(backButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
     connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
 
     QVBoxLayout * settingsLayout = new QVBoxLayout();
@@ -148,6 +146,11 @@ void MainWindow::showSettingsScreen()
     QWidget * settingsContainer = new QWidget();
     settingsContainer->setLayout(settingsLayout);
     showWidgetOnCenter(settingsContainer);
+}
+
+void MainWindow::setAlarmsEnabledByDefault(bool newAlarmsEnabledState)
+{
+    alarmsEnabledByDefault = newAlarmsEnabledState;
 }
 
 void MainWindow::showYearsList()
@@ -216,7 +219,7 @@ void MainWindow::showExactDay(QDate date)
 
 DayBoard * MainWindow::createDayBoard()
 {
-    DayBoard * day = new DayBoard(currentlyUsedDate, this);
+    DayBoard * day = new DayBoard(currentlyUsedDate, alarmsEnabledByDefault, this);
     day->load();
 
     connect(this, SIGNAL(centralWidgetWillBeDestroyed()), day, SLOT(save()));
@@ -377,4 +380,31 @@ void MainWindow::errorReaction(QString errorText)
 {
     QMessageBox::critical(this, QString("Error"), errorText);
     close();
+}
+
+void MainWindow::saveSettings()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.settingsCheckIfExistsQuery();
+
+    if(db.recordAlreadyExists(query))
+    {
+        query = db.settingsUpdateQuery(alarmsEnabledByDefault);
+        db.execQuery(query);
+    }
+}
+
+void MainWindow::loadSettings()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.settingsCheckIfExistsQuery();
+
+    if(db.recordAlreadyExists(query))
+    {
+        query = db.settingsSelectDataQuery();
+        db.execQuery(query);
+
+        query.first();
+        alarmsEnabledByDefault = query.value(0).toBool();
+    }
 }

@@ -322,3 +322,25 @@ QSqlQuery DatabaseManager::taskSelectCurrentActivity()
     query.bindValue(":date", QDate::currentDate());
     return query;
 }
+
+QSqlQuery DatabaseManager::settingsCheckIfExistsQuery()
+{
+    QSqlQuery query;
+    query.prepare("SELECT 1 FROM settings WHERE id=0");
+    return query;
+}
+
+QSqlQuery DatabaseManager::settingsSelectDataQuery()
+{
+    QSqlQuery query;
+    query.prepare("SELECT alarms_enabled FROM settings WHERE id=0");
+    return query;
+}
+
+QSqlQuery DatabaseManager::settingsUpdateQuery(bool alarmsEnabled)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE settings SET alarms_enabled=:alarms WHERE id=0");
+    query.bindValue(":alarms", alarmsEnabled);
+    return query;
+}

@@ -60,6 +60,10 @@ public:
     QSqlQuery actvDeleteQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
 
     QSqlQuery taskSelectCurrentActivity();
+
+    QSqlQuery settingsCheckIfExistsQuery();
+    QSqlQuery settingsSelectDataQuery();
+    QSqlQuery settingsUpdateQuery(bool alarmsEnabled);
 };
 
 #endif // DATABASEMANAGER_H

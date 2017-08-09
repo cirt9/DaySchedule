@@ -13,7 +13,7 @@ private:
     QCheckBox * checkBox;
 
 public:
-    OptionWidget(QString text, QWidget * parent = nullptr);
+    OptionWidget(QString text, bool defaultValue = false, QWidget * parent = nullptr);
 
     QCheckBox * getCheckBox() const;
 };
