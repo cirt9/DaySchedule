@@ -178,6 +178,8 @@ void DayBoard::copyingConfirmed(QDate selectedDate)
         currentlyUsedDate->setDate(savedDate.year(), savedDate.month(), savedDate.day());
         assignActivitesToCurrentlyUsedDate();
         save();
+
+        updateCurrentActivity();
     }
     else
         QMessageBox::information(this, QString("Information"), QString("Day to copy doesn't exist."));

@@ -14,6 +14,10 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setCurrentlyUsedDate(QDate::currentDate());
     alarmsEnabledByDefault = false;
     taskManager.updateTask();
+    //
+    connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(counterStartCatched()));
+    connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(counterEndCatched()));
+    //
     loadSettings();
 
     clearMainWindow();
@@ -107,10 +111,7 @@ void MainWindow::showAboutScreen()
         file.close();
     }
     else
-    {
-        QMessageBox::critical(this, QString("Error"), QString("This copy of DaySchedule is corrupted."));
-        close();
-    }
+        errorReaction(QString("This copy of DaySchedule is corrupted."));
 }
 
 void MainWindow::showSettingsScreen()
@@ -407,4 +408,14 @@ void MainWindow::loadSettings()
         query.first();
         alarmsEnabledByDefault = query.value(0).toBool();
     }
+}
+
+void MainWindow::counterStartCatched()
+{
+    qDebug() << "Start catched!";
+}
+
+void MainWindow::counterEndCatched()
+{
+    qDebug() << "End catched!";
 }

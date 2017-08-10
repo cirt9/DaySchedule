@@ -80,6 +80,9 @@ public:
 public slots:
     void displayMainMenu();
 
+    void counterStartCatched();
+    void counterEndCatched();
+
 signals:
     void centralWidgetWillBeDestroyed();
 };

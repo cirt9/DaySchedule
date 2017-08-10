@@ -29,7 +29,7 @@ void TimeCounter::showCountdownTime()
 
 void TimeCounter::updateCountdownTime()
 {
-    if(countdownTime > QTime(0, 0, 0))
+    if(countdownTime > QTime(0, 0))
         countdownTime = countdownTime.addSecs(-1);
     else
     {
@@ -48,7 +48,7 @@ void TimeCounter::enterEvent(QEvent * e)
     QWidget::enterEvent(e);
 }
 
-void TimeCounter::leaveEvent(QEvent *e)
+void TimeCounter::leaveEvent(QEvent * e)
 {
     disconnect(oneSecTimer, SIGNAL(timeout()), this, SLOT(showCountdownTime()));
 

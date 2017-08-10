@@ -14,11 +14,13 @@ private:
     QTime toTime;
     QString description;
     QTimer * taskSeekingTimer;
+    //QTimer * taskEndTimer;
 
     void resetTask();
 
 private slots:
     void lookForTask();
+    //void endOfTask();
 
 public:
     TaskManager();
@@ -38,6 +40,9 @@ public slots:
 signals:
     void updated();
     void lookingForTask();
+
+    void newTaskStarted();
+    void taskEnded();
 };
 
 #endif // TASKMANAGER_H
