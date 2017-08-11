@@ -3,7 +3,6 @@
 
 #include <databasemanager.h>
 #include <QDate>
-#include <QSharedPointer>
 #include <QObject>
 
 class TaskManager : public QObject
@@ -14,13 +13,14 @@ private:
     QTime toTime;
     QString description;
     QTimer * taskSeekingTimer;
-    //QTimer * taskEndTimer;
+    QTimer * taskEndTimer;
 
     void resetTask();
+    bool taskIsntTheSame(QTime from, QTime to, QString des);
 
 private slots:
     void lookForTask();
-    //void endOfTask();
+    void endOfTask();
 
 public:
     TaskManager();
