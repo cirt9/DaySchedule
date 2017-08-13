@@ -20,7 +20,7 @@
 #include <timecounter.h>
 #include <taskmanager.h>
 #include <optionwidget.h>
-
+#include <notification.h>
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +33,7 @@ class MainWindow : public QMainWindow
 private:
     Ui::MainWindow * ui;
     QVBoxLayout * centralWidgetLayout;
+    QGridLayout * centeringLayout;
     QSharedPointer<QDate> currentlyUsedDate;
     TaskManager taskManager;
     bool alarmsEnabledByDefault;

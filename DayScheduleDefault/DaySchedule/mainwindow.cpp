@@ -10,14 +10,15 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setupDatabase();
 
     centralWidgetLayout = nullptr;
+    centeringLayout = nullptr;
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
     setCurrentlyUsedDate(QDate::currentDate());
     alarmsEnabledByDefault = false;
+
     taskManager.updateTask();
-    //
-    connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(counterStartCatched()));
-    connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(counterEndCatched()));
-    //
+    connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
+    connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
+
     loadSettings();
 
     clearMainWindow();
@@ -236,7 +237,7 @@ DayBoard * MainWindow::createDayBoard()
 
 void MainWindow::showWidgetOnCenter(QWidget * widget)
 {
-    QGridLayout * centeringLayout = new QGridLayout();
+    centeringLayout = new QGridLayout();
     QSpacerItem * leftSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
     QSpacerItem * rightSpacer = new QSpacerItem(0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -410,12 +411,19 @@ void MainWindow::loadSettings()
     }
 }
 
-void MainWindow::counterStartCatched()
+void MainWindow::taskStartCatched()
 {
     qDebug() << "Start catched!";
 }
 
-void MainWindow::counterEndCatched()
+void MainWindow::taskEndCatched()
 {
     qDebug() << "End catched!";
+    if(centeringLayout)
+    {
+        Notification * notification = new Notification(taskManager.getDescription());
+        notification->createTimeIntervalText(taskManager.getFromTime(), taskManager.getToTime());
+
+        centeringLayout->addWidget(notification, 0, 1, Qt::AlignCenter);
+    }
 }

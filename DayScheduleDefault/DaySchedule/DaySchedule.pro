@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     timecounter.cpp \
     dateselectingwidget.cpp \
     taskmanager.cpp \
-    optionwidget.cpp
+    optionwidget.cpp \
+    notification.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -50,7 +51,8 @@ HEADERS  += mainwindow.h \
     timecounter.h \
     dateselectingwidget.h \
     taskmanager.h \
-    optionwidget.h
+    optionwidget.h \
+    notification.h
 
 FORMS    += \
     mainwindow.ui

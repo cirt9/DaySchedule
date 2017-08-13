@@ -61,6 +61,66 @@ QGroupBox
 border: none;
 }
 
+/* Notifications Style */
+
+#Notification
+{
+background: rgb(255,240,235);
+border: 2px solid rgb(46, 48, 51);
+border-radius: 5px;
+}
+
+#NotificationTitle
+{
+background: rgb(51,102,153);
+color: rgb(255,240,235);
+font: bold 15px;
+border-top-left-radius: 2px;
+border-top-right-radius: 2px;
+}
+
+QTextEdit
+{
+border: none;
+background: transparent;
+}
+
+#NotificationText
+{
+background: transparent;
+color: rgb(51,102,153);
+font-size: 15px;
+}
+
+#NotificationButtonsContainer
+{
+background: rgb(51,102,153);
+border-bottom-left-radius: 2px;
+border-bottom-right-radius: 2px;
+}
+
+#NotificationButton
+{
+background: rgb(46, 48, 51);
+border: 2px solid transparent;
+border-radius: 3px;
+font-size: 15px;
+color: rgb(255,240,235);
+padding: 2px;
+}
+
+#NotificationButton:hover
+{
+background: rgb(22, 25, 27);
+border: 1px solid rgb(255,240,235);
+}
+
+#NotificationButton:pressed
+{
+border: 2px solid rgb(255,240,235);
+}
+
+
 /* OptionsWidget Style */
 
 #MainWindowOptionsContainer

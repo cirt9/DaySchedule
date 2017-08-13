@@ -16,7 +16,27 @@ void TaskManager::resetTask()
     fromTime = QTime(0, 0);
     toTime = QTime(0, 0);
     description = QString("No task");
+
     taskEndTimer->stop();
+}
+
+void TaskManager::startSeekingForTask()
+{
+    taskSeekingTimer->start(60000);
+    lookForTask();
+}
+
+void TaskManager::lookForTask()
+{
+    updateTask();
+    if(toTime == QTime(0, 0))
+        emit lookingForTask();
+}
+
+void TaskManager::endOfTask()
+{
+    taskEndTimer->stop();
+    emit taskEnded();
 }
 
 void TaskManager::updateTask()
@@ -36,6 +56,7 @@ void TaskManager::updateTask()
 
             taskSeekingTimer->stop();
             taskEndTimer->start(QTime::currentTime().msecsTo(toTime));
+
             emit updated();
             emit newTaskStarted();
         }
@@ -59,6 +80,7 @@ void TaskManager::updateTaskLive(QTime fromT, QTime toT, QString descript)
 
             taskSeekingTimer->stop();
             taskEndTimer->start(QTime::currentTime().msecsTo(toTime));
+
             emit updated();
             emit newTaskStarted();
         }
@@ -76,25 +98,6 @@ bool TaskManager::taskIsntTheSame(QTime from, QTime to, QString des)
         return true;
 
     return false;
-}
-
-void TaskManager::startSeekingForTask()
-{
-    taskSeekingTimer->start(60000);
-    lookForTask();
-}
-
-void TaskManager::lookForTask()
-{
-    updateTask();
-    if(toTime == QTime(0, 0))
-        emit lookingForTask();
-}
-
-void TaskManager::endOfTask()
-{
-    taskEndTimer->stop();
-    emit taskEnded();
 }
 
 QTime TaskManager::getFromTime() const
