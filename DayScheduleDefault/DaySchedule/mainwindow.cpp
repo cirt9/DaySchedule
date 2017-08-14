@@ -418,12 +418,25 @@ void MainWindow::taskStartCatched()
 
 void MainWindow::taskEndCatched()
 {
-    qDebug() << "End catched!";
     if(centeringLayout)
     {
         Notification * notification = new Notification(taskManager.getDescription());
         notification->createTimeIntervalText(taskManager.getFromTime(), taskManager.getToTime());
+        notification->setLeftButtonText("More");
+        notification->setRightButtonText("Got it");
+
+        connect(notification, &Notification::leftButtonClicked, this,
+                [=]{showExactDay(QDate::currentDate());} );
+
+        connect(notification, &Notification::rightButtonClicked, this,
+                [=]{closeNotification(notification);} );
 
         centeringLayout->addWidget(notification, 0, 1, Qt::AlignCenter);
     }
+}
+
+void MainWindow::closeNotification(Notification * notification)
+{
+    centeringLayout->removeWidget(notification);
+    notification->deleteLater();
 }

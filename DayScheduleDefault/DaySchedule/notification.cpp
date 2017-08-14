@@ -5,6 +5,9 @@ Notification::Notification(QString description, QWidget * parent) : QGroupBox(pa
     setFixedSize(300, 220);
     setObjectName("Notification");
     intervalTextAlreadyExists = false;
+    leftButton = rightButton = nullptr;
+
+    createShadow();
 
     notificationLayout = new QVBoxLayout();
     notificationLayout->setContentsMargins(2, 2, 2, 2);
@@ -27,6 +30,17 @@ Notification::Notification(QString description, QWidget * parent) : QGroupBox(pa
     notificationLayout->setAlignment(descriptionText, Qt::AlignCenter);
     notificationLayout->addWidget(buttons);
     notificationLayout->setAlignment(buttons, Qt::AlignBottom);
+}
+
+void Notification::createShadow()
+{
+    QGraphicsDropShadowEffect * shadow = new QGraphicsDropShadowEffect();
+    shadow->setBlurRadius(15);
+    shadow->setXOffset(4);
+    shadow->setYOffset(4);
+    shadow->setColor(Qt::black);
+
+    setGraphicsEffect(shadow);
 }
 
 void Notification::createTimeIntervalText(QTime from, QTime to)
@@ -52,15 +66,25 @@ QWidget * Notification::createButtons()
     buttonsContainer->setLayout(buttonsLayout);
     buttonsContainer->setObjectName("NotificationButtonsContainer");
 
-    QPushButton * moreInfoButton = new QPushButton("More info");
-    moreInfoButton->setObjectName("NotificationButton");
-    buttonsLayout->addWidget(moreInfoButton);
-    connect(moreInfoButton, SIGNAL(clicked()), this, SIGNAL(leftButtonClicked()));
+    leftButton = new QPushButton();
+    leftButton->setObjectName("NotificationButton");
+    buttonsLayout->addWidget(leftButton);
+    connect(leftButton, SIGNAL(clicked()), this, SIGNAL(leftButtonClicked()));
 
-    QPushButton * okButton = new QPushButton("Got it");
-    okButton->setObjectName("NotificationButton");
-    buttonsLayout->addWidget(okButton);
-    connect(okButton, SIGNAL(clicked()), this, SIGNAL(rightButtonClicked()));
+    rightButton = new QPushButton();
+    rightButton->setObjectName("NotificationButton");
+    buttonsLayout->addWidget(rightButton);
+    connect(rightButton, SIGNAL(clicked()), this, SIGNAL(rightButtonClicked()));
 
     return buttonsContainer;
+}
+
+void Notification::setLeftButtonText(QString text)
+{
+    leftButton->setText(text);
+}
+
+void Notification::setRightButtonText(QString text)
+{
+    rightButton->setText(text);
 }

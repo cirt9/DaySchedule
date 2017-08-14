@@ -74,6 +74,8 @@ private slots:
     void saveSettings();
     void loadSettings();
 
+    void closeNotification(Notification * notification);
+
 public:
     explicit MainWindow(QWidget * parent = nullptr);
     ~MainWindow();

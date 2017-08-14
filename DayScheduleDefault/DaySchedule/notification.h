@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <QTime>
+#include <QGraphicsDropShadowEffect>
 
 class Notification : public QGroupBox
 {
@@ -15,14 +16,19 @@ class Notification : public QGroupBox
 
 private:
     QVBoxLayout * notificationLayout;
+    QPushButton * leftButton;
+    QPushButton * rightButton;
     bool intervalTextAlreadyExists;
 
+    void createShadow();
     QWidget * createButtons();
 
 public:
     explicit Notification(QString description, QWidget * parent = 0);
 
     void createTimeIntervalText(QTime from, QTime to);
+    void setLeftButtonText(QString text);
+    void setRightButtonText(QString text);
 
 signals:
     void leftButtonClicked();
