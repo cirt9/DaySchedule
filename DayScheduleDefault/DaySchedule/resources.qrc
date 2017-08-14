@@ -20,4 +20,7 @@
     <qresource prefix="/txt">
         <file>about.txt</file>
     </qresource>
+    <qresource prefix="/sounds">
+        <file>notification_sound.wav</file>
+    </qresource>
 </RCC>

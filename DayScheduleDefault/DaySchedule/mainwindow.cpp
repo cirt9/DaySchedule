@@ -420,6 +420,8 @@ void MainWindow::taskEndCatched()
 {
     if(centeringLayout)
     {
+        QSound::play(":/sounds/notification_sound.wav");
+
         Notification * notification = new Notification(taskManager.getDescription());
         notification->createTimeIntervalText(taskManager.getFromTime(), taskManager.getToTime());
         notification->setLeftButtonText("More");

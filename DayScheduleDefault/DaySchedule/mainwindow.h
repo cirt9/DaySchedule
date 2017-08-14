@@ -21,6 +21,7 @@
 #include <taskmanager.h>
 #include <optionwidget.h>
 #include <notification.h>
+#include <QSound>
 
 namespace Ui {
 class MainWindow;
