@@ -64,6 +64,8 @@ public:
     QSqlQuery settingsCheckIfExistsQuery();
     QSqlQuery settingsSelectDataQuery();
     QSqlQuery settingsUpdateQuery(bool alarmsEnabled);
+
+    bool getAlarmsStateForToday();
 };
 
 #endif // DATABASEMANAGER_H

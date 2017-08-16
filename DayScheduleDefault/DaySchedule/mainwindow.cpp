@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
     setupDatabase();
+    initializeTraySystem();
 
     centralWidgetLayout = nullptr;
     centeringLayout = nullptr;
@@ -33,6 +34,31 @@ void MainWindow::setupDatabase()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.connect("db.dsch");
+}
+
+void MainWindow::initializeTraySystem()
+{
+    traySystem = new QSystemTrayIcon(this);
+
+    traySystem->setIcon(QIcon(":/icons/icons/trayicon.jpg"));
+    traySystem->show();
+
+    QAction * showAction = new QAction("Show", this);
+    connect(showAction, SIGNAL(triggered()), this, SLOT(showMaximized()));
+
+    QAction * hideAction = new QAction("Hide", this);
+    connect(hideAction, SIGNAL(triggered()), this, SLOT(hide()));
+
+    QAction * quitAction = new QAction("Quit", this);
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
+
+    QMenu * traySystemMenu = new QMenu(this);
+    traySystemMenu->addAction(showAction);
+    traySystemMenu->addAction(hideAction);
+    traySystemMenu->addSeparator();
+    traySystemMenu->addAction(quitAction);
+
+    traySystem->setContextMenu(traySystemMenu);
 }
 
 void MainWindow::setCurrentlyUsedDate(QDate date)
@@ -413,14 +439,20 @@ void MainWindow::loadSettings()
 
 void MainWindow::taskStartCatched()
 {
-    qDebug() << "Start catched!";
+    QString messageTitle = "Task started " + taskManager.getFromTime().toString("hh:mm") +
+                    " - " + taskManager.getToTime().toString("hh:mm");
+
+    traySystem->showMessage(messageTitle, taskManager.getDescription());
 }
 
 void MainWindow::taskEndCatched()
 {
     if(centeringLayout)
     {
-        QSound::play(":/sounds/notification_sound.wav");
+        DatabaseManager & db = DatabaseManager::getInstance();
+
+        if(db.getAlarmsStateForToday())
+            QSound::play(":/sounds/sounds/notification_sound.wav");
 
         Notification * notification = new Notification(taskManager.getDescription());
         notification->createTimeIntervalText(taskManager.getFromTime(), taskManager.getToTime());

@@ -13,6 +13,7 @@
         <file>icons/ready.jpg</file>
         <file>icons/readyHover.jpg</file>
         <file>icons/readyPressed.jpg</file>
+        <file>icons/trayicon.jpg</file>
     </qresource>
     <qresource prefix="/style">
         <file>style.css</file>
@@ -21,6 +22,6 @@
         <file>about.txt</file>
     </qresource>
     <qresource prefix="/sounds">
-        <file>notification_sound.wav</file>
+        <file>sounds/notification_sound.wav</file>
     </qresource>
 </RCC>

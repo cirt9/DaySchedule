@@ -22,6 +22,7 @@
 #include <optionwidget.h>
 #include <notification.h>
 #include <QSound>
+#include <QSystemTrayIcon>
 
 namespace Ui {
 class MainWindow;
@@ -38,6 +39,7 @@ private:
     QSharedPointer<QDate> currentlyUsedDate;
     TaskManager taskManager;
     bool alarmsEnabledByDefault;
+    QSystemTrayIcon * traySystem;
 
     void setMenuIcons(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
@@ -58,6 +60,7 @@ private:
     TimeCounter * createTimeCounter();
 
     void setupDatabase();
+    void initializeTraySystem();
 
 private slots:
     void errorReaction(QString errorText);
@@ -75,6 +78,8 @@ private slots:
     void saveSettings();
     void loadSettings();
 
+    void taskStartCatched();
+    void taskEndCatched();
     void closeNotification(Notification * notification);
 
 public:
@@ -83,9 +88,6 @@ public:
 
 public slots:
     void displayMainMenu();
-
-    void taskStartCatched();
-    void taskEndCatched();
 
 signals:
     void centralWidgetWillBeDestroyed();

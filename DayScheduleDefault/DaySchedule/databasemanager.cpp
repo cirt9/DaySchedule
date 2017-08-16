@@ -344,3 +344,14 @@ QSqlQuery DatabaseManager::settingsUpdateQuery(bool alarmsEnabled)
     query.bindValue(":alarms", alarmsEnabled);
     return query;
 }
+
+bool DatabaseManager::getAlarmsStateForToday()
+{
+    QSqlQuery query;
+    query.prepare("SELECT alarms_enabled FROM day WHERE day_id=:id");
+    query.bindValue(":id", QDate::currentDate());
+    execQuery(query);
+    query.first();
+
+    return query.value(0).toBool();
+}
