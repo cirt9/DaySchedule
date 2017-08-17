@@ -62,6 +62,8 @@ private:
     void setupDatabase();
     void initializeTraySystem();
 
+    bool eventFilter(QObject * obj, QEvent * event);
+
 private slots:
     void errorReaction(QString errorText);
 
@@ -81,6 +83,7 @@ private slots:
     void taskStartCatched();
     void taskEndCatched();
     void closeNotification(Notification * notification);
+    void activateDoubleClickForTray(QSystemTrayIcon::ActivationReason reason);
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

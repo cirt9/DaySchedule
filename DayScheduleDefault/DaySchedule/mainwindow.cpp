@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setWindowState(Qt::WindowMaximized);
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
+    installEventFilter(this);
     setupDatabase();
     initializeTraySystem();
 
@@ -21,7 +22,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
 
     loadSettings();
-
     clearMainWindow();
 }
 
@@ -39,6 +39,8 @@ void MainWindow::setupDatabase()
 void MainWindow::initializeTraySystem()
 {
     traySystem = new QSystemTrayIcon(this);
+    connect(traySystem, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+    this, SLOT(activateDoubleClickForTray(QSystemTrayIcon::ActivationReason)));
 
     traySystem->setIcon(QIcon(":/icons/icons/trayicon.jpg"));
     traySystem->show();
@@ -50,7 +52,7 @@ void MainWindow::initializeTraySystem()
     connect(hideAction, SIGNAL(triggered()), this, SLOT(hide()));
 
     QAction * quitAction = new QAction("Quit", this);
-    connect(quitAction, SIGNAL(triggered()), this, SLOT(close()));
+    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
     QMenu * traySystemMenu = new QMenu(this);
     traySystemMenu->addAction(showAction);
@@ -59,6 +61,12 @@ void MainWindow::initializeTraySystem()
     traySystemMenu->addAction(quitAction);
 
     traySystem->setContextMenu(traySystemMenu);
+}
+
+void MainWindow::activateDoubleClickForTray(QSystemTrayIcon::ActivationReason reason)
+{
+    if(reason == QSystemTrayIcon::DoubleClick)
+        this->show();
 }
 
 void MainWindow::setCurrentlyUsedDate(QDate date)
@@ -99,7 +107,7 @@ void MainWindow::setMenuIcons(MainMenu * menu)
 
 void MainWindow::connectMenuToSlots(MainMenu * menu)
 {
-    connect(menu->getBottomButton(), SIGNAL(clicked()), this, SLOT(close()));
+    connect(menu->getBottomButton(), SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(menu->getLeftButton(), SIGNAL(clicked()), this, SLOT(showAboutScreen()));
     connect(menu->getRightButton(), SIGNAL(clicked()), this, SLOT(showSettingsScreen()));
     connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(showYearsList()));
@@ -407,6 +415,7 @@ void MainWindow::clearMainWindow()
 void MainWindow::errorReaction(QString errorText)
 {
     QMessageBox::critical(this, QString("Error"), errorText);
+    removeEventFilter(this);
     close();
 }
 
@@ -473,4 +482,16 @@ void MainWindow::closeNotification(Notification * notification)
 {
     centeringLayout->removeWidget(notification);
     notification->deleteLater();
+}
+
+bool MainWindow::eventFilter(QObject * obj, QEvent * event)
+{
+    if (event->type() == QEvent::Close)
+    {
+        event->ignore();
+        hide();
+
+        return true;
+    }
+    return QMainWindow::eventFilter(obj, event);
 }
