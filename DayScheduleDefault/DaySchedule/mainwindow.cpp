@@ -115,7 +115,7 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
 
 void MainWindow::showAboutScreen()
 {
-    QFile file(":/txt/about.txt");
+    /*QFile file(":/txt/about.txt");
 
     if(file.open(QIODevice::ReadOnly))
     {
@@ -146,7 +146,11 @@ void MainWindow::showAboutScreen()
         file.close();
     }
     else
-        errorReaction(QString("This copy of DaySchedule is corrupted."));
+        errorReaction(QString("This copy of DaySchedule is corrupted."));*/
+
+    resetCentralWidget();
+    Statistics * stats = new Statistics();
+    showWidgetOnCenter(stats);
 }
 
 void MainWindow::showSettingsScreen()
@@ -156,6 +160,7 @@ void MainWindow::showSettingsScreen()
     QLabel * settingsTitle = new QLabel("Settings");
     settingsTitle->setObjectName("MainWindowTitle");
     settingsTitle->setAlignment(Qt::AlignCenter);
+    settingsTitle->setMinimumWidth(520);
 
     OptionWidget * alarmsOption = new OptionWidget("Alarms enabled by default", alarmsEnabledByDefault);
     connect(alarmsOption->getCheckBox(), SIGNAL(toggled(bool)), this, SLOT(setAlarmsEnabledByDefault(bool)));

@@ -25,6 +25,7 @@ private:
     int currentActivityIndex;
     QSharedPointer<TimeRangeSystem> timeSystem;
     QGroupBox * footerButtonsBarContainer;
+    bool defaultAlarmsEnabledState;
 
     QLabel * progress;
     QCheckBox * alarmsButton;
@@ -42,6 +43,7 @@ private:
 
     void deleteCopyDateSelectingWidget();
     bool somethingChanged();
+    bool defaultValuesChanged();
     int getProgress();
 
     void saveActivities();

@@ -61,6 +61,22 @@ QGroupBox
 border: none;
 }
 
+/* Statistics Style */
+#Statistics
+{
+border-radius: 3px;
+background: rgb(255,240,235);
+}
+
+#StatisticsTitle
+{
+background: rgb(51,102,153);
+font-size: 35px;
+color: rgb(255,240,235);
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+}
+
 /* Notifications Style */
 
 #Notification

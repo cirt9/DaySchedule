@@ -15,6 +15,7 @@ class MonthBoard : public BoardTemplate
 private:
     static const int MAX_ROW_SIZE = 7;
     int maxNumberOfCards;
+    QString defaultFooterDescription;
 
     QString createHeaderDate();
 

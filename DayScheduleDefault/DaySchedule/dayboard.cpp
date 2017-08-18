@@ -6,12 +6,13 @@ BoardTemplate(currUsedDate, parent), timeSystem(new TimeRangeSystem)
     progress = nullptr;
     footerButtonsBarContainer = nullptr;
     currentActivityIndex = -1;
+    defaultAlarmsEnabledState = alarmsEnabled;
 
     createDateAndProgressLayout();
     createActivitiesLayout();
     createBottomMenuLayout();
 
-    alarmsButton->setChecked(alarmsEnabled);
+    alarmsButton->setChecked(defaultAlarmsEnabledState);
 }
 
 void DayBoard::createDateAndProgressLayout()
@@ -302,11 +303,14 @@ void DayBoard::save()
     }
     else
     {
-        query = db.dayInsertQuery(*currentlyUsedDate,
-                                  getProgress(),
-                                  alarmsButton->isChecked());
-        db.execQuery(query);
-        saveActivities();
+        if(defaultValuesChanged())
+        {
+            query = db.dayInsertQuery(*currentlyUsedDate,
+                                      getProgress(),
+                                      alarmsButton->isChecked());
+            db.execQuery(query);
+            saveActivities();
+        }
     }
 
 }
@@ -344,6 +348,16 @@ bool DayBoard::somethingChanged()
     {
         if(query.value(1).toBool() == alarmsButton->isChecked())
             return false;
+    }
+    return true;
+}
+
+bool DayBoard::defaultValuesChanged()
+{
+    if(alarmsButton->isChecked() == defaultAlarmsEnabledState &&
+       getProgress() == 0 && activities.size() == 0)
+    {
+        return false;
     }
     return true;
 }
