@@ -149,7 +149,13 @@ void MainWindow::showAboutScreen()
         errorReaction(QString("This copy of DaySchedule is corrupted."));*/
 
     resetCentralWidget();
-    Statistics * stats = new Statistics();
+    StatsWidget * stats = new StatsWidget("Title", "Success rate: 73%");
+    stats->createStat("Number of productive days:", "134");
+    stats->createStat("Best year:", "2017");
+    stats->createStat("Succeeded activities:", "431");
+    stats->createStat("Failed activities:", "159");
+    stats->createStat("Blank activities:", "13");
+
     showWidgetOnCenter(stats);
 }
 

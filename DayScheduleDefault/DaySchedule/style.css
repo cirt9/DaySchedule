@@ -62,19 +62,44 @@ border: none;
 }
 
 /* Statistics Style */
-#Statistics
+#StatsWidget
 {
 border-radius: 3px;
 background: rgb(255,240,235);
 }
 
-#StatisticsTitle
+#StatsHeader
 {
 background: rgb(51,102,153);
-font-size: 35px;
+font: bold 35px;
 color: rgb(255,240,235);
 border-top-left-radius: 3px;
 border-top-right-radius: 3px;
+}
+
+#StatsFooter
+{
+background: rgb(51,102,153);
+font: 35px;
+color: rgb(255,240,235);
+border-bottom-left-radius: 3px;
+border-bottom-right-radius: 3px;
+}
+
+#StatsStatText
+{
+background: transparent;
+font: bold 25px;
+color: rgb(51,102,153);
+border-bottom: 2px dashed rgb(51,102,153);
+}
+
+#StatsStatData
+{
+background: transparent;
+font: 25px;
+color: rgb(51,102,153);
+border-bottom: 2px dashed rgb(51,102,153);
 }
 
 /* Notifications Style */

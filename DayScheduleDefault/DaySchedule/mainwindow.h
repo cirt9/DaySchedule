@@ -23,7 +23,7 @@
 #include <notification.h>
 #include <QSound>
 #include <QSystemTrayIcon>
-#include <statistics.h>
+#include <statswidget.h>
 
 namespace Ui {
 class MainWindow;
