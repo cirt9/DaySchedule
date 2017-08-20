@@ -345,6 +345,32 @@ QSqlQuery DatabaseManager::settingsUpdateQuery(bool alarmsEnabled)
     return query;
 }
 
+QSqlQuery DatabaseManager::statsSelectProductiveDaysNumber()
+{
+    QSqlQuery query;
+    query.prepare("select count(*) from "
+                  "(SELECT day.day_id FROM day "
+                  "INNER JOIN activity ON day.day_id = activity.day_id "
+                  "WHERE activity.state = 'success' "
+                  "GROUP BY day.day_id "
+                  "HAVING count(activity.state) > 0"
+                  ") productive_days;");
+    return query;
+}
+
+QSqlQuery DatabaseManager::statsCountActivitiesStates()
+{
+    QSqlQuery query;
+    query.prepare("SELECT "
+                  "(SELECT count(*) FROM activity "
+                  "WHERE state = 'success') succeeded, "
+                  "(SELECT count(*) FROM activity "
+                  "WHERE state = 'fail') failed, "
+                  "(SELECT count(*) FROM activity "
+                  "WHERE state = 'active') blank;");
+    return query;
+}
+
 bool DatabaseManager::getAlarmsStateForToday()
 {
     QSqlQuery query;

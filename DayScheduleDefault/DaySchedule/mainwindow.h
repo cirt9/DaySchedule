@@ -73,6 +73,7 @@ private slots:
     void showMonth();
     void showDay();
     void showExactDay(QDate date);
+    void showResults();
 
     void showAboutScreen();
     void showSettingsScreen();

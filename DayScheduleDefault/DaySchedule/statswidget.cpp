@@ -3,6 +3,7 @@
 StatsWidget::StatsWidget(QString headerText, QString footerText, QWidget * parent) : QGroupBox(parent)
 {
     setObjectName("StatsWidget");
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     layout = new QVBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);

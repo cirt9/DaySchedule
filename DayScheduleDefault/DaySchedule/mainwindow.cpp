@@ -115,7 +115,7 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
 
 void MainWindow::showAboutScreen()
 {
-    /*QFile file(":/txt/about.txt");
+    QFile file(":/txt/about.txt");
 
     if(file.open(QIODevice::ReadOnly))
     {
@@ -146,17 +146,7 @@ void MainWindow::showAboutScreen()
         file.close();
     }
     else
-        errorReaction(QString("This copy of DaySchedule is corrupted."));*/
-
-    resetCentralWidget();
-    StatsWidget * stats = new StatsWidget("Title", "Success rate: 73%");
-    stats->createStat("Number of productive days:", "134");
-    stats->createStat("Best year:", "2017");
-    stats->createStat("Succeeded activities:", "431");
-    stats->createStat("Failed activities:", "159");
-    stats->createStat("Blank activities:", "13");
-
-    showWidgetOnCenter(stats);
+        errorReaction(QString("This copy of DaySchedule is corrupted."));
 }
 
 void MainWindow::showSettingsScreen()
@@ -280,6 +270,35 @@ DayBoard * MainWindow::createDayBoard()
     return day;
 }
 
+void MainWindow::showResults()
+{
+    resetCentralWidget();
+    showMenuBar();
+
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.statsCountActivitiesStates();
+    db.execQuery(query);
+    query.first();
+    int succeeded = query.value(0).toInt();
+    int failed = query.value(1).toInt();
+    int blank = query.value(2).toInt();
+    int successRate = succeeded * 100 / (succeeded + failed);
+
+    query = db.statsSelectProductiveDaysNumber();
+    db.execQuery(query);
+    query.first();
+    int numberOfProductiveDays = query.value(0).toInt();
+
+    StatsWidget * stats = new StatsWidget("Title", "Success rate: " + QString::number(successRate) + "%");
+    stats->createStat("Number of productive days:", QString::number(numberOfProductiveDays));
+    stats->createStat("Best year:", "2017");
+    stats->createStat("Succeeded activities:", QString::number(succeeded));
+    stats->createStat("Failed activities:", QString::number(failed));
+    stats->createStat("Blank activities:", QString::number(blank));
+
+    showWidgetOnCenter(stats);
+}
+
 void MainWindow::showWidgetOnCenter(QWidget * widget)
 {
     centeringLayout = new QGridLayout();
@@ -308,10 +327,12 @@ void MainWindow::showMenuBar()
         menuBar->addWidget(pagesButton);
 
         TimeCounter * timeCounter = createTimeCounter();
+        connect(timeCounter, &TimeCounter::clicked, this, [=]{showExactDay(QDate::currentDate());} );
         menuBar->addWidget(timeCounter, 180);
 
         QPushButton * resultsButton = new QPushButton(QString("Results"));
         resultsButton->setObjectName("BarMiddleWidget");
+        connect(resultsButton, SIGNAL(clicked()), this, SLOT(showResults()));
         menuBar->addWidget(resultsButton);
 
         QPushButton * saveButton = new QPushButton(QString("Save"));

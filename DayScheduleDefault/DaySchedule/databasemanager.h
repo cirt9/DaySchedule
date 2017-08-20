@@ -65,6 +65,9 @@ public:
     QSqlQuery settingsSelectDataQuery();
     QSqlQuery settingsUpdateQuery(bool alarmsEnabled);
 
+    QSqlQuery statsSelectProductiveDaysNumber();
+    QSqlQuery statsCountActivitiesStates();
+
     bool getAlarmsStateForToday();
 };
 
