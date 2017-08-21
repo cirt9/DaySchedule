@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     taskmanager.cpp \
     optionwidget.cpp \
     notification.cpp \
-    statswidget.cpp
+    statswidget.cpp \
+    statistics.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     taskmanager.h \
     optionwidget.h \
     notification.h \
-    statswidget.h
+    statswidget.h \
+    statistics.h
 
 FORMS    += \
     mainwindow.ui

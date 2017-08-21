@@ -16,6 +16,7 @@ private:
 
 public:
     explicit StatsWidget(QString headerText, QString footerText, QWidget * parent = nullptr);
+    ~StatsWidget() {}
 
     void createStat(QString description, QString value);
 };

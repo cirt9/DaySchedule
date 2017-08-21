@@ -14,6 +14,7 @@ private:
 
 public:
     OptionWidget(QString text, bool defaultValue = false, QWidget * parent = nullptr);
+    ~OptionWidget() {}
 
     QCheckBox * getCheckBox() const;
 };

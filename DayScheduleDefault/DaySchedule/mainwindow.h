@@ -24,6 +24,7 @@
 #include <QSound>
 #include <QSystemTrayIcon>
 #include <statswidget.h>
+#include <statistics.h>
 
 namespace Ui {
 class MainWindow;
@@ -62,6 +63,7 @@ private:
 
     void setupDatabase();
     void initializeTraySystem();
+    QString getResultsTitle(int successRate);
 
     bool eventFilter(QObject * obj, QEvent * event);
 

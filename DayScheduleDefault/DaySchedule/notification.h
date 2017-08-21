@@ -25,6 +25,7 @@ private:
 
 public:
     explicit Notification(QString description, QWidget * parent = 0);
+    ~Notification() {}
 
     void createTimeIntervalText(QTime from, QTime to);
     void setLeftButtonText(QString text);

@@ -275,28 +275,38 @@ void MainWindow::showResults()
     resetCentralWidget();
     showMenuBar();
 
-    DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.statsCountActivitiesStates();
-    db.execQuery(query);
-    query.first();
-    int succeeded = query.value(0).toInt();
-    int failed = query.value(1).toInt();
-    int blank = query.value(2).toInt();
-    int successRate = succeeded * 100 / (succeeded + failed);
+    Statistics statistics;
 
-    query = db.statsSelectProductiveDaysNumber();
-    db.execQuery(query);
-    query.first();
-    int numberOfProductiveDays = query.value(0).toInt();
+    QString succeeded = QString::number(statistics.getNumberOfSucceededActivities());
+    QString failed = QString::number(statistics.getNumberOfFailedActivities());
+    QString blank = QString::number(statistics.getNumberOfBlankActivities());
+    QString productiveDays = QString::number(statistics.getNumberOfProductiveDays());
+    QString bestYear = statistics.getBestYear();
+    int successRate = statistics.getSuccessRate();
 
-    StatsWidget * stats = new StatsWidget("Title", "Success rate: " + QString::number(successRate) + "%");
-    stats->createStat("Number of productive days:", QString::number(numberOfProductiveDays));
-    stats->createStat("Best year:", "2017");
-    stats->createStat("Succeeded activities:", QString::number(succeeded));
-    stats->createStat("Failed activities:", QString::number(failed));
-    stats->createStat("Blank activities:", QString::number(blank));
+    StatsWidget * stats = new StatsWidget(getResultsTitle(successRate),
+                                          "Success rate: " + QString::number(successRate) + "%");
+    stats->createStat("Number of productive days:", productiveDays);
+    stats->createStat("Best year:", bestYear);
+    stats->createStat("Succeeded activities:", succeeded);
+    stats->createStat("Failed activities:", failed);
+    stats->createStat("Blank activities:", blank);
 
     showWidgetOnCenter(stats);
+}
+
+QString MainWindow::getResultsTitle(int successRate)
+{
+    if(successRate < 25)
+        return QString("Don't stop!");
+    else if(successRate < 50)
+        return QString("Not bad");
+    else if(successRate < 75)
+        return QString("You are doing great");
+    else if(successRate < 100)
+        return QString("Wow!");
+    else
+        return QString("Perfection");
 }
 
 void MainWindow::showWidgetOnCenter(QWidget * widget)

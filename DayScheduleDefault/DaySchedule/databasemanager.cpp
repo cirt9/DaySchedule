@@ -348,7 +348,7 @@ QSqlQuery DatabaseManager::settingsUpdateQuery(bool alarmsEnabled)
 QSqlQuery DatabaseManager::statsSelectProductiveDaysNumber()
 {
     QSqlQuery query;
-    query.prepare("select count(*) from "
+    query.prepare("SELECT count(*) FROM "
                   "(SELECT day.day_id FROM day "
                   "INNER JOIN activity ON day.day_id = activity.day_id "
                   "WHERE activity.state = 'success' "
@@ -368,6 +368,17 @@ QSqlQuery DatabaseManager::statsCountActivitiesStates()
                   "WHERE state = 'fail') failed, "
                   "(SELECT count(*) FROM activity "
                   "WHERE state = 'active') blank;");
+    return query;
+}
+
+QSqlQuery DatabaseManager::statsSelectBestYear()
+{
+    QSqlQuery query;
+    query.prepare("SELECT year FROM "
+                  "(SELECT strftime('%Y', day_id)year, count(*)succeeded FROM activity "
+                  "WHERE year IN (SELECT DISTINCT strftime('%Y', day_id)year  FROM activity) "
+                  "AND state = 'success' "
+                  "GROUP BY year ORDER BY succeeded desc LIMIT 1)");
     return query;
 }
 

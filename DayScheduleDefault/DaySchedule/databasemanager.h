@@ -67,6 +67,7 @@ public:
 
     QSqlQuery statsSelectProductiveDaysNumber();
     QSqlQuery statsCountActivitiesStates();
+    QSqlQuery statsSelectBestYear();
 
     bool getAlarmsStateForToday();
 };
