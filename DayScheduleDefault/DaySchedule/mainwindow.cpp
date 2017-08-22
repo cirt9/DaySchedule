@@ -33,7 +33,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupDatabase()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    db.connect("db.dsch");
+    db.connect("profiles//default.dsch");
 }
 
 void MainWindow::initializeTraySystem()
@@ -463,28 +463,32 @@ void MainWindow::errorReaction(QString errorText)
 
 void MainWindow::saveSettings()
 {
-    DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.settingsCheckIfExistsQuery();
-
-    if(db.recordAlreadyExists(query))
+    QFile inputFile("settings.dat");
+    if(inputFile.open(QIODevice::WriteOnly))
     {
-        query = db.settingsUpdateQuery(alarmsEnabledByDefault);
-        db.execQuery(query);
+        QDataStream settings(&inputFile);
+        settings << alarmsEnabledByDefault;
+
+        inputFile.close();
     }
 }
 
 void MainWindow::loadSettings()
 {
-    DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.settingsCheckIfExistsQuery();
+    QFile inputFile("settings.dat");
 
-    if(db.recordAlreadyExists(query))
+    if(inputFile.open(QIODevice::ReadOnly))
     {
-        query = db.settingsSelectDataQuery();
-        db.execQuery(query);
+       QDataStream settings(&inputFile);
+       settings >> alarmsEnabledByDefault;
 
-        query.first();
-        alarmsEnabledByDefault = query.value(0).toBool();
+       inputFile.close();
+    }
+    else
+    {
+        QFile makeFile("settings.dat");
+        makeFile.open(QIODevice::WriteOnly);
+        makeFile.close();
     }
 }
 

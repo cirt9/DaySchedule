@@ -23,7 +23,10 @@ void Statistics::update()
     query = db.statsSelectBestYear();
     db.execQuery(query);
     query.first();
-    bestYear = query.value(0).toString();
+    if(query.isValid())
+        bestYear = query.value(0).toString();
+    else
+        bestYear = QString("No Data");
 }
 
 int Statistics::getNumberOfSucceededActivities() const

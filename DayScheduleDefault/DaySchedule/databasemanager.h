@@ -16,6 +16,9 @@ private:
 
     bool alreadyConnected();
 
+    void resetDatabaseToDefault();
+    void vacuumDatabase();
+
 public:
     DatabaseManager(DatabaseManager const &) = delete;
     void operator=(DatabaseManager const &) = delete;
@@ -60,10 +63,6 @@ public:
     QSqlQuery actvDeleteQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);
 
     QSqlQuery taskSelectCurrentActivity();
-
-    QSqlQuery settingsCheckIfExistsQuery();
-    QSqlQuery settingsSelectDataQuery();
-    QSqlQuery settingsUpdateQuery(bool alarmsEnabled);
 
     QSqlQuery statsSelectProductiveDaysNumber();
     QSqlQuery statsCountActivitiesStates();

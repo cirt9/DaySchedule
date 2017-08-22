@@ -14,17 +14,29 @@ DatabaseManager::~DatabaseManager()
     database.close();
 }
 
-bool DatabaseManager::alreadyConnected()
+void DatabaseManager::resetDatabaseToDefault()
 {
-    if(database.isOpen())
-    {
-        QSqlQuery query(database);
-        query.prepare("SELECT 1 FROM years");
+    QSqlQuery query;
 
-        if(query.exec())
-            return true;
-    }
-    return false;
+    query.prepare("DELETE FROM activity");
+    execQuery(query);
+    query.prepare("DELETE FROM day");
+    execQuery(query);
+    query.prepare("DELETE FROM month");
+    execQuery(query);
+    query.prepare("DELETE FROM year");
+    execQuery(query);
+    query.prepare("DELETE FROM years");
+    execQuery(query);
+
+    vacuumDatabase();
+}
+
+void DatabaseManager::vacuumDatabase()
+{
+    QSqlQuery query;
+    query.prepare("VACUUM");
+    execQuery(query);
 }
 
 void DatabaseManager::connect(QString databaseAddress)
@@ -48,6 +60,19 @@ void DatabaseManager::connect(QString databaseAddress)
     }
     else
         qDebug() << "Already connected";
+}
+
+bool DatabaseManager::alreadyConnected()
+{
+    if(database.isOpen())
+    {
+        QSqlQuery query(database);
+        query.prepare("SELECT 1 FROM years");
+
+        if(query.exec())
+            return true;
+    }
+    return false;
 }
 
 void DatabaseManager::closeDatabase()
@@ -320,28 +345,6 @@ QSqlQuery DatabaseManager::taskSelectCurrentActivity()
                   "AND day_id = :date AND state = 'active'");
     query.bindValue(":time", QTime::currentTime());
     query.bindValue(":date", QDate::currentDate());
-    return query;
-}
-
-QSqlQuery DatabaseManager::settingsCheckIfExistsQuery()
-{
-    QSqlQuery query;
-    query.prepare("SELECT 1 FROM settings WHERE id=0");
-    return query;
-}
-
-QSqlQuery DatabaseManager::settingsSelectDataQuery()
-{
-    QSqlQuery query;
-    query.prepare("SELECT alarms_enabled FROM settings WHERE id=0");
-    return query;
-}
-
-QSqlQuery DatabaseManager::settingsUpdateQuery(bool alarmsEnabled)
-{
-    QSqlQuery query;
-    query.prepare("UPDATE settings SET alarms_enabled=:alarms WHERE id=0");
-    query.bindValue(":alarms", alarmsEnabled);
     return query;
 }
 
