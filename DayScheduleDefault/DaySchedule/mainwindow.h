@@ -61,14 +61,19 @@ private:
     DayBoard * createDayBoard();
     TimeCounter * createTimeCounter();
 
-    void setupDatabase();
+    void setupDatabase(QString fileName);
     void initializeTraySystem();
     QString getResultsTitle(int successRate);
+
+    void vacuumApp();
 
     bool eventFilter(QObject * obj, QEvent * event);
 
 private slots:
     void errorReaction(QString errorText);
+
+    void start();
+    void startLoaded();
 
     void showYearsList();
     void showYear();

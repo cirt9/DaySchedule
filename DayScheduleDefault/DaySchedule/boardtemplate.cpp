@@ -3,6 +3,7 @@
 BoardTemplate::BoardTemplate(QSharedPointer<QDate> currUsedDate, QWidget * parent) : QGroupBox(parent)
 {
     currentlyUsedDate = currUsedDate;
+    defaultFooterText = "";
     footerLineEdit = nullptr;
 
     boardLayout = new QVBoxLayout();

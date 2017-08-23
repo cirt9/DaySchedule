@@ -14,7 +14,6 @@ class YearBoard : public BoardTemplate
 private:
     static const int ROWS = 4;
     static const int COLUMNS = 3;
-    QString defaultFooterDescription;
 
     void createMonthCardsLayout();
 

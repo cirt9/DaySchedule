@@ -3,12 +3,10 @@
 TaskManager::TaskManager()
 {
     taskEndTimer = new QTimer(this);
-    connect(taskEndTimer, SIGNAL(timeout()), this, SLOT(endOfTask()));
-
     resetTask();
-
     taskSeekingTimer = new QTimer(this);
-    connect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(lookForTask()));
+
+    connectTimers();
 }
 
 void TaskManager::resetTask()
@@ -127,4 +125,16 @@ QTime TaskManager::getTimeTillEndOfTask()
         int msecTillEndOfTask = QTime::currentTime().msecsTo(toTime);
         return QTime(0, 0).addMSecs(msecTillEndOfTask);
     }
+}
+
+void TaskManager::connectTimers()
+{
+    connect(taskEndTimer, SIGNAL(timeout()), this, SLOT(endOfTask()));
+    connect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(lookForTask()));
+}
+
+void TaskManager::disconnectTimers()
+{
+    disconnect(taskEndTimer, SIGNAL(timeout()), this, SLOT(endOfTask()));
+    disconnect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(lookForTask()));
 }

@@ -17,6 +17,7 @@ class BoardTemplate : public QGroupBox
 
 protected:
     QSharedPointer<QDate> currentlyUsedDate;
+    QString defaultFooterText;
 
     QVBoxLayout * boardLayout;
     QHBoxLayout * headerLayout;

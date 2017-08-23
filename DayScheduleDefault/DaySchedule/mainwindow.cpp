@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
     installEventFilter(this);
-    setupDatabase();
     initializeTraySystem();
 
     centralWidgetLayout = nullptr;
@@ -16,10 +15,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     currentlyUsedDate = QSharedPointer<QDate>(new QDate);
     setCurrentlyUsedDate(QDate::currentDate());
     alarmsEnabledByDefault = false;
-
-    taskManager.updateTask();
-    connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
-    connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
 
     loadSettings();
     clearMainWindow();
@@ -30,10 +25,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setupDatabase()
+void MainWindow::setupDatabase(QString fileName)
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    db.connect("profiles//default.dsch");
+    QString path = QString("profiles//") + fileName;
+    db.connect(path);
 }
 
 void MainWindow::initializeTraySystem()
@@ -81,6 +77,7 @@ void MainWindow::setCurrentlyUsedDate(QDate date)
 void MainWindow::displayMainMenu()
 {
     resetCentralWidget();
+    vacuumApp();
 
     int menuSize = 500;
     MainMenu * menu = new MainMenu(menuSize, menuSize, this);
@@ -89,6 +86,15 @@ void MainWindow::displayMainMenu()
     connectMenuToSlots(menu);
 
     showWidgetOnCenter(menu);
+}
+
+void MainWindow::vacuumApp()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    db.closeDatabase();
+    taskManager.disconnectTimers();
+    disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
+    disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
 }
 
 void MainWindow::setMenuIcons(MainMenu * menu)
@@ -110,7 +116,24 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
     connect(menu->getBottomButton(), SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(menu->getLeftButton(), SIGNAL(clicked()), this, SLOT(showAboutScreen()));
     connect(menu->getRightButton(), SIGNAL(clicked()), this, SLOT(showSettingsScreen()));
-    connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(showYearsList()));
+    connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(start()));
+}
+
+void MainWindow::start()
+{
+    setupDatabase("default.dsch");
+
+    taskManager.connectTimers();
+    taskManager.updateTask();
+    connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
+    connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
+
+    showYearsList();
+}
+
+void MainWindow::startLoaded()
+{
+
 }
 
 void MainWindow::showAboutScreen()

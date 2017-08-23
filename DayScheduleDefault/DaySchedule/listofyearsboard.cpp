@@ -3,6 +3,7 @@
 ListOfYearsBoard::ListOfYearsBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent)
 : BoardTemplate(currUsedDate, parent)
 {
+    defaultFooterText = footerText;
     createHeaderLayout(QString("Header"));
     createYearsCardsLayout();
     createFooterLayout(footerText);
@@ -58,8 +59,11 @@ void ListOfYearsBoard::save()
     }
     else
     {
-        query = db.yearsInsertQuery(1, footerLineEdit->text());
-        db.execQuery(query);
+        if(footerLineEdit->text() != defaultFooterText)
+        {
+            query = db.yearsInsertQuery(1, footerLineEdit->text());
+            db.execQuery(query);
+        }
     }
 }
 

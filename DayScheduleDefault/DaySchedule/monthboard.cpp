@@ -4,12 +4,12 @@ MonthBoard::MonthBoard(QString footerText, QSharedPointer<QDate> currUsedDate, Q
 : BoardTemplate(currUsedDate, parent)
 {
     maxNumberOfCards = 42;
-    defaultFooterDescription = footerText;
+    defaultFooterText = footerText;
 
     QString headerDate = createHeaderDate();
     createHeaderLayout(headerDate);
     createDayCardsLayout();
-    createFooterLayout(defaultFooterDescription);
+    createFooterLayout(defaultFooterText);
 }
 
 QString MonthBoard::createHeaderDate()
@@ -156,7 +156,7 @@ void MonthBoard::save()
     }
     else
     {
-        if(footerLineEdit->text() != defaultFooterDescription)
+        if(footerLineEdit->text() != defaultFooterText)
         {
             query = db.monthInsertQuery(currentlyUsedDate->month(),
                                         currentlyUsedDate->year(),

@@ -32,6 +32,9 @@ public:
 
     QTime getTimeTillEndOfTask();
 
+    void connectTimers();
+    void disconnectTimers();
+
 public slots:
     void updateTask();
     void updateTaskLive(QTime fromT, QTime toT, QString descript);

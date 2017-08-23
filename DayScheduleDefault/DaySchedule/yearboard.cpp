@@ -3,10 +3,10 @@
 YearBoard::YearBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent)
 : BoardTemplate(currUsedDate, parent)
 {
-    defaultFooterDescription = footerText;
+    defaultFooterText = footerText;
     createHeaderLayout(QString::number(currentlyUsedDate->year()));
     createMonthCardsLayout();
-    createFooterLayout(defaultFooterDescription);
+    createFooterLayout(defaultFooterText);
 }
 
 void YearBoard::createMonthCardsLayout()
@@ -78,7 +78,7 @@ void YearBoard::save()
     }
     else
     {
-        if(footerLineEdit->text() != defaultFooterDescription)
+        if(footerLineEdit->text() != defaultFooterText)
         {
             query = db.yearInsertQuery(currentlyUsedDate->year(), footerLineEdit->text());
             db.execQuery(query);

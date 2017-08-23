@@ -16,7 +16,7 @@ DatabaseManager::~DatabaseManager()
 
 void DatabaseManager::resetDatabaseToDefault()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
 
     query.prepare("DELETE FROM activity");
     execQuery(query);
@@ -34,7 +34,7 @@ void DatabaseManager::resetDatabaseToDefault()
 
 void DatabaseManager::vacuumDatabase()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("VACUUM");
     execQuery(query);
 }
@@ -47,7 +47,7 @@ void DatabaseManager::connect(QString databaseAddress)
         {
             dbAddress = databaseAddress;
 
-            database = QSqlDatabase::addDatabase("QSQLITE");
+            database = QSqlDatabase::addDatabase("QSQLITE", "defaultConnection");
             database.setDatabaseName(dbAddress);
 
             if(!database.open())
@@ -77,7 +77,12 @@ bool DatabaseManager::alreadyConnected()
 
 void DatabaseManager::closeDatabase()
 {
-    database.close();
+    if(alreadyConnected())
+    {
+        database.close();
+        database = QSqlDatabase();
+        database.removeDatabase("defaultConnection");
+    }
 }
 
 void DatabaseManager::execQuery(QSqlQuery & query)
@@ -104,7 +109,7 @@ bool DatabaseManager::recordAlreadyExists(QSqlQuery & query)
 
 QSqlQuery DatabaseManager::yearsCheckIfExistsQuery(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT 1 FROM years WHERE years_id=:id LIMIT 1");
     query.bindValue(":id", id);
     return query;
@@ -112,7 +117,7 @@ QSqlQuery DatabaseManager::yearsCheckIfExistsQuery(int id)
 
 QSqlQuery DatabaseManager::yearsUpdateQuery(int id, QString description)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("UPDATE years SET description = :description WHERE years_id=:id");
     query.bindValue(":description", description);
     query.bindValue(":id", id);
@@ -121,7 +126,7 @@ QSqlQuery DatabaseManager::yearsUpdateQuery(int id, QString description)
 
 QSqlQuery DatabaseManager::yearsInsertQuery(int id, QString description)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("INSERT INTO years (years_id, description)"
                    "VALUES (:id, :description)");
     query.bindValue(":id", id);
@@ -131,7 +136,7 @@ QSqlQuery DatabaseManager::yearsInsertQuery(int id, QString description)
 
 QSqlQuery DatabaseManager::yearsSelectDescriptionQuery(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT description FROM years WHERE years_id=:id");
     query.bindValue(":id", id);
     return query;
@@ -139,7 +144,7 @@ QSqlQuery DatabaseManager::yearsSelectDescriptionQuery(int id)
 
 QSqlQuery DatabaseManager::yearCheckIfExistsQuery(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT 1 FROM year WHERE year_id=:id LIMIT 1");
     query.bindValue(":id", id);
     return query;
@@ -147,7 +152,7 @@ QSqlQuery DatabaseManager::yearCheckIfExistsQuery(int id)
 
 QSqlQuery DatabaseManager::yearUpdateQuery(int id, QString description)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("UPDATE year SET description=:description WHERE year_id=:id");
     query.bindValue(":description", description);
     query.bindValue(":id", id);
@@ -156,7 +161,7 @@ QSqlQuery DatabaseManager::yearUpdateQuery(int id, QString description)
 
 QSqlQuery DatabaseManager::yearInsertQuery(int id, QString description)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("INSERT INTO year (year_id, description)"
                    "VALUES (:id, :description)");
     query.bindValue(":id", id);
@@ -166,7 +171,7 @@ QSqlQuery DatabaseManager::yearInsertQuery(int id, QString description)
 
 QSqlQuery DatabaseManager::yearSelectDescriptionQuery(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT description FROM year WHERE year_id=:id");
     query.bindValue(":id", id);
     return query;
@@ -174,7 +179,7 @@ QSqlQuery DatabaseManager::yearSelectDescriptionQuery(int id)
 
 QSqlQuery DatabaseManager::monthCheckIfExistsQuery(int monthId, int yearId)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT 1 FROM month "
                   "WHERE month_id=:mid AND year_id=:yid LIMIT 1");
     query.bindValue(":mid", monthId);
@@ -184,7 +189,7 @@ QSqlQuery DatabaseManager::monthCheckIfExistsQuery(int monthId, int yearId)
 
 QSqlQuery DatabaseManager::monthUpdateQuery(int m_id, int yearId, QString description)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("UPDATE month SET description = :description "
                   "WHERE month_id=:mid AND year_id=:yid");
     query.bindValue(":description", description);
@@ -195,7 +200,7 @@ QSqlQuery DatabaseManager::monthUpdateQuery(int m_id, int yearId, QString descri
 
 QSqlQuery DatabaseManager::monthInsertQuery(int m_id, int yearId, QString description)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("INSERT INTO month (month_id, year_id, description)"
                   "VALUES (:mid, :yid, :description)");
     query.bindValue(":mid", m_id);
@@ -206,7 +211,7 @@ QSqlQuery DatabaseManager::monthInsertQuery(int m_id, int yearId, QString descri
 
 QSqlQuery DatabaseManager::monthSelectDescriptionQuery(int m_id, int yearId)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT description FROM month "
                   "WHERE month_id=:mid AND year_id=:yid");
     query.bindValue(":mid", m_id);
@@ -216,7 +221,7 @@ QSqlQuery DatabaseManager::monthSelectDescriptionQuery(int m_id, int yearId)
 
 QSqlQuery DatabaseManager::dayCheckIfExistsQuery(const QDate & id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT 1 FROM day WHERE day_id=:id LIMIT 1");
     query.bindValue(":id", id);
     return query;
@@ -224,7 +229,7 @@ QSqlQuery DatabaseManager::dayCheckIfExistsQuery(const QDate & id)
 
 QSqlQuery DatabaseManager::dayUpdateQuery(const QDate & id, int progress, bool alarmsEnabled)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("UPDATE day SET progress=:progress, alarms_enabled=:alarmsEnabled "
                   "WHERE day_id=:id");
     query.bindValue(":progress", progress);
@@ -235,7 +240,7 @@ QSqlQuery DatabaseManager::dayUpdateQuery(const QDate & id, int progress, bool a
 
 QSqlQuery DatabaseManager::dayInsertQuery(const QDate & id, int progress, bool alarmsEnabled)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("INSERT INTO day (day_id, progress, alarms_enabled)"
                   "VALUES (:id, :progress, :alarmsEnabled)");
     query.bindValue(":id", id);
@@ -246,7 +251,7 @@ QSqlQuery DatabaseManager::dayInsertQuery(const QDate & id, int progress, bool a
 
 QSqlQuery DatabaseManager::daySelectDataQuery(const QDate & id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT progress, alarms_enabled FROM day "
                   "WHERE day_id=:id");
     query.bindValue(":id", id);
@@ -255,7 +260,7 @@ QSqlQuery DatabaseManager::daySelectDataQuery(const QDate & id)
 
 QSqlQuery DatabaseManager::daySelectActivityIntervals(const QDate & id)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT from_time, to_time FROM activity WHERE day_id=:id");
     query.bindValue(":id", id);
     return query;
@@ -264,7 +269,7 @@ QSqlQuery DatabaseManager::daySelectActivityIntervals(const QDate & id)
 QSqlQuery DatabaseManager::actvCheckIfExistsQuery(const QDate & dayId,
                           const QTime & fromTime, const QTime & toTime)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT 1 FROM activity WHERE day_id=:id "
                   "AND from_time=:from AND to_time=:to");
     query.bindValue(":id", dayId);
@@ -276,7 +281,7 @@ QSqlQuery DatabaseManager::actvCheckIfExistsQuery(const QDate & dayId,
 QSqlQuery DatabaseManager::actvInsertQuery(const QDate & dayId, QString state, QString description,
                                            const QTime & fromTime, const QTime & toTime)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("INSERT INTO activity (day_id, state, description, from_time, to_time)"
                   "VALUES (:id, :state, :description, :from, :to)");
     query.bindValue(":id", dayId);
@@ -290,7 +295,7 @@ QSqlQuery DatabaseManager::actvInsertQuery(const QDate & dayId, QString state, Q
 QSqlQuery DatabaseManager::actvUpdateQuery(const QDate & dayId, const QTime & fromTime,
                                            const QTime & toTime, QString state)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("UPDATE activity SET state=:state WHERE day_id=:id "
                   "AND from_time=:from AND to_time=:to");
     query.bindValue(":id", dayId);
@@ -303,7 +308,7 @@ QSqlQuery DatabaseManager::actvUpdateQuery(const QDate & dayId, const QTime & fr
 QSqlQuery DatabaseManager::actvSelectDataQuery(const QDate & dayId, const QTime & fromTime,
                                                const QTime & toTime)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT state, from_time, to_time, description "
                   "FROM activity WHERE day_id=:id "
                   "AND from_time=:from AND to_time=:to");
@@ -316,7 +321,7 @@ QSqlQuery DatabaseManager::actvSelectDataQuery(const QDate & dayId, const QTime 
 QSqlQuery DatabaseManager::actvSelectStateQuery(const QDate &dayId, const QTime &fromTime,
                                                 const QTime &toTime)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT state FROM activity WHERE day_id=:id "
                   "AND from_time=:from AND to_time=:to");
     query.bindValue(":id", dayId);
@@ -328,7 +333,7 @@ QSqlQuery DatabaseManager::actvSelectStateQuery(const QDate &dayId, const QTime 
 QSqlQuery DatabaseManager::actvDeleteQuery(const QDate & dayId, const QTime & fromTime,
                                            const QTime & toTime)
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("DELETE FROM activity WHERE day_id=:id AND "
                   "from_time=:from AND to_time=:to");
     query.bindValue(":id", dayId);
@@ -339,7 +344,7 @@ QSqlQuery DatabaseManager::actvDeleteQuery(const QDate & dayId, const QTime & fr
 
 QSqlQuery DatabaseManager::taskSelectCurrentActivity()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT from_time, to_time, description FROM activity "
                   "WHERE :time >= from_time AND :time <= to_time "
                   "AND day_id = :date AND state = 'active'");
@@ -350,7 +355,7 @@ QSqlQuery DatabaseManager::taskSelectCurrentActivity()
 
 QSqlQuery DatabaseManager::statsSelectProductiveDaysNumber()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT count(*) FROM "
                   "(SELECT day.day_id FROM day "
                   "INNER JOIN activity ON day.day_id = activity.day_id "
@@ -363,7 +368,7 @@ QSqlQuery DatabaseManager::statsSelectProductiveDaysNumber()
 
 QSqlQuery DatabaseManager::statsCountActivitiesStates()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT "
                   "(SELECT count(*) FROM activity "
                   "WHERE state = 'success') succeeded, "
@@ -376,7 +381,7 @@ QSqlQuery DatabaseManager::statsCountActivitiesStates()
 
 QSqlQuery DatabaseManager::statsSelectBestYear()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT year FROM "
                   "(SELECT strftime('%Y', day_id)year, count(*)succeeded FROM activity "
                   "WHERE year IN (SELECT DISTINCT strftime('%Y', day_id)year  FROM activity) "
@@ -387,7 +392,7 @@ QSqlQuery DatabaseManager::statsSelectBestYear()
 
 bool DatabaseManager::getAlarmsStateForToday()
 {
-    QSqlQuery query;
+    QSqlQuery query(database);
     query.prepare("SELECT alarms_enabled FROM day WHERE day_id=:id");
     query.bindValue(":id", QDate::currentDate());
     execQuery(query);
