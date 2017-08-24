@@ -25,6 +25,7 @@
 #include <QSystemTrayIcon>
 #include <statswidget.h>
 #include <statistics.h>
+#include <saveswidget.h>
 
 namespace Ui {
 class MainWindow;
@@ -81,6 +82,7 @@ private slots:
     void showDay();
     void showExactDay(QDate date);
     void showResults();
+    void showSavingScreen();
 
     void showAboutScreen();
     void showSettingsScreen();

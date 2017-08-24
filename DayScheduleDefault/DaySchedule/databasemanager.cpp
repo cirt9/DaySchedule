@@ -343,7 +343,7 @@ QSqlQuery DatabaseManager::actvDeleteQuery(const QDate & dayId, const QTime & fr
 }
 
 QSqlQuery DatabaseManager::taskSelectCurrentActivity()
-{
+{ 
     QSqlQuery query(database);
     query.prepare("SELECT from_time, to_time, description FROM activity "
                   "WHERE :time >= from_time AND :time <= to_time "

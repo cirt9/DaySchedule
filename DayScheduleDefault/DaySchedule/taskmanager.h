@@ -32,6 +32,7 @@ public:
 
     QTime getTimeTillEndOfTask();
 
+    void clear();
     void connectTimers();
     void disconnectTimers();
 

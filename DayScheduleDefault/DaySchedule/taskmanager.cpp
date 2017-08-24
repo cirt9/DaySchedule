@@ -127,6 +127,13 @@ QTime TaskManager::getTimeTillEndOfTask()
     }
 }
 
+void TaskManager::clear()
+{
+    resetTask();
+    taskSeekingTimer->stop();
+    disconnectTimers();
+}
+
 void TaskManager::connectTimers()
 {
     connect(taskEndTimer, SIGNAL(timeout()), this, SLOT(endOfTask()));

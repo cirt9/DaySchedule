@@ -61,14 +61,16 @@ QGroupBox
 border: none;
 }
 
-/* Statistics Style */
-#StatsWidget
+/* Statistics & Saves Style */
+#StatsWidget,
+#SavesWidget
 {
 border-radius: 3px;
 background: rgb(255,240,235);
 }
 
-#StatsHeader
+#StatsHeader,
+#SavesHeader
 {
 background: rgb(51,102,153);
 font: bold 35px;
@@ -100,6 +102,59 @@ background: transparent;
 font: 25px;
 color: rgb(51,102,153);
 border-bottom: 2px dashed rgb(51,102,153);
+}
+
+#SavesSaveNameLineEdit
+{
+background: rgb(51,102,153);
+font: 35px;
+color: rgb(255,240,235);
+border-bottom-left-radius: 3px;
+}
+
+#SavesSaveName
+{
+font: bold 25px;
+color: rgb(51,102,153);
+border: transparent;
+border-bottom: 2px dashed rgb(51,102,153);
+text-align: left;
+}
+
+#SavesSaveName:hover
+{
+border-bottom: 2px solid rgb(51,102,153);
+}
+
+#SavesSaveName:pressed
+{
+font: bold 30px;
+}
+
+#SavesSaveButton
+{
+background: rgb(51,102,153);
+font: 35px;
+color: rgb(255,240,235);
+border-bottom-right-radius: 3px;
+}
+
+#SavesSaveButton:hover
+{
+background: rgb(255,240,235);
+color: rgb(51,102,153);
+}
+
+#SavesSaveButton:pressed
+{
+font: 40px;
+}
+
+#SaveWidgetScroll,
+#SaveWidgetScrollArea
+{
+background: transparent;
+border: none;
 }
 
 /* Notifications Style */

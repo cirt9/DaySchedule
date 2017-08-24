@@ -34,7 +34,9 @@ SOURCES += main.cpp\
     optionwidget.cpp \
     notification.cpp \
     statswidget.cpp \
-    statistics.cpp
+    statistics.cpp \
+    saveswidget.cpp \
+    filenamewidget.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -56,7 +58,9 @@ HEADERS  += mainwindow.h \
     optionwidget.h \
     notification.h \
     statswidget.h \
-    statistics.h
+    statistics.h \
+    saveswidget.h \
+    filenamewidget.h
 
 FORMS    += \
     mainwindow.ui

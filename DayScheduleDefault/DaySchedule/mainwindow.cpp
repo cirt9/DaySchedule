@@ -92,9 +92,9 @@ void MainWindow::vacuumApp()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.closeDatabase();
-    taskManager.disconnectTimers();
     disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
+    taskManager.clear();
 }
 
 void MainWindow::setMenuIcons(MainMenu * menu)
@@ -332,6 +332,21 @@ QString MainWindow::getResultsTitle(int successRate)
         return QString("Perfection");
 }
 
+void MainWindow::showSavingScreen()
+{
+    resetCentralWidget();
+    showMenuBar();
+
+    SavesWidget * saves = new SavesWidget();
+    saves->createSaveName("MySaveName1");
+    saves->createSaveName("MySaveName2");
+    saves->createSaveName("MySaveName3");
+    saves->createSaveName("MySaveName4");
+    saves->createSaveName("MySaveName5");
+
+    showWidgetOnCenter(saves);
+}
+
 void MainWindow::showWidgetOnCenter(QWidget * widget)
 {
     centeringLayout = new QGridLayout();
@@ -370,6 +385,7 @@ void MainWindow::showMenuBar()
 
         QPushButton * saveButton = new QPushButton(QString("Save"));
         saveButton->setObjectName("BarRightWidget");
+        connect(saveButton, SIGNAL(clicked()), this, SLOT(showSavingScreen()));
         menuBar->addWidget(saveButton);
 
         QHBoxLayout * barLayout = new QHBoxLayout();
