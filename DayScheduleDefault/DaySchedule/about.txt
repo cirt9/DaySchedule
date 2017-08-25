@@ -7,6 +7,8 @@ Lesser General Public License as  published by the Free Software  Foundation, ei
 the License, or any later version. DaySchedule is distributed in the hope that it will be useful, but
 without any warranty. See the GNU Lesser General  Public License for more  details. You should
 have received  a copy of  the  GNU Lesser General Public  License along with DaySchedule.
+<br>
 If not, see http://www.gnu.org/licenses/.
-
+<br>
+<br>
 DaySchedule was created by Bartłomiej Wójtowicz using Qt 5.6.

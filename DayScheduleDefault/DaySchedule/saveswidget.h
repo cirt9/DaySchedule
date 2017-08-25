@@ -16,19 +16,23 @@ class SavesWidget : public QGroupBox
 private:
     QVBoxLayout * layout;
     QVBoxLayout * saveNamesLayout;
+    size_t maximumFileNameSize;
 
     QLineEdit * saveNameLineEdit;
 
     void createScroll();
-    void createFooter();
+    void createFooter(QString responseText);
 
 private slots:
     void setFileNime(QString & fileName);
 
 public:
-    explicit SavesWidget(QWidget * parent = 0);
+    explicit SavesWidget(QString responseButtonText, size_t maxFileNameSize, QWidget * parent = 0);
 
     void createSaveName(QString name);
+
+signals:
+    void fileNameChosen();
 };
 
 #endif // SAVESWIDGET_H

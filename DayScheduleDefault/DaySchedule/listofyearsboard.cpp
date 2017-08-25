@@ -1,10 +1,10 @@
 #include "listofyearsboard.h"
 
-ListOfYearsBoard::ListOfYearsBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent)
-: BoardTemplate(currUsedDate, parent)
+ListOfYearsBoard::ListOfYearsBoard(QString headerText, QString footerText, QSharedPointer<QDate> currUsedDate,
+                                   QWidget * parent) : BoardTemplate(currUsedDate, parent)
 {
     defaultFooterText = footerText;
-    createHeaderLayout(QString("Header"));
+    createHeaderLayout(headerText);
     createYearsCardsLayout();
     createFooterLayout(footerText);
 }

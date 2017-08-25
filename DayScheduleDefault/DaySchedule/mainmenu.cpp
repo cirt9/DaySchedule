@@ -21,10 +21,15 @@ void MainMenu::initButtons()
     int centralButtonHeight = menuHeight - topBottomButtonHeight * 2;
 
     topButton = new QPushButton(this);
+    topButton->setObjectName("MainMenuTopButton");
     leftButton = new QPushButton(this);
+    leftButton->setObjectName("MainMenuLeftButton");
     bottomButton = new QPushButton(this);
+    bottomButton->setObjectName("MainMenuBottomButton");
     rightButton = new QPushButton(this);
+    rightButton->setObjectName("MainMenuRightButton");
     centralButton = new QPushButton(this);
+    centralButton->setObjectName("MainMenuCentralButton");
 
     topButton->setGeometry(0, 0, topBottomButtonWidth, topBottomButtonHeight);
     leftButton->setGeometry(0, topBottomButtonHeight, leftRightButtonWidth, leftRightButtonHeight);

@@ -14,6 +14,7 @@ private:
     QString description;
     QTimer * taskSeekingTimer;
     QTimer * taskEndTimer;
+    bool activated;
 
     void resetTask();
     bool taskIsntTheSame(QTime from, QTime to, QString des);
@@ -35,6 +36,7 @@ public:
     void clear();
     void connectTimers();
     void disconnectTimers();
+    void setActivated(bool state);
 
 public slots:
     void updateTask();

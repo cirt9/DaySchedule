@@ -22,7 +22,8 @@ private slots:
     void updateCurrentlyUsedDateYear(QString & yearValue);
 
 public:
-    explicit ListOfYearsBoard(QString footerText, QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
+    explicit ListOfYearsBoard(QString headerText, QString footerText,
+                              QSharedPointer<QDate> currUsedDate, QWidget * parent = nullptr);
     ~ListOfYearsBoard() {;}
 
 public slots:

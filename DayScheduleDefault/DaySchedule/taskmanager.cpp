@@ -5,6 +5,7 @@ TaskManager::TaskManager()
     taskEndTimer = new QTimer(this);
     resetTask();
     taskSeekingTimer = new QTimer(this);
+    activated = false;
 
     connectTimers();
 }
@@ -39,54 +40,60 @@ void TaskManager::endOfTask()
 
 void TaskManager::updateTask()
 {
-    DatabaseManager & db = DatabaseManager::getInstance();
-    QSqlQuery query = db.taskSelectCurrentActivity();
-    db.execQuery(query);
-
-    query.first();
-    if(query.isValid())
+    if(activated)
     {
-        if(taskIsntTheSame(query.value(0).toTime(), query.value(1).toTime(), query.value(2).toString()))
+        DatabaseManager & db = DatabaseManager::getInstance();
+        QSqlQuery query = db.taskSelectCurrentActivity();
+        db.execQuery(query);
+
+        query.first();
+        if(query.isValid())
         {
-            fromTime = query.value(0).toTime();
-            toTime = query.value(1).toTime();
-            description = query.value(2).toString();
+            if(taskIsntTheSame(query.value(0).toTime(), query.value(1).toTime(), query.value(2).toString()))
+            {
+                fromTime = query.value(0).toTime();
+                toTime = query.value(1).toTime();
+                description = query.value(2).toString();
 
-            taskSeekingTimer->stop();
-            taskEndTimer->start(QTime::currentTime().msecsTo(toTime));
+                taskSeekingTimer->stop();
+                taskEndTimer->start(QTime::currentTime().msecsTo(toTime));
 
-            emit updated();
-            emit newTaskStarted();
+                emit updated();
+                emit newTaskStarted();
+            }
         }
-    }
-    else if(toTime != QTime(0, 0))
-    {
-        resetTask();
-        emit updated();
+        else if(toTime != QTime(0, 0))
+        {
+            resetTask();
+            emit updated();
+        }
     }
 }
 
 void TaskManager::updateTaskLive(QTime fromT, QTime toT, QString descript)
 {
-    if(toT != QTime(0, 0))
+    if(activated)
     {
-        if(taskIsntTheSame(fromT, toT, descript))
+        if(toT != QTime(0, 0))
         {
-            fromTime = fromT;
-            toTime = toT;
-            description = descript;
+            if(taskIsntTheSame(fromT, toT, descript))
+            {
+                fromTime = fromT;
+                toTime = toT;
+                description = descript;
 
-            taskSeekingTimer->stop();
-            taskEndTimer->start(QTime::currentTime().msecsTo(toTime));
+                taskSeekingTimer->stop();
+                taskEndTimer->start(QTime::currentTime().msecsTo(toTime));
 
-            emit updated();
-            emit newTaskStarted();
+                emit updated();
+                emit newTaskStarted();
+            }
         }
-    }
-    else if(toT != toTime)
-    {
-        resetTask();
-        emit updated();
+        else if(toT != toTime)
+        {
+            resetTask();
+            emit updated();
+        }
     }
 }
 
@@ -132,6 +139,7 @@ void TaskManager::clear()
     resetTask();
     taskSeekingTimer->stop();
     disconnectTimers();
+    setActivated(false);
 }
 
 void TaskManager::connectTimers()
@@ -144,4 +152,9 @@ void TaskManager::disconnectTimers()
 {
     disconnect(taskEndTimer, SIGNAL(timeout()), this, SLOT(endOfTask()));
     disconnect(taskSeekingTimer, SIGNAL(timeout()), this, SLOT(lookForTask()));
+}
+
+void TaskManager::setActivated(bool state)
+{
+    activated = state;
 }

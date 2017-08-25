@@ -1,10 +1,11 @@
 #include "saveswidget.h"
 
-SavesWidget::SavesWidget(QWidget * parent) : QGroupBox(parent)
+SavesWidget::SavesWidget(QString responseButtonText,size_t maxFileNameSize,QWidget * parent) : QGroupBox(parent)
 {
     setObjectName("SavesWidget");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+    maximumFileNameSize = maxFileNameSize;
     layout = new QVBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
@@ -21,7 +22,7 @@ SavesWidget::SavesWidget(QWidget * parent) : QGroupBox(parent)
     saveNamesLayout->setAlignment(Qt::AlignTop);
 
     createScroll();
-    createFooter();
+    createFooter(responseButtonText);
 }
 
 void SavesWidget::createScroll()
@@ -41,7 +42,7 @@ void SavesWidget::createScroll()
     layout->setAlignment(scrollArea, Qt::AlignTop);
 }
 
-void SavesWidget::createFooter()
+void SavesWidget::createFooter(QString responseText)
 {
     QHBoxLayout * footerLayout = new QHBoxLayout();
     footerLayout->setSpacing(0);
@@ -52,18 +53,19 @@ void SavesWidget::createFooter()
     saveNameLineEdit->setAlignment(Qt::AlignCenter);
     footerLayout->addWidget(saveNameLineEdit);
 
-    QPushButton * saveButton = new QPushButton("Save");
-    saveButton->setObjectName("SavesSaveButton");
-    saveButton->setFixedHeight(80);
-    saveButton->setFixedWidth(120);
-    footerLayout->addWidget(saveButton);
+    QPushButton * responseButton = new QPushButton(responseText);
+    responseButton->setObjectName("SavesResponseButton");
+    responseButton->setFixedHeight(80);
+    responseButton->setMinimumWidth(120);
+    connect(responseButton, SIGNAL(clicked()), this, SIGNAL(fileNameChosen()));
+    footerLayout->addWidget(responseButton);
 
     layout->addLayout(footerLayout);
 }
 
 void SavesWidget::createSaveName(QString name)
 {
-    FileNameWidget * saveName = new FileNameWidget(name);
+    FileNameWidget * saveName = new FileNameWidget(name, maximumFileNameSize);
     saveName->setObjectName("SavesSaveName");
     saveName->setFixedHeight(80);
     connect(saveName, SIGNAL(clicked(QString&)), this, SLOT(setFileNime(QString&)));

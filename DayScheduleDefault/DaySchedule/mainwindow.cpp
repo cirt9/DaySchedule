@@ -125,6 +125,7 @@ void MainWindow::start()
 
     taskManager.connectTimers();
     taskManager.updateTask();
+    taskManager.setActivated(true);
     connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
 
@@ -146,12 +147,17 @@ void MainWindow::showAboutScreen()
         QTextStream fileText(&file);
 
         QLabel * aboutTitle = new QLabel("About");
+        aboutTitle->setMinimumWidth(540);
         aboutTitle->setObjectName("MainWindowTitle");
         aboutTitle->setAlignment(Qt::AlignCenter);
 
-        QLabel * aboutLabel = new QLabel(fileText.readAll());
+        QTextEdit * aboutLabel = new QTextEdit(fileText.readAll());
         aboutLabel->setObjectName("MainWindowAboutText");
-        aboutLabel->setAlignment(Qt::AlignCenter);
+        aboutLabel->setMinimumHeight(660);
+        aboutLabel->setDisabled(true);
+        aboutLabel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        aboutLabel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        aboutLabel->setAlignment(Qt::AlignLeft);
 
         QPushButton * backButton = new QPushButton("Back");
         backButton->setObjectName("MainWindowBackButton");
@@ -218,7 +224,7 @@ void MainWindow::showYearsList()
     resetCentralWidget();
     showMenuBar();
 
-    ListOfYearsBoard * years = new ListOfYearsBoard("Your goal or note", currentlyUsedDate, this);
+    ListOfYearsBoard * years = new ListOfYearsBoard("Good luck!","Your goal or note",currentlyUsedDate,this);
     connect(years, SIGNAL(currentlyUsedDateHasChanged()), this, SLOT(showYear()));
 
     years->load();
@@ -337,7 +343,7 @@ void MainWindow::showSavingScreen()
     resetCentralWidget();
     showMenuBar();
 
-    SavesWidget * saves = new SavesWidget();
+    SavesWidget * saves = new SavesWidget(QString("Save"), 23);
     saves->createSaveName("MySaveName1");
     saves->createSaveName("MySaveName2");
     saves->createSaveName("MySaveName3");

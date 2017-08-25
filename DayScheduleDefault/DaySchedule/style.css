@@ -30,7 +30,7 @@ color: rgb(255,240,235);
 {
 padding: 10px;
 background: rgb(255,240,235);
-font: bold 15px;
+font: 25px;
 border-radius: 3px;
 color: rgb(46, 48, 51);
 }
@@ -131,7 +131,7 @@ border-bottom: 2px solid rgb(51,102,153);
 font: bold 30px;
 }
 
-#SavesSaveButton
+#SavesResponseButton
 {
 background: rgb(51,102,153);
 font: 35px;
@@ -139,13 +139,13 @@ color: rgb(255,240,235);
 border-bottom-right-radius: 3px;
 }
 
-#SavesSaveButton:hover
+#SavesResponseButton:hover
 {
 background: rgb(255,240,235);
 color: rgb(51,102,153);
 }
 
-#SavesSaveButton:pressed
+#SavesResponseButton:pressed
 {
 font: 40px;
 }
