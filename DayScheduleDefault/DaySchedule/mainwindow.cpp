@@ -95,6 +95,8 @@ void MainWindow::vacuumApp()
     disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
     taskManager.clear();
+
+    currentlyUsedSaveName = "";
 }
 
 void MainWindow::setMenuIcons(MainMenu * menu)
@@ -128,6 +130,8 @@ void MainWindow::start()
     taskManager.setActivated(true);
     connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
+
+    currentlyUsedSaveName = "default";
 
     showYearsList();
 }
@@ -344,13 +348,40 @@ void MainWindow::showSavingScreen()
     showMenuBar();
 
     SavesWidget * saves = new SavesWidget(QString("Save"), 23);
-    saves->createSaveName("MySaveName1");
-    saves->createSaveName("MySaveName2");
-    saves->createSaveName("MySaveName3");
-    saves->createSaveName("MySaveName4");
-    saves->createSaveName("MySaveName5");
+    connect(saves, SIGNAL(fileNameChosen(QString)), this, SLOT(save(QString)));
+
+    QDir savesFolder("profiles");
+    savesFolder.setNameFilters(QStringList()<<"*.dsch");
+    QStringList fileList = savesFolder.entryList();
+
+    for(int i=0; i<fileList.size(); i++)
+    {
+        if(fileList.at(i) == "default.dsch")
+        {
+            fileList.removeAt(i);
+            break;
+        }
+    }
+
+    for(int i=0; i<fileList.size(); i++)
+        saves->createSaveName(cutFileExtension(fileList.at(i)));
 
     showWidgetOnCenter(saves);
+}
+
+QString MainWindow::cutFileExtension(const QString & fileName)
+{
+    return fileName.left(fileName.lastIndexOf("."));
+}
+
+void MainWindow::save(const QString fileName)
+{
+    if(fileName == "default")
+        QMessageBox::information(this, "Error", "This filename is not allowed", QMessageBox::Ok);
+    else
+    {
+        ;
+    }
 }
 
 void MainWindow::showWidgetOnCenter(QWidget * widget)

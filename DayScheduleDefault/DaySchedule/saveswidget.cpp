@@ -57,7 +57,7 @@ void SavesWidget::createFooter(QString responseText)
     responseButton->setObjectName("SavesResponseButton");
     responseButton->setFixedHeight(80);
     responseButton->setMinimumWidth(120);
-    connect(responseButton, SIGNAL(clicked()), this, SIGNAL(fileNameChosen()));
+    connect(responseButton, SIGNAL(clicked()), this, SLOT(responseButtonClicked()));
     footerLayout->addWidget(responseButton);
 
     layout->addLayout(footerLayout);
@@ -76,4 +76,9 @@ void SavesWidget::createSaveName(QString name)
 void SavesWidget::setFileNime(QString &fileName)
 {
     saveNameLineEdit->setText(fileName);
+}
+
+void SavesWidget::responseButtonClicked()
+{
+    emit fileNameChosen(saveNameLineEdit->text());
 }

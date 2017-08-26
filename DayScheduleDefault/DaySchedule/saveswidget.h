@@ -25,6 +25,7 @@ private:
 
 private slots:
     void setFileNime(QString & fileName);
+    void responseButtonClicked();
 
 public:
     explicit SavesWidget(QString responseButtonText, size_t maxFileNameSize, QWidget * parent = 0);
@@ -32,7 +33,7 @@ public:
     void createSaveName(QString name);
 
 signals:
-    void fileNameChosen();
+    void fileNameChosen(QString fileName);
 };
 
 #endif // SAVESWIDGET_H
