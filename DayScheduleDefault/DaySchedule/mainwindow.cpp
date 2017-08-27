@@ -28,7 +28,8 @@ MainWindow::~MainWindow()
 void MainWindow::setupDatabase(QString fileName)
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    QString path = QString("profiles//") + fileName;
+    db.setDefaultDbAddress(QString("profiles//default.dsch"));
+    QString path = fileName;
     db.connect(path);
 }
 
@@ -88,17 +89,6 @@ void MainWindow::displayMainMenu()
     showWidgetOnCenter(menu);
 }
 
-void MainWindow::vacuumApp()
-{
-    DatabaseManager & db = DatabaseManager::getInstance();
-    db.closeDatabase();
-    disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
-    disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
-    taskManager.clear();
-
-    currentlyUsedSaveName = "";
-}
-
 void MainWindow::setMenuIcons(MainMenu * menu)
 {
     menu->getCentralButton()->setIconSize(QSize(100,100));
@@ -118,27 +108,35 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
     connect(menu->getBottomButton(), SIGNAL(clicked()), qApp, SLOT(quit()));
     connect(menu->getLeftButton(), SIGNAL(clicked()), this, SLOT(showAboutScreen()));
     connect(menu->getRightButton(), SIGNAL(clicked()), this, SLOT(showSettingsScreen()));
-    connect(menu->getCentralButton(), SIGNAL(clicked()), this, SLOT(start()));
+    connect(menu->getTopButton(), SIGNAL(clicked()), this, SLOT(showLoadingScreen()));
+    connect(menu->getCentralButton(), &QPushButton::clicked, this,
+            [=]{start("profiles//default.dsch");});
 }
 
-void MainWindow::start()
+void MainWindow::vacuumApp()
 {
-    setupDatabase("default.dsch");
+    DatabaseManager & db = DatabaseManager::getInstance();
+    db.closeDatabase();
+    disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
+    disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
+    taskManager.clear();
+}
 
+void MainWindow::prepareAppToWork()
+{
     taskManager.connectTimers();
     taskManager.updateTask();
     taskManager.setActivated(true);
     connect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     connect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
-
-    currentlyUsedSaveName = "default";
-
-    showYearsList();
 }
 
-void MainWindow::startLoaded()
+void MainWindow::start(QString filename)
 {
+    setupDatabase(filename);
+    prepareAppToWork();
 
+    showYearsList();
 }
 
 void MainWindow::showAboutScreen()
@@ -189,7 +187,7 @@ void MainWindow::showSettingsScreen()
     QLabel * settingsTitle = new QLabel("Settings");
     settingsTitle->setObjectName("MainWindowTitle");
     settingsTitle->setAlignment(Qt::AlignCenter);
-    settingsTitle->setMinimumWidth(520);
+    settingsTitle->setMinimumWidth(540);
 
     OptionWidget * alarmsOption = new OptionWidget("Alarms enabled by default", alarmsEnabledByDefault);
     connect(alarmsOption->getCheckBox(), SIGNAL(toggled(bool)), this, SLOT(setAlarmsEnabledByDefault(bool)));
@@ -216,6 +214,49 @@ void MainWindow::showSettingsScreen()
     QWidget * settingsContainer = new QWidget();
     settingsContainer->setLayout(settingsLayout);
     showWidgetOnCenter(settingsContainer);
+}
+
+void MainWindow::showLoadingScreen()
+{
+    resetCentralWidget();
+
+    QLabel * loadTitle = new QLabel("Load");
+    loadTitle->setMinimumWidth(540);
+    loadTitle->setObjectName("MainWindowTitle");
+    loadTitle->setAlignment(Qt::AlignCenter);
+
+    SavesWidget * saves = new SavesWidget(SavesWidget::LOAD, 23);
+    //connect(saves, SIGNAL(fileNameClicked(QString&)), qApp, SLOT(aboutQt()));
+
+    QDir savesFolder("profiles");
+    savesFolder.setNameFilters(QStringList()<<"*.dsch");
+    QStringList fileList = savesFolder.entryList();
+
+    for(int i=0; i<fileList.size(); i++)
+    {
+        if(fileList.at(i) == "default.dsch")
+        {
+            fileList.removeAt(i);
+            break;
+        }
+    }
+
+    for(int i=0; i<fileList.size(); i++)
+        saves->createSaveName(cutFileExtension(fileList.at(i)));
+
+    QPushButton * backButton = new QPushButton("Back");
+    backButton->setObjectName("MainWindowBackButton");
+    connect(backButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
+    connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
+
+    QVBoxLayout * loadingLayout = new QVBoxLayout();
+    loadingLayout->addWidget(loadTitle);
+    loadingLayout->addWidget(saves);
+    loadingLayout->addWidget(backButton);
+
+    QWidget * loadingContainer = new QWidget();
+    loadingContainer->setLayout(loadingLayout);
+    showWidgetOnCenter(loadingContainer);
 }
 
 void MainWindow::setAlarmsEnabledByDefault(bool newAlarmsEnabledState)
@@ -347,7 +388,7 @@ void MainWindow::showSavingScreen()
     resetCentralWidget();
     showMenuBar();
 
-    SavesWidget * saves = new SavesWidget(QString("Save"), 23);
+    SavesWidget * saves = new SavesWidget(SavesWidget::SAVE, 23);
     connect(saves, SIGNAL(fileNameChosen(QString)), this, SLOT(save(QString)));
 
     QDir savesFolder("profiles");
@@ -374,13 +415,27 @@ QString MainWindow::cutFileExtension(const QString & fileName)
     return fileName.left(fileName.lastIndexOf("."));
 }
 
-void MainWindow::save(const QString fileName)
+void MainWindow::save(QString fileName)
 {
-    if(fileName == "default")
+    if(fileName == "default" || fileName.size() == 0)
         QMessageBox::information(this, "Error", "This filename is not allowed", QMessageBox::Ok);
     else
     {
-        ;
+        DatabaseManager & db = DatabaseManager::getInstance();
+        db.vacuumDatabase();
+        fileName.prepend(QString("profiles//"));
+        fileName += QString(".dsch");
+
+        if(db.getDatabaseAdress() != fileName)
+            QFile::copy(db.getDatabaseAdress(), fileName);
+
+        if(db.getDatabaseAdress() == db.getDefaultDbAddress())
+        {
+            vacuumApp();
+            setupDatabase(fileName);
+            prepareAppToWork();
+        }
+        showExactDay(QDate::currentDate());
     }
 }
 

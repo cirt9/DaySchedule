@@ -13,11 +13,11 @@ private:
 
     QSqlDatabase database;
     QString dbAddress;
+    QString defaultDbAddress;
 
     bool alreadyConnected();
 
     void resetDatabaseToDefault();
-    void vacuumDatabase();
 
 public:
     DatabaseManager(DatabaseManager const &) = delete;
@@ -28,6 +28,12 @@ public:
 
     void connect(QString databaseAddress);
     void closeDatabase();
+
+    void vacuumDatabase();
+
+    QString getDatabaseAdress() const;
+    QString getDefaultDbAddress() const;
+    void setDefaultDbAddress(const QString & defaultAddress);
 
     void execQuery(QSqlQuery & query);
     bool recordAlreadyExists(QSqlQuery & query);

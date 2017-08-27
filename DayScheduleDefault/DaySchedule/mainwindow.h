@@ -43,7 +43,6 @@ private:
     TaskManager taskManager;
     bool alarmsEnabledByDefault;
     QSystemTrayIcon * traySystem;
-    QString currentlyUsedSaveName;
 
     void setMenuIcons(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
@@ -68,6 +67,7 @@ private:
     QString getResultsTitle(int successRate);
 
     void vacuumApp();
+    void prepareAppToWork();
     QString cutFileExtension(const QString & fileName);
 
     bool eventFilter(QObject * obj, QEvent * event);
@@ -75,8 +75,7 @@ private:
 private slots:
     void errorReaction(QString errorText);
 
-    void start();
-    void startLoaded();
+    void start(QString filename);
 
     void showYearsList();
     void showYear();
@@ -85,6 +84,7 @@ private slots:
     void showExactDay(QDate date);
     void showResults();
     void showSavingScreen();
+    void showLoadingScreen();
 
     void showAboutScreen();
     void showSettingsScreen();
@@ -98,7 +98,7 @@ private slots:
     void closeNotification(Notification * notification);
     void activateDoubleClickForTray(QSystemTrayIcon::ActivationReason reason);
 
-    void save(const QString fileName);
+    void save(QString fileName);
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

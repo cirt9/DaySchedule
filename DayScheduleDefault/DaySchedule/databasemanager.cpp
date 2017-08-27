@@ -30,6 +30,7 @@ void DatabaseManager::resetDatabaseToDefault()
     execQuery(query);
 
     vacuumDatabase();
+    dbAddress = "";
 }
 
 void DatabaseManager::vacuumDatabase()
@@ -84,6 +85,22 @@ void DatabaseManager::closeDatabase()
         database.removeDatabase("defaultConnection");
     }
 }
+
+QString DatabaseManager::getDatabaseAdress() const
+{
+    return dbAddress;
+}
+
+QString DatabaseManager::getDefaultDbAddress() const
+{
+    return defaultDbAddress;
+}
+
+void DatabaseManager::setDefaultDbAddress(const QString & defaultAddress)
+{
+    defaultDbAddress = defaultAddress;
+}
+
 
 void DatabaseManager::execQuery(QSqlQuery & query)
 {
