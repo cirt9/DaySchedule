@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     setWindowState(Qt::WindowMaximized);
     MainWindow::setWindowTitle(QString("Day Schedule"));
 
+    if(!fileExists("profiles//default.dsch"))
+        errorReaction("This copy of DaySchedule is corrupted.");
+
     installEventFilter(this);
     initializeTraySystem();
 
@@ -116,6 +119,10 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
 void MainWindow::vacuumApp()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
+
+    if(db.getDatabaseAdress() == db.getDefaultDbAddress())
+        db.resetDatabaseToDefault();
+
     db.closeDatabase();
     disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
@@ -226,7 +233,7 @@ void MainWindow::showLoadingScreen()
     loadTitle->setAlignment(Qt::AlignCenter);
 
     SavesWidget * saves = new SavesWidget(SavesWidget::LOAD, 23);
-    //connect(saves, SIGNAL(fileNameClicked(QString&)), qApp, SLOT(aboutQt()));
+    connect(saves, SIGNAL(fileNameClicked(QString&)), this, SLOT(load(QString&)));
 
     QDir savesFolder("profiles");
     savesFolder.setNameFilters(QStringList()<<"*.dsch");
@@ -258,6 +265,17 @@ void MainWindow::showLoadingScreen()
     loadingContainer->setLayout(loadingLayout);
     showWidgetOnCenter(loadingContainer);
 }
+
+void MainWindow::load(QString & fileName)
+{
+    fileName.prepend(QString("profiles//"));
+    fileName += QString(".dsch");
+    setupDatabase(fileName);
+    prepareAppToWork();
+
+    showYearsList();
+}
+
 
 void MainWindow::setAlarmsEnabledByDefault(bool newAlarmsEnabledState)
 {
@@ -427,7 +445,12 @@ void MainWindow::save(QString fileName)
         fileName += QString(".dsch");
 
         if(db.getDatabaseAdress() != fileName)
+        {
+            if (fileExists(fileName))
+                QFile::remove(fileName);
+
             QFile::copy(db.getDatabaseAdress(), fileName);
+        }
 
         if(db.getDatabaseAdress() == db.getDefaultDbAddress())
         {
@@ -659,6 +682,12 @@ void MainWindow::closeNotification(Notification * notification)
 {
     centeringLayout->removeWidget(notification);
     notification->deleteLater();
+}
+
+bool MainWindow::fileExists(QString path)
+{
+    QFileInfo checkFile(path);
+    return checkFile.exists() && checkFile.isFile();
 }
 
 bool MainWindow::eventFilter(QObject * obj, QEvent * event)

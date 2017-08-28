@@ -69,6 +69,7 @@ private:
     void vacuumApp();
     void prepareAppToWork();
     QString cutFileExtension(const QString & fileName);
+    bool fileExists(QString path);
 
     bool eventFilter(QObject * obj, QEvent * event);
 
@@ -99,6 +100,7 @@ private slots:
     void activateDoubleClickForTray(QSystemTrayIcon::ActivationReason reason);
 
     void save(QString fileName);
+    void load(QString &fileName);
 
 public:
     explicit MainWindow(QWidget * parent = nullptr);

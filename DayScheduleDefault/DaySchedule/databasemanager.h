@@ -17,8 +17,6 @@ private:
 
     bool alreadyConnected();
 
-    void resetDatabaseToDefault();
-
 public:
     DatabaseManager(DatabaseManager const &) = delete;
     void operator=(DatabaseManager const &) = delete;
@@ -29,6 +27,7 @@ public:
     void connect(QString databaseAddress);
     void closeDatabase();
 
+    void resetDatabaseToDefault();
     void vacuumDatabase();
 
     QString getDatabaseAdress() const;

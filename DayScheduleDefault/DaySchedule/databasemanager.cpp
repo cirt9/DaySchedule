@@ -413,7 +413,11 @@ bool DatabaseManager::getAlarmsStateForToday()
     query.prepare("SELECT alarms_enabled FROM day WHERE day_id=:id");
     query.bindValue(":id", QDate::currentDate());
     execQuery(query);
+
     query.first();
 
-    return query.value(0).toBool();
+    if(query.isValid())
+        return query.value(0).toBool();
+    else
+        return false;
 }
