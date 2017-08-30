@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     statswidget.cpp \
     statistics.cpp \
     saveswidget.cpp \
-    filenamewidget.cpp
+    filenamewidget.cpp \
+    mainwindowtemplate.cpp
 
 HEADERS  += mainwindow.h \
     mainmenu.h \
@@ -60,7 +61,8 @@ HEADERS  += mainwindow.h \
     statswidget.h \
     statistics.h \
     saveswidget.h \
-    filenamewidget.h
+    filenamewidget.h \
+    mainwindowtemplate.h
 
 FORMS    += \
     mainwindow.ui

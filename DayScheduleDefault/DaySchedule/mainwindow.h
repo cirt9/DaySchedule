@@ -26,6 +26,7 @@
 #include <statswidget.h>
 #include <statistics.h>
 #include <saveswidget.h>
+#include <mainwindowtemplate.h>
 
 namespace Ui {
 class MainWindow;

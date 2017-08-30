@@ -120,10 +120,14 @@ void MainWindow::vacuumApp()
 {
     DatabaseManager & db = DatabaseManager::getInstance();
 
-    if(db.getDatabaseAdress() == db.getDefaultDbAddress())
-        db.resetDatabaseToDefault();
+    if(db.alreadyConnected())
+    {
+        if(db.getDatabaseAdress() == db.getDefaultDbAddress())
+            db.resetDatabaseToDefault();
 
-    db.closeDatabase();
+        db.closeDatabase();
+    }
+
     disconnect(&taskManager, SIGNAL(newTaskStarted()), this, SLOT(taskStartCatched()));
     disconnect(&taskManager, SIGNAL(taskEnded()), this, SLOT(taskEndCatched()));
     taskManager.clear();
@@ -155,11 +159,6 @@ void MainWindow::showAboutScreen()
         resetCentralWidget();
         QTextStream fileText(&file);
 
-        QLabel * aboutTitle = new QLabel("About");
-        aboutTitle->setMinimumWidth(540);
-        aboutTitle->setObjectName("MainWindowTitle");
-        aboutTitle->setAlignment(Qt::AlignCenter);
-
         QTextEdit * aboutLabel = new QTextEdit(fileText.readAll());
         aboutLabel->setObjectName("MainWindowAboutText");
         aboutLabel->setMinimumHeight(660);
@@ -168,18 +167,10 @@ void MainWindow::showAboutScreen()
         aboutLabel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         aboutLabel->setAlignment(Qt::AlignLeft);
 
-        QPushButton * backButton = new QPushButton("Back");
-        backButton->setObjectName("MainWindowBackButton");
-        connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-
-        QVBoxLayout * aboutLayout = new QVBoxLayout();
-        aboutLayout->addWidget(aboutTitle);
-        aboutLayout->addWidget(aboutLabel, Qt::AlignTop);
-        aboutLayout->addWidget(backButton);
-
-        QWidget * aboutContainer = new QWidget();
-        aboutContainer->setLayout(aboutLayout);
-        showWidgetOnCenter(aboutContainer);
+        MainWindowTemplate * about = new MainWindowTemplate("About", 540);
+        about->setMainWidget(aboutLabel);
+        connect(about, SIGNAL(backClicked()), this, SLOT(displayMainMenu()));
+        showWidgetOnCenter(about);
 
         file.close();
     }
@@ -190,11 +181,6 @@ void MainWindow::showAboutScreen()
 void MainWindow::showSettingsScreen()
 {
     resetCentralWidget();
-
-    QLabel * settingsTitle = new QLabel("Settings");
-    settingsTitle->setObjectName("MainWindowTitle");
-    settingsTitle->setAlignment(Qt::AlignCenter);
-    settingsTitle->setMinimumWidth(540);
 
     OptionWidget * alarmsOption = new OptionWidget("Alarms enabled by default", alarmsEnabledByDefault);
     connect(alarmsOption->getCheckBox(), SIGNAL(toggled(bool)), this, SLOT(setAlarmsEnabledByDefault(bool)));
@@ -208,29 +194,15 @@ void MainWindow::showSettingsScreen()
     optionsContainer->setObjectName("MainWindowOptionsContainer");
     optionsContainer->setLayout(optionsLayout);
 
-    QPushButton * backButton = new QPushButton("Back");
-    backButton->setObjectName("MainWindowBackButton");
-    connect(backButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
-    connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-
-    QVBoxLayout * settingsLayout = new QVBoxLayout();
-    settingsLayout->addWidget(settingsTitle);
-    settingsLayout->addWidget(optionsContainer, Qt::AlignTop);
-    settingsLayout->addWidget(backButton);
-
-    QWidget * settingsContainer = new QWidget();
-    settingsContainer->setLayout(settingsLayout);
-    showWidgetOnCenter(settingsContainer);
+    MainWindowTemplate * settings = new MainWindowTemplate("Settings", 540);
+    settings->setMainWidget(optionsContainer);
+    connect(settings, SIGNAL(backClicked()), this, SLOT(displayMainMenu()));
+    showWidgetOnCenter(settings);
 }
 
 void MainWindow::showLoadingScreen()
 {
     resetCentralWidget();
-
-    QLabel * loadTitle = new QLabel("Load");
-    loadTitle->setMinimumWidth(540);
-    loadTitle->setObjectName("MainWindowTitle");
-    loadTitle->setAlignment(Qt::AlignCenter);
 
     SavesWidget * saves = new SavesWidget(SavesWidget::LOAD, 23);
     connect(saves, SIGNAL(fileNameClicked(QString&)), this, SLOT(load(QString&)));
@@ -251,19 +223,10 @@ void MainWindow::showLoadingScreen()
     for(int i=0; i<fileList.size(); i++)
         saves->createSaveName(cutFileExtension(fileList.at(i)));
 
-    QPushButton * backButton = new QPushButton("Back");
-    backButton->setObjectName("MainWindowBackButton");
-    connect(backButton, SIGNAL(clicked()), this, SLOT(saveSettings()));
-    connect(backButton, SIGNAL(clicked()), this, SLOT(displayMainMenu()));
-
-    QVBoxLayout * loadingLayout = new QVBoxLayout();
-    loadingLayout->addWidget(loadTitle);
-    loadingLayout->addWidget(saves);
-    loadingLayout->addWidget(backButton);
-
-    QWidget * loadingContainer = new QWidget();
-    loadingContainer->setLayout(loadingLayout);
-    showWidgetOnCenter(loadingContainer);
+    MainWindowTemplate * loadingScreen = new MainWindowTemplate("Saves", 540);
+    loadingScreen->setMainWidget(saves);
+    connect(loadingScreen, SIGNAL(backClicked()), this, SLOT(displayMainMenu()));
+    showWidgetOnCenter(loadingScreen);
 }
 
 void MainWindow::load(QString & fileName)

@@ -17,7 +17,7 @@ background: transparent;
 border: none;
 }
 
-#MainWindowTitle
+#MainWindowTemplateTitle
 {
 padding: 10px;
 background: rgb(51,102,153);
@@ -35,7 +35,7 @@ border-radius: 3px;
 color: rgb(46, 48, 51);
 }
 
-#MainWindowBackButton
+#MainWindowTemplateBackButton
 {
 padding: 10px;
 background: rgb(51,102,153);
@@ -45,13 +45,13 @@ font-size: 35px;
 color: rgb(255,240,235);
 }
 
-#MainWindowBackButton:hover
+#MainWindowTemplateBackButton:hover
 {
 background: rgb(55,105,150);
 border: 1px solid rgb(255,240,235);
 }
 
-#MainWindowBackButton:pressed
+#MainWindowTemplateBackButton:pressed
 {
 border: 2px solid rgb(255,240,235);
 }
