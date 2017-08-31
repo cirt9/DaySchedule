@@ -49,6 +49,7 @@ private:
 
     bool stateChanged();
     void deleteActivityFromDatabase();
+    bool activityHasEnded();
 
 private slots:
     void deleteActivity();

@@ -71,6 +71,7 @@ private:
     void prepareAppToWork();
     QString cutFileExtension(const QString & fileName);
     bool fileExists(QString path);
+    QStringList getSaveNameList();
 
     bool eventFilter(QObject * obj, QEvent * event);
 

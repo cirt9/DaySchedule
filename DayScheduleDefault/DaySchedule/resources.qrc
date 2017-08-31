@@ -14,6 +14,7 @@
         <file>icons/readyHover.jpg</file>
         <file>icons/readyPressed.jpg</file>
         <file>icons/trayicon.jpg</file>
+        <file>icons/appIcon.jpg</file>
     </qresource>
     <qresource prefix="/style">
         <file>style.css</file>

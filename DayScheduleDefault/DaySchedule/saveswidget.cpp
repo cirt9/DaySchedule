@@ -61,6 +61,7 @@ void SavesWidget::createFooter(QString responseText)
     saveNameLineEdit->setFixedHeight(80);
     saveNameLineEdit->setAlignment(Qt::AlignCenter);
     footerLayout->addWidget(saveNameLineEdit);
+    saveNameLineEdit->setPlaceholderText("Your save name");
 
     QPushButton * responseButton = new QPushButton(responseText);
     responseButton->setObjectName("SavesResponseButton");

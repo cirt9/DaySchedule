@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     ui->setupUi(this);
     setWindowState(Qt::WindowMaximized);
     MainWindow::setWindowTitle(QString("Day Schedule"));
+    setWindowIcon(QIcon(":/icons/icons/appIcon.jpg"));
 
     if(!fileExists("profiles//default.dsch"))
         errorReaction("This copy of DaySchedule is corrupted.");
@@ -207,18 +208,7 @@ void MainWindow::showLoadingScreen()
     SavesWidget * saves = new SavesWidget(SavesWidget::LOAD, 23);
     connect(saves, SIGNAL(fileNameClicked(QString&)), this, SLOT(load(QString&)));
 
-    QDir savesFolder("profiles");
-    savesFolder.setNameFilters(QStringList()<<"*.dsch");
-    QStringList fileList = savesFolder.entryList();
-
-    for(int i=0; i<fileList.size(); i++)
-    {
-        if(fileList.at(i) == "default.dsch")
-        {
-            fileList.removeAt(i);
-            break;
-        }
-    }
+    QStringList fileList = getSaveNameList();
 
     for(int i=0; i<fileList.size(); i++)
         saves->createSaveName(cutFileExtension(fileList.at(i)));
@@ -372,18 +362,7 @@ void MainWindow::showSavingScreen()
     SavesWidget * saves = new SavesWidget(SavesWidget::SAVE, 23);
     connect(saves, SIGNAL(fileNameChosen(QString)), this, SLOT(save(QString)));
 
-    QDir savesFolder("profiles");
-    savesFolder.setNameFilters(QStringList()<<"*.dsch");
-    QStringList fileList = savesFolder.entryList();
-
-    for(int i=0; i<fileList.size(); i++)
-    {
-        if(fileList.at(i) == "default.dsch")
-        {
-            fileList.removeAt(i);
-            break;
-        }
-    }
+    QStringList fileList = getSaveNameList();
 
     for(int i=0; i<fileList.size(); i++)
         saves->createSaveName(cutFileExtension(fileList.at(i)));
@@ -651,6 +630,23 @@ bool MainWindow::fileExists(QString path)
 {
     QFileInfo checkFile(path);
     return checkFile.exists() && checkFile.isFile();
+}
+
+QStringList MainWindow::getSaveNameList()
+{
+    QDir savesFolder("profiles");
+    savesFolder.setNameFilters(QStringList()<<"*.dsch");
+    QStringList fileList = savesFolder.entryList();
+
+    for(int i=0; i<fileList.size(); i++)
+    {
+        if(fileList.at(i) == "default.dsch")
+        {
+            fileList.removeAt(i);
+            break;
+        }
+    }
+    return fileList;
 }
 
 bool MainWindow::eventFilter(QObject * obj, QEvent * event)

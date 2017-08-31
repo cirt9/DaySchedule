@@ -195,26 +195,36 @@ void Activity::checkCorrectnessOfInput()
 
 void Activity::failed()
 {
-    clearSummaryLayout();
+    if(activityHasEnded())
+    {
+        clearSummaryLayout();
 
-    state.setState(ActivityState::FAIL);
+        state.setState(ActivityState::FAIL);
 
-    description->setStyleSheet("background: rgb(255, 154, 154);");
-    descriptionLabel->setStyleSheet("background: rgb(255, 154, 154);");
+        description->setStyleSheet("background: rgb(255, 154, 154);");
+        descriptionLabel->setStyleSheet("background: rgb(255, 154, 154);");
 
-    emit fail();
+        emit fail();
+    }
+    else
+        QMessageBox::information(this, "Information", "You can't do this before the end of task.");
 }
 
 void Activity::succeeded()
 {
-    clearSummaryLayout();
+    if(activityHasEnded())
+    {
+        clearSummaryLayout();
 
-    state.setState(ActivityState::SUCCESS);
+        state.setState(ActivityState::SUCCESS);
 
-    description->setStyleSheet("background: rgb(177, 238, 144);");
-    descriptionLabel->setStyleSheet("background: rgb(177, 238, 144);");
+        description->setStyleSheet("background: rgb(177, 238, 144);");
+        descriptionLabel->setStyleSheet("background: rgb(177, 238, 144);");
 
-    emit success();
+        emit success();
+    }
+    else
+        QMessageBox::information(this, "Information", "You can't do this before the end of task.");
 }
 
 void Activity::clearSummaryLayout()
@@ -224,6 +234,16 @@ void Activity::clearSummaryLayout()
     summaryLayout = nullptr;
     setFixedHeight(FIXED_HEIGHT_START_END);
 }
+
+bool Activity::activityHasEnded()
+{
+    bool activityHasEnded = assignedDay <= QDate::currentDate();
+    if(assignedDay == QDate::currentDate())
+        activityHasEnded = toTime->time() <= QTime::currentTime();
+
+    return activityHasEnded;
+}
+
 
 QString Activity::getState() const
 {
