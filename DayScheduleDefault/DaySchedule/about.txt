@@ -11,4 +11,4 @@ have received  a copy of  the  GNU Lesser General Public  License along with Day
 If not, see http://www.gnu.org/licenses/.
 <br>
 <br>
-DaySchedule was created by Bartłomiej Wójtowicz using Qt 5.6.
+DaySchedule was created by <b>Bartłomiej Wójtowicz</b> using Qt 5.6.

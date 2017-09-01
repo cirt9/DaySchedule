@@ -22,7 +22,7 @@ public:
     static DatabaseManager & getInstance();
     ~DatabaseManager();
 
-    void connect(QString databaseAddress);
+    bool connect(QString databaseAddress);
     void closeDatabase();
 
     void resetDatabaseToDefault();
@@ -33,7 +33,7 @@ public:
     QString getDefaultDbAddress() const;
     void setDefaultDbAddress(const QString & defaultAddress);
 
-    void execQuery(QSqlQuery & query);
+    bool execQuery(QSqlQuery & query);
     bool recordAlreadyExists(QSqlQuery & query);
 
     QSqlQuery yearsCheckIfExistsQuery(int id);

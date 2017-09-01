@@ -1,7 +1,5 @@
 #include "databasemanager.h"
 
-#include <QDebug>
-
 DatabaseManager & DatabaseManager::getInstance()
 {
     static DatabaseManager instance;
@@ -40,7 +38,7 @@ void DatabaseManager::vacuumDatabase()
     execQuery(query);
 }
 
-void DatabaseManager::connect(QString databaseAddress)
+bool DatabaseManager::connect(QString databaseAddress)
 {
     if(!alreadyConnected())
     {
@@ -51,16 +49,11 @@ void DatabaseManager::connect(QString databaseAddress)
             database = QSqlDatabase::addDatabase("QSQLITE", "defaultConnection");
             database.setDatabaseName(dbAddress);
 
-            if(!database.open())
-                qDebug() << "Failed to open database.";
-            else
-                qDebug() << "Database opened.";
+            if(database.open())
+                return true;
         }
-        else
-            qDebug() << "Database does not exsists";
     }
-    else
-        qDebug() << "Already connected";
+    return false;
 }
 
 bool DatabaseManager::alreadyConnected()
@@ -101,20 +94,14 @@ void DatabaseManager::setDefaultDbAddress(const QString & defaultAddress)
     defaultDbAddress = defaultAddress;
 }
 
-
-void DatabaseManager::execQuery(QSqlQuery & query)
+bool DatabaseManager::execQuery(QSqlQuery & query)
 {
     if(alreadyConnected())
     {
         if(query.exec())
-            qDebug() << "query success";
-
-        else
-        {
-            qDebug() << query.lastError();
-            qDebug() << query.executedQuery();
-        }
+            return true;
     }
+    return false;
 }
 
 bool DatabaseManager::recordAlreadyExists(QSqlQuery & query)

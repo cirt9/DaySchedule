@@ -35,6 +35,14 @@ border-radius: 3px;
 color: rgb(46, 48, 51);
 }
 
+#MainWindowNoSavesLabel
+{
+border-radius: 3px;
+background: rgb(255,240,235);
+color: rgb(51,102,153);
+font: bold 35px;
+}
+
 #MainWindowTemplateBackButton
 {
 padding: 10px;

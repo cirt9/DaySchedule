@@ -34,7 +34,8 @@ void MainWindow::setupDatabase(QString fileName)
     DatabaseManager & db = DatabaseManager::getInstance();
     db.setDefaultDbAddress(QString("profiles//default.dsch"));
     QString path = fileName;
-    db.connect(path);
+    if(!db.connect(path))
+        errorReaction("This copy of DaySchedule is corrupted.");
 }
 
 void MainWindow::initializeTraySystem()
@@ -205,17 +206,28 @@ void MainWindow::showLoadingScreen()
 {
     resetCentralWidget();
 
-    SavesWidget * saves = new SavesWidget(SavesWidget::LOAD, 23);
-    connect(saves, SIGNAL(fileNameClicked(QString&)), this, SLOT(load(QString&)));
+    MainWindowTemplate * loadingScreen = new MainWindowTemplate("Saves", 540);
+    connect(loadingScreen, SIGNAL(backClicked()), this, SLOT(displayMainMenu()));
 
     QStringList fileList = getSaveNameList();
 
-    for(int i=0; i<fileList.size(); i++)
-        saves->createSaveName(cutFileExtension(fileList.at(i)));
+    if(fileList.size() == 0)
+    {
+        QLabel * noSaves = new QLabel("None file was saved yet");
+        noSaves->setAlignment(Qt::AlignCenter);
+        noSaves->setObjectName("MainWindowNoSavesLabel");
+        loadingScreen->setMainWidget(noSaves);
+    }
+    else
+    {
+        SavesWidget * saves = new SavesWidget(SavesWidget::LOAD, 23);
+        connect(saves, SIGNAL(fileNameClicked(QString&)), this, SLOT(load(QString&)));
 
-    MainWindowTemplate * loadingScreen = new MainWindowTemplate("Saves", 540);
-    loadingScreen->setMainWidget(saves);
-    connect(loadingScreen, SIGNAL(backClicked()), this, SLOT(displayMainMenu()));
+        for(int i=0; i<fileList.size(); i++)
+            saves->createSaveName(cutFileExtension(fileList.at(i)));
+
+        loadingScreen->setMainWidget(saves);
+    }
     showWidgetOnCenter(loadingScreen);
 }
 
@@ -228,7 +240,6 @@ void MainWindow::load(QString & fileName)
 
     showYearsList();
 }
-
 
 void MainWindow::setAlarmsEnabledByDefault(bool newAlarmsEnabledState)
 {
