@@ -55,6 +55,7 @@ public:
     QSqlQuery dayUpdateQuery(const QDate & id, int progress, bool alarmsEnabled);
     QSqlQuery dayInsertQuery(const QDate & id, int progress, bool alarmsEnabled);
     QSqlQuery daySelectDataQuery(const QDate & id);
+    QSqlQuery dayUpdateAlarmsStateQuery(const QDate & id, bool alarmsEnabled);
     QSqlQuery daySelectActivityIntervals(const QDate & id);
 
     QSqlQuery actvCheckIfExistsQuery(const QDate &dayId, const QTime &fromTime, const QTime &toTime);

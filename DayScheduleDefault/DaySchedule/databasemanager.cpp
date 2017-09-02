@@ -262,6 +262,16 @@ QSqlQuery DatabaseManager::daySelectDataQuery(const QDate & id)
     return query;
 }
 
+QSqlQuery DatabaseManager::dayUpdateAlarmsStateQuery(const QDate & id, bool alarmsEnabled)
+{
+    QSqlQuery query(database);
+    query.prepare("UPDATE day SET alarms_enabled=:alarmsEnabled "
+                  "WHERE day_id=:id");
+    query.bindValue(":alarmsEnabled", alarmsEnabled);
+    query.bindValue(":id", id);
+    return query;
+}
+
 QSqlQuery DatabaseManager::daySelectActivityIntervals(const QDate & id)
 {
     QSqlQuery query(database);

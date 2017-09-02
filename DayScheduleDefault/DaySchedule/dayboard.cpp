@@ -104,6 +104,8 @@ void DayBoard::createBottomMenuLayout()
     alarmsButton = new QCheckBox();
     alarmsButton->setObjectName("DayBoardAlarmsButton");
     alarmsButton->setFixedSize(40, 40);
+    if(QDate::currentDate() == *currentlyUsedDate)
+        connect(alarmsButton, SIGNAL(toggled(bool)), this, SLOT(updateAlarmsState()));
 
     buttonsBarLayout->addWidget(addActivityButton);
     buttonsBarLayout->addWidget(copyButton);
@@ -249,6 +251,26 @@ void DayBoard::eraseActivityFromList(QWidget * activity)
     }
 }
 
+void DayBoard::updateAlarmsState()
+{
+    DatabaseManager & db = DatabaseManager::getInstance();
+    QSqlQuery query = db.dayCheckIfExistsQuery(*currentlyUsedDate);
+
+    if(db.recordAlreadyExists(query))
+    {
+        query = db.dayUpdateAlarmsStateQuery(*currentlyUsedDate,
+                                             alarmsButton->isChecked());
+        db.execQuery(query);
+    }
+    else
+    {
+        query = db.dayInsertQuery(*currentlyUsedDate,
+                                  getProgress(),
+                                  alarmsButton->isChecked());
+        db.execQuery(query);
+     }
+}
+
 void DayBoard::updateProgress()
 {
     QString updatedProgress = QString::number(calculateProgress()) + QString("%");
@@ -312,7 +334,6 @@ void DayBoard::save()
             saveActivities();
         }
     }
-
 }
 
 void DayBoard::load()

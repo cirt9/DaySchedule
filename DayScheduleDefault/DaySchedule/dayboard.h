@@ -59,6 +59,7 @@ private slots:
     void copyingConfirmed(QDate selectedDate);
     void copyingCanceled();
     void eraseActivityFromList(QWidget * activity = nullptr);
+    void updateAlarmsState();
 
 public:
     explicit DayBoard(QSharedPointer<QDate> currUsedDate, bool alarmsEnabled, QWidget * parent = nullptr);
