@@ -173,6 +173,7 @@ void DayBoard::copyingConfirmed(QDate selectedDate)
     {
         clearAllActivities();
         QDate savedDate = *currentlyUsedDate;
+        db.dayDeleteActivitesFromDay(*currentlyUsedDate);
 
         currentlyUsedDate->setDate(selectedDate.year(), selectedDate.month(), selectedDate.day());
         assignActivitesToCurrentlyUsedDate();

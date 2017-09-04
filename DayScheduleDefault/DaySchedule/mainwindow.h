@@ -45,6 +45,8 @@ private:
     bool alarmsEnabledByDefault;
     QSystemTrayIcon * traySystem;
 
+    static const QString defaultSaveDirectory;
+
     void setMenuIcons(MainMenu * menu);
     void connectMenuToSlots(MainMenu * menu);
 

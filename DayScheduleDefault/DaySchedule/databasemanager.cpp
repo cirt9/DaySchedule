@@ -280,6 +280,14 @@ QSqlQuery DatabaseManager::daySelectActivityIntervals(const QDate & id)
     return query;
 }
 
+void DatabaseManager::dayDeleteActivitesFromDay(const QDate & id)
+{
+    QSqlQuery query(database);
+    query.prepare("DELETE FROM activity WHERE day_id=:id");
+    query.bindValue(":id", id);
+    execQuery(query);
+}
+
 QSqlQuery DatabaseManager::actvCheckIfExistsQuery(const QDate & dayId,
                           const QTime & fromTime, const QTime & toTime)
 {

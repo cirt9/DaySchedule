@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+const QString MainWindow::defaultSaveDirectory = QString("profiles//default.dsch");
+
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -8,7 +10,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
     MainWindow::setWindowTitle(QString("Day Schedule"));
     setWindowIcon(QIcon(":/icons/icons/appIcon.jpg"));
 
-    if(!fileExists("profiles//default.dsch"))
+    if(!fileExists(defaultSaveDirectory))
         errorReaction("This copy of DaySchedule is corrupted.");
 
     installEventFilter(this);
@@ -32,7 +34,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupDatabase(QString fileName)
 {
     DatabaseManager & db = DatabaseManager::getInstance();
-    db.setDefaultDbAddress(QString("profiles//default.dsch"));
+    db.setDefaultDbAddress(defaultSaveDirectory);
     QString path = fileName;
     if(!db.connect(path))
         errorReaction("This copy of DaySchedule is corrupted.");
@@ -115,7 +117,7 @@ void MainWindow::connectMenuToSlots(MainMenu * menu)
     connect(menu->getRightButton(), SIGNAL(clicked()), this, SLOT(showSettingsScreen()));
     connect(menu->getTopButton(), SIGNAL(clicked()), this, SLOT(showLoadingScreen()));
     connect(menu->getCentralButton(), &QPushButton::clicked, this,
-            [=]{start("profiles//default.dsch");});
+            [=]{start(defaultSaveDirectory);});
 }
 
 void MainWindow::vacuumApp()
