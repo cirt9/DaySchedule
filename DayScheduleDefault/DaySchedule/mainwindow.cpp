@@ -35,9 +35,9 @@ void MainWindow::setupDatabase(QString fileName)
 {
     DatabaseManager & db = DatabaseManager::getInstance();
     db.setDefaultDbAddress(defaultSaveDirectory);
-    QString path = fileName;
+    QString path = fileName;    
     if(!db.connect(path))
-        errorReaction("This copy of DaySchedule is corrupted.");
+        errorReaction("Error " + db.lastError());
 }
 
 void MainWindow::initializeTraySystem()

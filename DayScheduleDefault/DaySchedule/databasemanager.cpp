@@ -94,6 +94,11 @@ void DatabaseManager::setDefaultDbAddress(const QString & defaultAddress)
     defaultDbAddress = defaultAddress;
 }
 
+QString DatabaseManager::lastError()
+{
+    return database.lastError().databaseText();
+}
+
 bool DatabaseManager::execQuery(QSqlQuery & query)
 {
     if(alreadyConnected())

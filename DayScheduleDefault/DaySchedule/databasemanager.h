@@ -32,6 +32,7 @@ public:
     QString getDatabaseAdress() const;
     QString getDefaultDbAddress() const;
     void setDefaultDbAddress(const QString & defaultAddress);
+    QString lastError();
 
     bool execQuery(QSqlQuery & query);
     bool recordAlreadyExists(QSqlQuery & query);
